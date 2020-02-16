@@ -57,7 +57,7 @@ final class PlaySoundsViewController: UIViewController {
 }
 
 extension PlaySoundsViewController {
-    enum EffectType {
+    enum EffectType: Equatable {
         case slow(rate: Float)
         case fast(rate: Float)
         case chipmunk(pitch: Float)
