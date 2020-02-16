@@ -25,7 +25,7 @@ final class PlaySoundsViewController: UIViewController {
     @IBOutlet var vaderButton: UIButton!
     
     @IBAction func playSoundForButton(_ sender: UIButton) {
-        switch(ButtonType(tag: sender.tag)!) {
+        switch(EffectType(buttonTag: sender.tag)!) {
         case let .slow(rate),
              let .fast(rate):
             playSound(rate: rate)
@@ -57,7 +57,7 @@ final class PlaySoundsViewController: UIViewController {
 }
 
 extension PlaySoundsViewController {
-    enum ButtonType {
+    enum EffectType {
         case slow(rate: Float)
         case fast(rate: Float)
         case chipmunk(pitch: Float)
@@ -65,8 +65,8 @@ extension PlaySoundsViewController {
         case echo(isEnabled: Bool)
         case reverb(isEnabled: Bool)
         
-        init?(tag: Int) {
-            switch tag {
+        init?(buttonTag: Int) {
+            switch buttonTag {
             case 0: self = .slow(rate: 0.5)
             case 1: self = .fast(rate: 1.5)
             case 2: self = .chipmunk(pitch: 1000)
