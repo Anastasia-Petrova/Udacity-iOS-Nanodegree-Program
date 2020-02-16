@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Anastasia-Petrova/Udacity.svg?style=svg)](https://circleci.com/gh/Anastasia-Petrova/Udacity)
+
 # Udacity
 
 ## iOS Developer Nanodegree Program
