@@ -14,7 +14,7 @@ class MemeEditorViewController: UIViewController {
     let cameraButton = UIBarButtonItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
-    var topTextFieldTopConstraint = NSLayoutConstraint()
+//    var topTextFieldTopConstraint = NSLayoutConstraint()
     var bottomTextFieldBottomConstraint = NSLayoutConstraint()
     let memeTextAttributes: [NSAttributedString.Key: Any] = [
         NSAttributedString.Key.strokeColor: UIColor.black,
@@ -22,6 +22,7 @@ class MemeEditorViewController: UIViewController {
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSAttributedString.Key.strokeWidth: 0.1
     ]
+    var meme: MemeModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +39,8 @@ class MemeEditorViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        topTextFieldTopConstraint.constant = view.frame.height * 0.09
-        bottomTextFieldBottomConstraint.constant = view.frame.height * 0.09
+//        topTextFieldTopConstraint.constant = view.frame.height * 0.09
+//        bottomTextFieldBottomConstraint.constant = view.frame.height * 0.09
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,12 +71,7 @@ class MemeEditorViewController: UIViewController {
         cameraButton.target = self
         cameraButton.action = #selector(openCamera)
         let albumButton = UIBarButtonItem(title: "Album", style: .plain, target: self, action: #selector(openPhotoLibrary))
-        albumButton.setTitleTextAttributes(
-            [
-                NSAttributedString.Key.foregroundColor: UIColor.darkGray
-            ],
-            for: .normal)
-        
+
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let items = [flexibleSpace, cameraButton, flexibleSpace, albumButton, flexibleSpace]
         self.toolbarItems = items
@@ -98,36 +94,56 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topTextField)
         view.addSubview(bottomTextField)
-        topTextFieldTopConstraint = topTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.01)
-        bottomTextFieldBottomConstraint = self.view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01)
+        bottomTextFieldBottomConstraint = photoView.bottomAnchor.constraint(
+            equalTo: bottomTextField.bottomAnchor,
+            constant: 16
+        )
+        topTextField.setContentCompressionResistancePriority(.required, for: .horizontal)
+        topTextField.setContentHuggingPriority(.defaultLow, for: .horizontal)
         NSLayoutConstraint.activate([
-            topTextFieldTopConstraint,
-            bottomTextFieldBottomConstraint,
+            topTextField.topAnchor.constraint(equalTo: photoView.topAnchor, constant: 16),
             topTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bottomTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            topTextField.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: 16
+            ),
+            view.trailingAnchor.constraint(
+                equalTo: topTextField.trailingAnchor,
+                constant: 16
+            ),
+            bottomTextField.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: 16
+            ),
+            view.trailingAnchor.constraint(
+                equalTo: bottomTextField.trailingAnchor,
+                constant: 16
+            ),
+            bottomTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomTextFieldBottomConstraint
         ])
         topTextField.borderStyle = .none
-        topTextField.textAlignment = .center
-        topTextField.textColor = .white
-        topTextField.font = .systemFont(ofSize: 32, weight: .heavy)
         topTextField.text = "TOP"
         topTextField.isUserInteractionEnabled = false
+        topTextField.adjustsFontSizeToFitWidth = true
+        topTextField.minimumFontSize = 12
+        topTextField.autocapitalizationType = .allCharacters
         bottomTextField.borderStyle = .none
-        bottomTextField.textAlignment = .center
-        bottomTextField.textColor = .white
-        bottomTextField.font = .systemFont(ofSize: 32, weight: .heavy)
         bottomTextField.text = "BOTTOM"
         bottomTextField.isUserInteractionEnabled = false
-        //        if let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40) {
-        //            let memeTextAttributes: [NSAttributedString.Key: Any] = [
-        //                NSAttributedString.Key.strokeColor: UIColor.black,
-        //                NSAttributedString.Key.foregroundColor: UIColor.white,
-        //                NSAttributedString.Key.font: font,
-        //                NSAttributedString.Key.strokeWidth: 0.1
-        //            ]
-        //            topTextField.defaultTextAttributes = memeTextAttributes
-        //            bottomTextField.defaultTextAttributes = memeTextAttributes
-        //        }
+        bottomTextField.adjustsFontSizeToFitWidth = true
+        if let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40) {
+            let memeTextAttributes: [NSAttributedString.Key: Any] = [
+                NSAttributedString.Key.strokeColor: UIColor.black,
+                NSAttributedString.Key.foregroundColor: UIColor.white,
+                NSAttributedString.Key.font: font,
+                NSAttributedString.Key.strokeWidth: -3.0
+            ]
+            topTextField.defaultTextAttributes = memeTextAttributes
+            bottomTextField.defaultTextAttributes = memeTextAttributes
+        }
+        topTextField.textAlignment = .center
+        bottomTextField.textAlignment = .center
     }
     
     @objc func openPhotoLibrary() {
@@ -158,11 +174,19 @@ class MemeEditorViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        view.frame.origin.y = -getKeyboardHight(notification)
+//        if bottomTextField.isEditing {
+            bottomTextFieldBottomConstraint.constant = getKeyboardHight(notification)
+            UIView.animate(withDuration: 0.2) {
+                self.view.layoutIfNeeded()
+            }
+//        }
     }
     
     @objc func keyboardWillHide() {
-        view.frame.origin.y = 0
+        bottomTextFieldBottomConstraint.constant = 16//view.frame.height * 0.09
+        UIView.animate(withDuration: 0.2) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     func getKeyboardHight(_ notification: Notification) -> CGFloat {
@@ -183,7 +207,7 @@ class MemeEditorViewController: UIViewController {
     
     func save() {
         let memedImage = generateMemedImage()
-        let meme = MemeModel(topTetx: topTextField.text!, bottomText: bottomTextField.text!, originalImage: photoView.image!, memedImage: memedImage)
+        meme = MemeModel(topTetx: topTextField.text!, bottomText: bottomTextField.text!, originalImage: photoView.image!, memedImage: memedImage)
     }
     
     func generateMemedImage() -> UIImage {
@@ -199,7 +223,7 @@ class MemeEditorViewController: UIViewController {
         
         // TODO: Show toolbar and navbar
         
-        navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = false
         navigationController?.isToolbarHidden = false
 
         return memedImage
