@@ -10,8 +10,10 @@ import UIKit
 import MobileCoreServices
 
 class MemeEditorViewController: UIViewController {
-    let tabBar = TabBar(items: "Camera", "Album")
+    let tabBar = UITabBar()
     let photoView = UIImageView(frame: .zero)
+    let cameraBarItem = UITabBarItem()
+    let albumBarItem = UITabBarItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
     var topTextFieldTopConstraint = NSLayoutConstraint()
@@ -49,7 +51,7 @@ class MemeEditorViewController: UIViewController {
         
         setUpNavigationBar()
         setUpImageView()
-        setUpTabBar()
+        setUpCustomTabBar()
         setUpTextFields()
     }
     
@@ -57,6 +59,11 @@ class MemeEditorViewController: UIViewController {
         super.viewWillLayoutSubviews()
         topTextFieldTopConstraint.constant = view.frame.height * 0.01
         bottomTextFieldBottomConstraint.constant = view.frame.height * 0.01
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        cameraBarItem.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
     }
     
     private func setUpNavigationBar() {
@@ -99,17 +106,25 @@ class MemeEditorViewController: UIViewController {
         topTextField.font = .systemFont(ofSize: 32, weight: .heavy)
         topTextField.text = "TOP"
         topTextField.isUserInteractionEnabled = true
-//        topTextField.defaultTextAttributes = memeTextAttributes
-//        bottomTextField.defaultTextAttributes = memeTextAttributes
         bottomTextField.borderStyle = .none
         bottomTextField.textAlignment = .center
         bottomTextField.textColor = .white
         bottomTextField.font = .systemFont(ofSize: 32, weight: .heavy)
         bottomTextField.text = "BOTTOM"
         bottomTextField.isUserInteractionEnabled = true
+        //        if let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40) {
+        //            let memeTextAttributes: [NSAttributedString.Key: Any] = [
+        //                NSAttributedString.Key.strokeColor: UIColor.black,
+        //                NSAttributedString.Key.foregroundColor: UIColor.white,
+        //                NSAttributedString.Key.font: font,
+        //                NSAttributedString.Key.strokeWidth: 0.1
+        //            ]
+        //            topTextField.defaultTextAttributes = memeTextAttributes
+        //            bottomTextField.defaultTextAttributes = memeTextAttributes
+        //        }
     }
     
-    private func setUpTabBar() {
+    func setUpCustomTabBar() {
         tabBar.delegate = self
         tabBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -117,6 +132,22 @@ class MemeEditorViewController: UIViewController {
             tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+        
+        tabBar.tintColor = .white
+        tabBar.itemPositioning = .centered
+        cameraBarItem.image = UIImage(systemName: "camera.fill")
+        
+//        cameraButton.imageInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        albumBarItem.title = "Album"
+        albumBarItem.setTitleTextAttributes(
+            [
+                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .semibold),
+                NSAttributedString.Key.foregroundColor : UIColor.systemGray
+            ],
+            for: .normal
+        )
+        albumBarItem.titlePositionAdjustment = .init(horizontal: 0, vertical: -15)
+        tabBar.setItems([cameraBarItem, albumBarItem], animated: false)
     }
     
     func handleAddPhoto() {
