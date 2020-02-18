@@ -14,6 +14,8 @@ class MemeEditorViewController: UIViewController {
     let photoView = UIImageView(frame: .zero)
     let topTextField = UITextField()
     let bottomTextField = UITextField()
+    var topTextFieldTopConstraint = NSLayoutConstraint()
+    var bottomTextFieldBottomConstraint = NSLayoutConstraint()
     let memeTextAttributes: [NSAttributedString.Key: Any] = [
         NSAttributedString.Key.strokeColor: UIColor.black,
         NSAttributedString.Key.foregroundColor: UIColor.white,
@@ -51,6 +53,12 @@ class MemeEditorViewController: UIViewController {
         setUpTextFields()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        topTextFieldTopConstraint.constant = view.frame.height * 0.01
+        bottomTextFieldBottomConstraint.constant = view.frame.height * 0.01
+    }
+    
     private func setUpNavigationBar() {
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
@@ -77,10 +85,11 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topTextField)
         view.addSubview(bottomTextField)
-        //FIXME: assign top and botton constratints to properties and chance constant in viewDidLayoutSubviews
+        topTextFieldTopConstraint = topTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.01)
+        bottomTextFieldBottomConstraint = tabBar.topAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01)
         NSLayoutConstraint.activate([
-            topTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.01),
-            tabBar.topAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01),
+            topTextFieldTopConstraint,
+            bottomTextFieldBottomConstraint,
             topTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             bottomTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
