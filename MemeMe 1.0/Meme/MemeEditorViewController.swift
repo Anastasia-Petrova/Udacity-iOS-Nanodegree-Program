@@ -14,7 +14,6 @@ class MemeEditorViewController: UIViewController {
     let cameraButton = UIBarButtonItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
-//    var topTextFieldTopConstraint = NSLayoutConstraint()
     var bottomTextFieldBottomConstraint = NSLayoutConstraint()
     let memeTextAttributes: [NSAttributedString.Key: Any] = [
         NSAttributedString.Key.strokeColor: UIColor.black,
@@ -35,12 +34,6 @@ class MemeEditorViewController: UIViewController {
         setUpImageView()
         setUpToolBar()
         setUpTextFields()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-//        topTextFieldTopConstraint.constant = view.frame.height * 0.09
-//        bottomTextFieldBottomConstraint.constant = view.frame.height * 0.09
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,10 +91,18 @@ class MemeEditorViewController: UIViewController {
             equalTo: bottomTextField.bottomAnchor,
             constant: 16
         )
-        topTextField.setContentCompressionResistancePriority(.required, for: .horizontal)
-        topTextField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        topTextField.setContentHuggingPriority(.required, for: .vertical)
+        topTextField.setContentCompressionResistancePriority(.required, for: .vertical)
+        bottomTextField.setContentHuggingPriority(.required, for: .vertical)
+        bottomTextField.setContentCompressionResistancePriority(.required, for: .vertical)
+        let topTextFieldTopConstraint = topTextField.topAnchor.constraint(
+            equalTo: photoView.topAnchor,
+            constant: 16
+        )
+        topTextFieldTopConstraint.priority = .defaultLow
+        
         NSLayoutConstraint.activate([
-            topTextField.topAnchor.constraint(equalTo: photoView.topAnchor, constant: 16),
+            topTextFieldTopConstraint,
             topTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             topTextField.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
@@ -118,6 +119,10 @@ class MemeEditorViewController: UIViewController {
             view.trailingAnchor.constraint(
                 equalTo: bottomTextField.trailingAnchor,
                 constant: 16
+            ),
+            bottomTextField.topAnchor.constraint(
+                greaterThanOrEqualTo: topTextField.bottomAnchor,
+                constant: 8
             ),
             bottomTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             bottomTextFieldBottomConstraint
@@ -174,19 +179,52 @@ class MemeEditorViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-//        if bottomTextField.isEditing {
-            bottomTextFieldBottomConstraint.constant = getKeyboardHight(notification)
-            UIView.animate(withDuration: 0.2) {
+        guard bottomTextField.isEditing else { return }
+        let height = getKeyboardHight(notification)
+        let duration = getKeyboardAnimationDuration(notification)
+        let curve = getKeyboardAnimationCurve(notification)
+        
+        self.view.layoutIfNeeded()
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: UIView.animationOptions(for: curve),
+            animations: {
+                self.bottomTextFieldBottomConstraint.constant = height
                 self.view.layoutIfNeeded()
-            }
-//        }
+        },
+            completion: nil
+        )
     }
     
-    @objc func keyboardWillHide() {
-        bottomTextFieldBottomConstraint.constant = 16//view.frame.height * 0.09
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-        }
+    @objc func keyboardWillHide(_ notification: Notification) {
+        let height: CGFloat = 16.0
+        let duration = getKeyboardAnimationDuration(notification)
+        let curve = getKeyboardAnimationCurve(notification)
+        
+        self.view.layoutIfNeeded()
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: UIView.animationOptions(for: curve),
+            animations: {
+                self.bottomTextFieldBottomConstraint.constant = height
+                self.view.layoutIfNeeded()
+        },
+            completion: nil
+        )
+    }
+    
+    func getKeyboardAnimationCurve(_ notification: Notification) -> UIView.AnimationCurve {
+        let userInfo = notification.userInfo
+        let curve = userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! NSNumber
+        return UIView.AnimationCurve(rawValue: curve.intValue)!
+    }
+    
+    func getKeyboardAnimationDuration(_ notification: Notification) -> TimeInterval {
+        let userInfo = notification.userInfo
+        let duration = userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! NSNumber
+        return duration.doubleValue
     }
     
     func getKeyboardHight(_ notification: Notification) -> CGFloat {
@@ -261,3 +299,16 @@ extension MemeEditorViewController: UITextFieldDelegate {
         return true
     }
 }
+
+extension UIView {
+    class func animationOptions(for curve: UIView.AnimationCurve) -> UIView.AnimationOptions {
+        switch (curve) {
+        case .easeInOut: return .curveEaseInOut
+        case .easeIn: return .curveEaseIn
+        case .easeOut: return .curveEaseOut
+        case .linear: return .curveLinear
+        @unknown default: return .curveLinear
+        }
+    }
+}
+
