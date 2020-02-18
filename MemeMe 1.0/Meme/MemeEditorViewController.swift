@@ -10,10 +10,10 @@ import UIKit
 import MobileCoreServices
 
 class MemeEditorViewController: UIViewController {
-    let tabBar = UITabBar()
     let photoView = UIImageView(frame: .zero)
-    let cameraBarItem = UITabBarItem()
-    let albumBarItem = UITabBarItem()
+    let cameraButton = UIBarButtonItem()
+//    let cameraBarItem = UITabBarItem()
+//    let albumBarItem = UITabBarItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
     var topTextFieldTopConstraint = NSLayoutConstraint()
@@ -25,21 +25,21 @@ class MemeEditorViewController: UIViewController {
         NSAttributedString.Key.strokeWidth: 0.1
     ]
     
-    var isCameraButtonSelected: Bool = false {
-        didSet {
-            if isCameraButtonSelected {
-                openCamera()
-            }
-        }
-    }
-    
-    var isAlbumButtonSelected: Bool = false {
-        didSet {
-            if isAlbumButtonSelected {
-                handleAddPhoto()
-            }
-        }
-    }
+//    var isCameraButtonSelected: Bool = false {
+//        didSet {
+//            if isCameraButtonSelected {
+//                openCamera()
+//            }
+//        }
+//    }
+//
+//    var isAlbumButtonSelected: Bool = false {
+//        didSet {
+//            if isAlbumButtonSelected {
+//                openPhotoLibrary()
+//            }
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +47,10 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.delegate = self
         self.view.backgroundColor = .white
         self.view.addSubview(photoView)
-        self.view.addSubview(tabBar)
         
         setUpNavigationBar()
         setUpImageView()
-        setUpCustomTabBar()
+        setUpToolBar()
         setUpTextFields()
     }
     
@@ -63,7 +62,7 @@ class MemeEditorViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        cameraBarItem.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         sudcribeToKeyboardNotifications()
     }
     
@@ -81,11 +80,24 @@ class MemeEditorViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
+    func setUpToolBar() {
+        navigationController?.isToolbarHidden = false
+        navigationController?.toolbar.contentMode = .center
+        cameraButton.image = UIImage(systemName: "camera.fill")
+        cameraButton.style = .plain
+        cameraButton.target = self
+        cameraButton.action = #selector(openCamera)
+        let albumButton = UIBarButtonItem(title: "Album", style: .plain, target: self, action: #selector(openPhotoLibrary))
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let items = [flexibleSpace, cameraButton, albumButton, flexibleSpace]
+        self.toolbarItems = items
+    }
+    
     private func setUpImageView() {
         photoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             photoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            photoView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
+            photoView.bottomAnchor.constraint(equalTo: self.view.topAnchor),
             photoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             photoView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -99,7 +111,7 @@ class MemeEditorViewController: UIViewController {
         view.addSubview(topTextField)
         view.addSubview(bottomTextField)
         topTextFieldTopConstraint = topTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.01)
-        bottomTextFieldBottomConstraint = tabBar.topAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01)
+        bottomTextFieldBottomConstraint = self.view.topAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01)
         NSLayoutConstraint.activate([
             topTextFieldTopConstraint,
             bottomTextFieldBottomConstraint,
@@ -111,13 +123,13 @@ class MemeEditorViewController: UIViewController {
         topTextField.textColor = .white
         topTextField.font = .systemFont(ofSize: 32, weight: .heavy)
         topTextField.text = "TOP"
-        topTextField.isUserInteractionEnabled = true
+        topTextField.isUserInteractionEnabled = false
         bottomTextField.borderStyle = .none
         bottomTextField.textAlignment = .center
         bottomTextField.textColor = .white
         bottomTextField.font = .systemFont(ofSize: 32, weight: .heavy)
         bottomTextField.text = "BOTTOM"
-        bottomTextField.isUserInteractionEnabled = true
+        bottomTextField.isUserInteractionEnabled = false
         //        if let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40) {
         //            let memeTextAttributes: [NSAttributedString.Key: Any] = [
         //                NSAttributedString.Key.strokeColor: UIColor.black,
@@ -130,49 +142,28 @@ class MemeEditorViewController: UIViewController {
         //        }
     }
     
-    func setUpCustomTabBar() {
-        tabBar.delegate = self
-        tabBar.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tabBar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-        ])
-        
-        tabBar.tintColor = .white
-        tabBar.itemPositioning = .centered
-        cameraBarItem.image = UIImage(systemName: "camera.fill")
-//        cameraBarItem.imageInsets = UIEdgeInsets(top: 20, left: 0, bottom: -20, right: 0)
-        albumBarItem.title = "Album"
-        albumBarItem.setTitleTextAttributes(
-            [
-                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17, weight: .semibold),
-                NSAttributedString.Key.foregroundColor : UIColor.systemGray
-            ],
-            for: .normal
-        )
-//        albumBarItem.titlePositionAdjustment = .init(horizontal: 0, vertical: -15)
-        tabBar.setItems([cameraBarItem, albumBarItem], animated: false)
-    }
-    
-    func handleAddPhoto() {
-        tabBar.selectedItem = nil
+    @objc func openPhotoLibrary() {
+//        tabBar.selectedItem = nil
         VideoBrowser.startMediaBrowser(delegate: self, sourceType: .photoLibrary)
     }
     
-    func openCamera() {
+    @objc func openCamera() {
         VideoBrowser.startMediaBrowser(delegate: self, sourceType: .camera)
-        tabBar.selectedItem = nil
+//        tabBar.selectedItem = nil
     }
     
     @objc func openActivityView() {
         let image = generateMemedImage()
         let controller = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(controller, animated: true, completion: nil)
+        present(controller, animated: true, completion: { [weak self] in
+            self?.save()
+        })
     }
     
     @objc func cancel() {
         photoView.image = nil
+        topTextField.text = "TOP"
+        bottomTextField.text = "BOTTOM"
         navigationItem.leftBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.isEnabled = false
         UIView.animate(withDuration: 0.3) {
@@ -211,6 +202,8 @@ class MemeEditorViewController: UIViewController {
     
     func generateMemedImage() -> UIImage {
         // TODO: Hide toolbar and navbar
+        navigationController?.isToolbarHidden = true
+        navigationController?.isNavigationBarHidden = true
 
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -219,17 +212,11 @@ class MemeEditorViewController: UIViewController {
         UIGraphicsEndImageContext()
         
         // TODO: Show toolbar and navbar
+        
+        navigationController?.isNavigationBarHidden = true
+        navigationController?.isToolbarHidden = false
 
         return memedImage
-    }
-}
-
-extension MemeEditorViewController: UITabBarDelegate {
-    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        guard let selectedIndex = tabBar.items?.firstIndex(of: item) else { return }
-        
-        isCameraButtonSelected = selectedIndex == 0
-        isAlbumButtonSelected = selectedIndex == 1
     }
 }
 
@@ -243,6 +230,8 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
         
         dismiss(animated: true) {
             self.photoView.image = image
+            self.topTextField.isUserInteractionEnabled = true
+            self.bottomTextField.isUserInteractionEnabled = true
             self.navigationItem.leftBarButtonItem?.isEnabled = true
             self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
