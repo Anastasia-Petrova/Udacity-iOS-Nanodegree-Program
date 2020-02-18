@@ -43,8 +43,8 @@ class MemeEditorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        topTextField.delegate = self
-//        bottomTextField.delegate = self
+        topTextField.delegate = self
+        bottomTextField.delegate = self
         self.view.backgroundColor = .white
         self.view.addSubview(photoView)
         self.view.addSubview(tabBar)
@@ -57,13 +57,19 @@ class MemeEditorViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        topTextFieldTopConstraint.constant = view.frame.height * 0.01
-        bottomTextFieldBottomConstraint.constant = view.frame.height * 0.01
+        topTextFieldTopConstraint.constant = view.frame.height * 0.09
+        bottomTextFieldBottomConstraint.constant = view.frame.height * 0.09
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         cameraBarItem.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        sudcribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unsudcribeToKeyboardNotifications()
     }
     
     private func setUpNavigationBar() {
@@ -136,17 +142,16 @@ class MemeEditorViewController: UIViewController {
         tabBar.tintColor = .white
         tabBar.itemPositioning = .centered
         cameraBarItem.image = UIImage(systemName: "camera.fill")
-        
-//        cameraButton.imageInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+//        cameraBarItem.imageInsets = UIEdgeInsets(top: 20, left: 0, bottom: -20, right: 0)
         albumBarItem.title = "Album"
         albumBarItem.setTitleTextAttributes(
             [
-                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .semibold),
+                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17, weight: .semibold),
                 NSAttributedString.Key.foregroundColor : UIColor.systemGray
             ],
             for: .normal
         )
-        albumBarItem.titlePositionAdjustment = .init(horizontal: 0, vertical: -15)
+//        albumBarItem.titlePositionAdjustment = .init(horizontal: 0, vertical: -15)
         tabBar.setItems([cameraBarItem, albumBarItem], animated: false)
     }
     
@@ -199,13 +204,43 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
             self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        view.frame.origin.y = -getKeyboardHight(notification)
+    }
+    
+    @objc func keyboardWillHide() {
+        view.frame.origin.y = 0
+    }
+    
+    
+    func getKeyboardHight(_ notification: Notification) -> CGFloat {
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
+        return keyboardSize.cgRectValue.height
+    }
+    
+    func sudcribeToKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func unsudcribeToKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
 }
 
 extension MemeEditorViewController: UINavigationControllerDelegate {}
 
 extension MemeEditorViewController: UITextFieldDelegate {
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//      textField.resignFirstResponder()
-//        return true
-//    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.text = ""
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+      textField.resignFirstResponder()
+        return true
+    }
 }

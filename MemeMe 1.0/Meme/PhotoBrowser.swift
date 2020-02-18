@@ -18,7 +18,6 @@ enum VideoBrowser {
     let mediaUI = UIImagePickerController()
     mediaUI.sourceType = sourceType
     mediaUI.mediaTypes = [kUTTypeImage as String]
-    mediaUI.allowsEditing = true
     mediaUI.delegate = delegate
     delegate.present(mediaUI, animated: true, completion: nil)
   }
