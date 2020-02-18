@@ -12,8 +12,6 @@ import MobileCoreServices
 class MemeEditorViewController: UIViewController {
     let photoView = UIImageView(frame: .zero)
     let cameraButton = UIBarButtonItem()
-//    let cameraBarItem = UITabBarItem()
-//    let albumBarItem = UITabBarItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
     var topTextFieldTopConstraint = NSLayoutConstraint()
@@ -24,22 +22,6 @@ class MemeEditorViewController: UIViewController {
         NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSAttributedString.Key.strokeWidth: 0.1
     ]
-    
-//    var isCameraButtonSelected: Bool = false {
-//        didSet {
-//            if isCameraButtonSelected {
-//                openCamera()
-//            }
-//        }
-//    }
-//
-//    var isAlbumButtonSelected: Bool = false {
-//        didSet {
-//            if isAlbumButtonSelected {
-//                openPhotoLibrary()
-//            }
-//        }
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +62,7 @@ class MemeEditorViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
-    func setUpToolBar() {
+    private func setUpToolBar() {
         navigationController?.isToolbarHidden = false
         navigationController?.toolbar.contentMode = .center
         cameraButton.image = UIImage(systemName: "camera.fill")
@@ -88,8 +70,14 @@ class MemeEditorViewController: UIViewController {
         cameraButton.target = self
         cameraButton.action = #selector(openCamera)
         let albumButton = UIBarButtonItem(title: "Album", style: .plain, target: self, action: #selector(openPhotoLibrary))
+        albumButton.setTitleTextAttributes(
+            [
+                NSAttributedString.Key.foregroundColor: UIColor.darkGray
+            ],
+            for: .normal)
+        
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let items = [flexibleSpace, cameraButton, albumButton, flexibleSpace]
+        let items = [flexibleSpace, cameraButton, flexibleSpace, albumButton, flexibleSpace]
         self.toolbarItems = items
     }
     
@@ -97,7 +85,7 @@ class MemeEditorViewController: UIViewController {
         photoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             photoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            photoView.bottomAnchor.constraint(equalTo: self.view.topAnchor),
+            photoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             photoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             photoView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -105,13 +93,13 @@ class MemeEditorViewController: UIViewController {
         photoView.contentMode = .scaleAspectFit
     }
     
-    func setUpTextFields() {
+    private func setUpTextFields() {
         topTextField.translatesAutoresizingMaskIntoConstraints = false
         bottomTextField.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(topTextField)
         view.addSubview(bottomTextField)
         topTextFieldTopConstraint = topTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height * 0.01)
-        bottomTextFieldBottomConstraint = self.view.topAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01)
+        bottomTextFieldBottomConstraint = self.view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: bottomTextField.bottomAnchor, constant: view.frame.height * 0.01)
         NSLayoutConstraint.activate([
             topTextFieldTopConstraint,
             bottomTextFieldBottomConstraint,
@@ -143,13 +131,11 @@ class MemeEditorViewController: UIViewController {
     }
     
     @objc func openPhotoLibrary() {
-//        tabBar.selectedItem = nil
         VideoBrowser.startMediaBrowser(delegate: self, sourceType: .photoLibrary)
     }
     
     @objc func openCamera() {
         VideoBrowser.startMediaBrowser(delegate: self, sourceType: .camera)
-//        tabBar.selectedItem = nil
     }
     
     @objc func openActivityView() {
@@ -166,7 +152,7 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.text = "BOTTOM"
         navigationItem.leftBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.isEnabled = false
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
         }
     }
