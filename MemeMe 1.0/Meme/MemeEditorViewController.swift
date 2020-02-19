@@ -16,12 +16,16 @@ class MemeEditorViewController: UIViewController {
     let topTextField = UITextField()
     let bottomTextField = UITextField()
     var bottomTextFieldBottomConstraint = NSLayoutConstraint()
-    let memeTextAttributes: [NSAttributedString.Key: Any] = [
-        NSAttributedString.Key.strokeColor: UIColor.black,
-        NSAttributedString.Key.foregroundColor: UIColor.white,
-        NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSAttributedString.Key.strokeWidth: 0.1
-    ]
+    var memeTextAttributes: [NSAttributedString.Key: Any] {
+        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
+            ?? UIFont.systemFont(ofSize: 40)
+        return [
+            NSAttributedString.Key.strokeColor: UIColor.black,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.strokeWidth: -3.0
+        ]
+    }
     var meme: MemeModel?
     
     override func viewDidLoad() {
@@ -154,16 +158,10 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.autocapitalizationType = .allCharacters
         bottomTextField.isUserInteractionEnabled = false
         bottomTextField.adjustsFontSizeToFitWidth = true
-        if let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40) {
-            let memeTextAttributes: [NSAttributedString.Key: Any] = [
-                NSAttributedString.Key.strokeColor: UIColor.black,
-                NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.font: font,
-                NSAttributedString.Key.strokeWidth: -3.0
-            ]
-            topTextField.defaultTextAttributes = memeTextAttributes
-            bottomTextField.defaultTextAttributes = memeTextAttributes
-        }
+        
+        topTextField.defaultTextAttributes = memeTextAttributes
+        bottomTextField.defaultTextAttributes = memeTextAttributes
+        
         topTextField.textAlignment = .center
         bottomTextField.textAlignment = .center
         
@@ -272,22 +270,71 @@ class MemeEditorViewController: UIViewController {
     }
     
     func generateMemedImage() -> UIImage {
-        // TODO: Hide toolbar and navbar
-        navigationController?.isToolbarHidden = true
-        navigationController?.isNavigationBarHidden = true
+        guard let imageMeme = photoView.image,
+        let topText = topTextField.text,
+        let bottomText = bottomTextField.text else {
+            return UIImage()
+        }
+        let topTextFieldSize = topTextField.frame.size
+        
+        let bottomTextFieldSize = bottomTextField.frame.size
+        let aspectRatio = imageMeme.size.width/imageMeme.size.height
+        let imageViewSize = photoView.frame.size
+        
+        let smallerSide = imageViewSize.height > imageViewSize.width
+            ? imageViewSize.width
+            : imageViewSize.height
+        
+        let contextSize = CGSize(
+            width: smallerSide * aspectRatio,
+            height: smallerSide
+        )
+        let topLabel = UILabel()
+        topLabel.textAlignment = .center
+        topLabel.attributedText = NSAttributedString(
+            string: topText,
+            attributes: memeTextAttributes
+        )
+        
+        let bottomLabel = UILabel()
+        bottomLabel.textAlignment = .center
+        bottomLabel.attributedText = NSAttributedString(
+            string: bottomText,
+            attributes: memeTextAttributes
+        )
+        
+        let actualTopSize = topLabel.sizeThatFits(topTextFieldSize)
+        let actualBottomSize = bottomLabel.sizeThatFits(bottomTextFieldSize)
+        
+        let convertedRectTop = self.view.convert(topTextField.frame, to: photoView)
+        let convertedRectBottom = self.view.convert(bottomTextField.frame, to: photoView)
+        
+        UIGraphicsBeginImageContextWithOptions(contextSize, false, UIScreen.main.scale)
+        
+        let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
+        imageMeme.draw(in: contextRect)
+        let topTextRect = CGRect(
+            origin: CGPoint(
+                x: contextRect.midX.advanced(by: -actualTopSize.width/2.0),
+                y: convertedRectTop.origin.y
+            ),
+            size: actualTopSize
+        )
+        let bottomTextRect = CGRect(
+            origin: CGPoint(
+                x: contextRect.midX.advanced(by: -actualBottomSize.width/2.0),
+                y: convertedRectBottom.origin.y
+            ),
+            size: actualBottomSize
+        )
+        
+        topText.draw(in: topTextRect, withAttributes: memeTextAttributes)
+        bottomText.draw(in: bottomTextRect, withAttributes: memeTextAttributes)
 
-        // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
-        let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
-        // TODO: Show toolbar and navbar
-        
-        navigationController?.isNavigationBarHidden = false
-        navigationController?.isToolbarHidden = false
 
-        return memedImage
+        return newImage!
     }
 }
 
