@@ -11,6 +11,7 @@ import MobileCoreServices
 
 class MemeEditorViewController: UIViewController {
     let photoView = UIImageView(frame: .zero)
+    let label = UILabel()
     let cameraButton = UIBarButtonItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
@@ -34,6 +35,7 @@ class MemeEditorViewController: UIViewController {
         setUpImageView()
         setUpToolBar()
         setUpTextFields()
+        setUpPickImageLabel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,6 +82,20 @@ class MemeEditorViewController: UIViewController {
         ])
         photoView.backgroundColor = .darkGray
         photoView.contentMode = .scaleAspectFit
+    }
+    
+    func setUpPickImageLabel() {
+        label.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(label)
+        label.font = .systemFont(ofSize: 30, weight: .medium)
+        label.numberOfLines = 0
+        label.text = "Pick an image"
+        label.textColor = .white
+        label.textAlignment = .center
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
     }
     
     private func setUpTextFields() {
@@ -135,6 +151,7 @@ class MemeEditorViewController: UIViewController {
         topTextField.autocapitalizationType = .allCharacters
         bottomTextField.borderStyle = .none
         bottomTextField.text = "BOTTOM"
+        bottomTextField.autocapitalizationType = .allCharacters
         bottomTextField.isUserInteractionEnabled = false
         bottomTextField.adjustsFontSizeToFitWidth = true
         if let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40) {
@@ -149,6 +166,9 @@ class MemeEditorViewController: UIViewController {
         }
         topTextField.textAlignment = .center
         bottomTextField.textAlignment = .center
+        
+        topTextField.isHidden = true
+        bottomTextField.isHidden = true
     }
     
     @objc func openPhotoLibrary() {
@@ -169,6 +189,9 @@ class MemeEditorViewController: UIViewController {
     
     @objc func cancel() {
         photoView.image = nil
+        self.label.isHidden = false
+        topTextField.isHidden = true
+        bottomTextField.isHidden = true
         topTextField.text = "TOP"
         bottomTextField.text = "BOTTOM"
         navigationItem.leftBarButtonItem?.isEnabled = false
@@ -277,7 +300,10 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
         }
         
         dismiss(animated: true) {
+            self.label.isHidden = true
             self.photoView.image = image
+            self.topTextField.isHidden = false
+            self.bottomTextField.isHidden = false
             self.topTextField.isUserInteractionEnabled = true
             self.bottomTextField.isUserInteractionEnabled = true
             self.navigationItem.leftBarButtonItem?.isEnabled = true
