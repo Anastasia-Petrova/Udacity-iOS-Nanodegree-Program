@@ -21,16 +21,6 @@ class MemeEditorViewController: UIViewController {
     var topTextFieldTrailingConstraint = NSLayoutConstraint()
     var bottomTextFieldLeadingConstraint = NSLayoutConstraint()
     var bottomTextFieldTrailingConstraint = NSLayoutConstraint()
-    var memeTextAttributes: [NSAttributedString.Key: Any] {
-        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
-            ?? UIFont.systemFont(ofSize: 40)
-        return [
-            NSAttributedString.Key.strokeColor: UIColor.black,
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: font,
-            NSAttributedString.Key.strokeWidth: -3.0
-        ]
-    }
     var meme: MemeModel?
     var keyboardHeight: CGFloat = 0.0
     
@@ -183,14 +173,25 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.isUserInteractionEnabled = false
         bottomTextField.adjustsFontSizeToFitWidth = true
         
-        topTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.defaultTextAttributes = memeTextAttributes
+        topTextField.defaultTextAttributes = memeTextAttributes(fontSize: 40)
+        bottomTextField.defaultTextAttributes = memeTextAttributes(fontSize: 40)
         
         topTextField.textAlignment = .center
         bottomTextField.textAlignment = .center
         
         topTextField.isHidden = true
         bottomTextField.isHidden = true
+    }
+    
+    func memeTextAttributes(fontSize size: CGFloat) -> [NSAttributedString.Key: Any] {
+        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: size)
+            ?? UIFont.systemFont(ofSize: size)
+        return [
+            NSAttributedString.Key.strokeColor: UIColor.black,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.strokeWidth: -3.0
+        ]
     }
     
     func countTextFieldsConstants() -> (top: CGFloat, bottom: CGFloat) {
@@ -353,95 +354,94 @@ class MemeEditorViewController: UIViewController {
         meme = MemeModel(topTetx: topTextField.text!, bottomText: bottomTextField.text!, originalImage: photoView.image!, memedImage: memedImage)
     }
     
-    func textAttributes(fontSize size: CGFloat) -> [NSAttributedString.Key: Any] {
-        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: size)
-            ?? UIFont.systemFont(ofSize: 40)
-        return [
-            NSAttributedString.Key.strokeColor: UIColor.black,
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: font,
-            NSAttributedString.Key.strokeWidth: -3.0
-        ]
+    func calculateSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.attributedText = NSAttributedString(
+            string: text,
+            attributes: attributes
+        )
+        return label.sizeThatFits(size)
     }
     
     func generateMemedImage() -> UIImage {
-        guard let imageMeme = photoView.image,
-        let topText = topTextField.text,
-        let bottomText = bottomTextField.text,
-        let topFontSize = topTextField.font?.pointSize,
-        let bottomFontSize = bottomTextField.font?.pointSize else {
-            return UIImage()
+        // Step 1
+        let renderingData = prepareRenderingData()!
+        // Step 2
+        let finalImage = drawImage(with: renderingData)!
+        return finalImage
+    }
+    
+    func prepareRenderingData() -> RenderingData? {
+        guard let image = photoView.image,
+            let topText = topTextField.text,
+            let bottomText = bottomTextField.text,
+            let topFontSize = topTextField.font?.pointSize,
+            let bottomFontSize = bottomTextField.font?.pointSize else {
+                return nil
         }
-        let topTextAttributes = textAttributes(fontSize: topFontSize)
-        let bottomTextAttributes = textAttributes(fontSize: bottomFontSize)
-        
-        let topTextFieldSize = topTextField.frame.size
-        
-        let bottomTextFieldSize = bottomTextField.frame.size
-        
         let imageViewSize = photoView.frame.size
-        
-        let isPortrait = imageViewSize.height > imageViewSize.width
-        let aspectRatio = isPortrait ?
-            (imageMeme.size.height/imageMeme.size.width)
-            : (imageMeme.size.width/imageMeme.size.height)
         let smallerSide = isPortrait ? imageViewSize.width : imageViewSize.height
+        let aspectRatio = image.aspectRatio(isPortrait: isPortrait)
         
         let contextSize = CGSize(
             width: smallerSide * (isPortrait ? 1 : aspectRatio),
             height: smallerSide * (isPortrait ? aspectRatio : 1)
         )
-        let topLabel = UILabel()
-        topLabel.textAlignment = .center
-        topLabel.attributedText = NSAttributedString(
-            string: topText,
-            attributes: topTextAttributes
-        )
-        
-        let bottomLabel = UILabel()
-        bottomLabel.textAlignment = .center
-        bottomLabel.attributedText = NSAttributedString(
-            string: bottomText,
-            attributes: bottomTextAttributes
-        )
-        
-        let actualTopSize = topLabel.sizeThatFits(topTextFieldSize)
-        let actualBottomSize = bottomLabel.sizeThatFits(bottomTextFieldSize)
-        
-        let convertedRectTop = self.view.convert(topTextField.frame, to: photoView)
-        let convertedRectBottom = self.view.convert(bottomTextField.frame, to: photoView)
-        
-        UIGraphicsBeginImageContextWithOptions(contextSize, false, UIScreen.main.scale)
-        let topTextOnImageViewY = convertedRectTop.origin.y
-        let bottomTextOnImageViewY = convertedRectBottom.origin.y
-        let deltaY = (imageViewSize.height - contextSize.height)/2
-        let topTextOnImageY = topTextOnImageViewY - deltaY
-        let bottomTextOnImageY = bottomTextOnImageViewY - deltaY
-        
         let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
-        imageMeme.draw(in: contextRect)
-        let topTextRect = CGRect(
-            origin: CGPoint(
-                x: contextRect.midX.advanced(by: -actualTopSize.width/2.0),
-                y: topTextOnImageY
-            ),
-            size: actualTopSize
+        
+        return RenderingData(
+            contextRect: contextRect,
+            image: image,
+            topText: topText,
+            bottomText: bottomText,
+            topTextRect: prepareTextRect(contextRect: contextRect, textField: topTextField),
+            bottomTextRect: prepareTextRect(contextRect: contextRect, textField: bottomTextField),
+            topTextAttributes: memeTextAttributes(fontSize: topFontSize),
+            bottomTextAttributes: memeTextAttributes(fontSize: bottomFontSize)
         )
-        let bottomTextRect = CGRect(
-            origin: CGPoint(
-                x: contextRect.midX.advanced(by: -actualBottomSize.width/2.0),
-                y: bottomTextOnImageY
-            ),
-            size: actualBottomSize
+    }
+    
+    var isPortrait: Bool {
+        return view.frame.height > view.frame.width
+    }
+    
+    func prepareTextRect(contextRect: CGRect, textField: UITextField) -> CGRect {
+        guard let text = textField.text,
+            let fontSize = textField.font?.pointSize else {
+            return .zero
+        }
+        
+        let imageViewSize = photoView.frame.size
+        let convertedFrame = view.convert(textField.frame, to: photoView)
+        let deltaY = (imageViewSize.height - contextRect.size.height)/2
+        
+        let actualSize = calculateSize(
+            for: text,
+            thatFits: textField.frame.size,
+            attributes: memeTextAttributes(fontSize: fontSize)
         )
         
-        topText.draw(in: topTextRect, withAttributes: topTextAttributes)
-        bottomText.draw(in: bottomTextRect, withAttributes: bottomTextAttributes)
-
+        return CGRect(
+            origin: CGPoint(
+                x: contextRect.midX.advanced(by: -actualSize.width/2.0),
+                y: convertedFrame.origin.y - deltaY
+            ),
+            size: actualSize
+        )
+    }
+    
+    func drawImage(with data: RenderingData) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(data.contextRect.size, false, UIScreen.main.scale)
+        
+        data.image.draw(in: data.contextRect)
+        data.topText.draw(in: data.topTextRect, withAttributes: data.topTextAttributes)
+        data.bottomText.draw(in: data.bottomTextRect, withAttributes: data.bottomTextAttributes)
+        
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
-        return newImage!
+        
+        return newImage
     }
 }
 
@@ -492,3 +492,26 @@ extension UIView {
     }
 }
 
+extension MemeEditorViewController {
+    struct RenderingData {
+        let contextRect: CGRect
+        let image: UIImage
+        let topText: String
+        let bottomText: String
+        let topTextRect: CGRect
+        let bottomTextRect: CGRect
+        let topTextAttributes: [NSAttributedString.Key : Any]
+        let bottomTextAttributes: [NSAttributedString.Key : Any]
+    }
+}
+
+extension UIImage {
+    func aspectRatio(isPortrait: Bool) -> CGFloat {
+        let dividend = isPortrait ? size.height : size.width
+        let denominator = isPortrait ? size.width : size.height
+        guard denominator > 0 else {
+            return 0
+        }
+        return dividend/denominator
+    }
+}
