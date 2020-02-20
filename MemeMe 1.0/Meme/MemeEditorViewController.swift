@@ -36,6 +36,7 @@ class MemeEditorViewController: UIViewController {
         setUpToolBar()
         setUpTextFields()
         setUpPickImageLabel()
+        setDefaultValues()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,10 +49,10 @@ class MemeEditorViewController: UIViewController {
         super.viewDidLayoutSubviews()
         topTextFieldTopConstraint.constant = countTextFieldsConstants().top
         bottomTextFieldBottomConstraint.constant = countTextFieldsConstants().bottom
-        topTextFieldLeadingConstraint.constant = countTextFieldLeadingConstants()
-        topTextFieldTrailingConstraint.constant = countTextFieldLeadingConstants()
-        bottomTextFieldLeadingConstraint.constant = countTextFieldLeadingConstants()
-        bottomTextFieldTrailingConstraint.constant = countTextFieldLeadingConstants()
+        topTextFieldLeadingConstraint.constant = countTextFieldHorizontalConstant()
+        topTextFieldTrailingConstraint.constant = countTextFieldHorizontalConstant()
+        bottomTextFieldLeadingConstraint.constant = countTextFieldHorizontalConstant()
+        bottomTextFieldTrailingConstraint.constant = countTextFieldHorizontalConstant()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,13 +60,20 @@ class MemeEditorViewController: UIViewController {
         unsudcribeToKeyboardNotifications()
     }
     
+    func setDefaultValues() {
+        self.label.isHidden = false
+        topTextField.isHidden = true
+        bottomTextField.isHidden = true
+        topTextField.text = "TOP"
+        bottomTextField.text = "BOTTOM"
+        navigationItem.leftBarButtonItem?.isEnabled = false
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
     private func setUpNavigationBar() {
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
         navigationItem.leftBarButtonItem = actionItem
         navigationItem.rightBarButtonItem = cancelItem
-        navigationItem.leftBarButtonItem?.isEnabled = false
-        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     private func setUpToolBar() {
@@ -162,13 +170,11 @@ class MemeEditorViewController: UIViewController {
             bottomTextFieldBottomConstraint
         ])
         topTextField.borderStyle = .none
-        topTextField.text = "TOP"
         topTextField.isUserInteractionEnabled = false
         topTextField.adjustsFontSizeToFitWidth = true
         topTextField.minimumFontSize = 12
         topTextField.autocapitalizationType = .allCharacters
         bottomTextField.borderStyle = .none
-        bottomTextField.text = "TOP"
         bottomTextField.autocapitalizationType = .allCharacters
         bottomTextField.isUserInteractionEnabled = false
         bottomTextField.adjustsFontSizeToFitWidth = true
@@ -178,9 +184,6 @@ class MemeEditorViewController: UIViewController {
         
         topTextField.textAlignment = .center
         bottomTextField.textAlignment = .center
-        
-        topTextField.isHidden = true
-        bottomTextField.isHidden = true
     }
     
     func memeTextAttributes(fontSize size: CGFloat) -> [NSAttributedString.Key: Any] {
@@ -194,25 +197,25 @@ class MemeEditorViewController: UIViewController {
         ]
     }
     
+    func calculateContextSize(image: UIImage) -> CGSize {
+        let imageViewSize = photoView.frame.size
+        let aspectRatio = image.aspectRatio(isPortrait: isPortrait)
+        let smallerSide = isPortrait ? imageViewSize.width : imageViewSize.height
+        return CGSize(
+            width: smallerSide * (isPortrait ? 1 : aspectRatio),
+            height: smallerSide * (isPortrait ? aspectRatio : 1)
+        )
+    }
+    
     func countTextFieldsConstants() -> (top: CGFloat, bottom: CGFloat) {
         var topConstant: CGFloat = 0.0
         var bottomConstant: CGFloat = 0.0
         guard let image = photoView.image else { return (topConstant, bottomConstant)}
         
-        let imageViewHeight = photoView.frame.height
-        let aspectRatio = image.size.height/image.size.width
-        
-        let smallerSide =
-            photoView.frame.height > photoView.frame.width
-            ? photoView.frame.width
-            : photoView.frame.height
-        
-        let contextSize = CGSize(
-            width: smallerSide,
-            height: smallerSide * aspectRatio
-        )
         let keyboardOffset = max(0, keyboardHeight - view.safeAreaInsets.bottom)
-        if photoView.frame.height > photoView.frame.width {
+        if isPortrait {
+            let imageViewHeight = photoView.frame.height
+            let contextSize = calculateContextSize(image: image)
             topConstant = ((imageViewHeight - contextSize.height) / 2 + 8)
             let baseOffset = max((imageViewHeight - contextSize.height) / 2, keyboardOffset)
             bottomConstant = baseOffset + 8
@@ -223,31 +226,10 @@ class MemeEditorViewController: UIViewController {
         return (topConstant, bottomConstant)
     }
     
-    func countTextFieldLeadingConstants() -> CGFloat {
-//        return 16
-        var leadingConstant: CGFloat = 0.0
-        
-        guard let image = photoView.image else { return (leadingConstant)}
-        
-        let imageViewWidth = photoView.frame.width
-        let aspectRatio = image.size.width/image.size.height
-        
-        let smallerSide =
-            photoView.frame.height > photoView.frame.width
-            ? photoView.frame.width
-            : photoView.frame.height
-        
-        let contextSize = CGSize(
-            width: smallerSide * aspectRatio,
-            height: smallerSide
-        )
-        
-        if photoView.frame.width > photoView.frame.height {
-            leadingConstant = ((imageViewWidth - contextSize.width) / 2 + 16)
-        } else {
-            leadingConstant = 16
-        }
-        return leadingConstant
+    func countTextFieldHorizontalConstant() -> CGFloat {
+        guard let image = photoView.image else { return 0.0}
+        let contextSize = calculateContextSize(image: image)
+        return isPortrait ? 16 : ((photoView.frame.width - contextSize.width) / 2 + 16)
     }
     
     @objc func openPhotoLibrary() {
@@ -268,13 +250,7 @@ class MemeEditorViewController: UIViewController {
     
     @objc func cancel() {
         photoView.image = nil
-        self.label.isHidden = false
-        topTextField.isHidden = true
-        bottomTextField.isHidden = true
-        topTextField.text = "TOP"
-        bottomTextField.text = "BOTTOM"
-        navigationItem.leftBarButtonItem?.isEnabled = false
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        setDefaultValues()
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
         }
@@ -380,14 +356,8 @@ class MemeEditorViewController: UIViewController {
             let bottomFontSize = bottomTextField.font?.pointSize else {
                 return nil
         }
-        let imageViewSize = photoView.frame.size
-        let smallerSide = isPortrait ? imageViewSize.width : imageViewSize.height
-        let aspectRatio = image.aspectRatio(isPortrait: isPortrait)
         
-        let contextSize = CGSize(
-            width: smallerSide * (isPortrait ? 1 : aspectRatio),
-            height: smallerSide * (isPortrait ? aspectRatio : 1)
-        )
+        let contextSize = calculateContextSize(image: image)
         let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
         
         return RenderingData(
