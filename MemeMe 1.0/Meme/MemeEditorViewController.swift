@@ -52,7 +52,8 @@ class MemeEditorViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        countTextFieldConstant()
+        topTextFieldTopConstraint.constant = countTextFieldsConstants().top
+        bottomTextFieldBottomConstraint.constant = countTextFieldsConstants().bottom
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -177,8 +178,10 @@ class MemeEditorViewController: UIViewController {
         bottomTextField.isHidden = true
     }
     
-    func countTextFieldConstant() {
-        guard let image = photoView.image else { return }
+    func countTextFieldsConstants() -> (top: CGFloat, bottom: CGFloat) {
+        var topConstant: CGFloat = 0.0
+        var bottomConstant: CGFloat = 0.0
+        guard let image = photoView.image else { return (topConstant, bottomConstant)}
         
         let imageViewHeight = photoView.frame.height
         let aspectRatio = image.size.height/image.size.width
@@ -194,13 +197,14 @@ class MemeEditorViewController: UIViewController {
         )
         let keyboardOffset = max(0, keyboardHeight - view.safeAreaInsets.bottom)
         if photoView.frame.height > photoView.frame.width {
-            topTextFieldTopConstraint.constant = ((imageViewHeight - contextSize.height) / 2 + 8)
+            topConstant = ((imageViewHeight - contextSize.height) / 2 + 8)
             let baseOffset = max((imageViewHeight - contextSize.height) / 2, keyboardOffset)
-            bottomTextFieldBottomConstraint.constant = baseOffset + 8
+            bottomConstant = baseOffset + 8
         } else {
-            topTextFieldTopConstraint.constant = 8
-            bottomTextFieldBottomConstraint.constant = 8 + keyboardOffset
+            topConstant = 8
+            bottomConstant = 8 + keyboardOffset
         }
+        return (topConstant, bottomConstant)
     }
     
     @objc func openPhotoLibrary() {
