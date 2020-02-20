@@ -16,6 +16,7 @@ class MemeEditorViewController: UIViewController {
     let topTextField = UITextField()
     let bottomTextField = UITextField()
     var bottomTextFieldBottomConstraint = NSLayoutConstraint()
+    var topTextFieldTopConstraint = NSLayoutConstraint()
     var memeTextAttributes: [NSAttributedString.Key: Any] {
         let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
             ?? UIFont.systemFont(ofSize: 40)
@@ -27,6 +28,7 @@ class MemeEditorViewController: UIViewController {
         ]
     }
     var meme: MemeModel?
+    var keyboardHight = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +48,11 @@ class MemeEditorViewController: UIViewController {
         super.viewWillAppear(animated)
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         sudcribeToKeyboardNotifications()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        countTextFieldConstant()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -115,10 +122,11 @@ class MemeEditorViewController: UIViewController {
         topTextField.setContentCompressionResistancePriority(.required, for: .vertical)
         bottomTextField.setContentHuggingPriority(.required, for: .vertical)
         bottomTextField.setContentCompressionResistancePriority(.required, for: .vertical)
-        let topTextFieldTopConstraint = topTextField.topAnchor.constraint(
+        topTextFieldTopConstraint = topTextField.topAnchor.constraint(
             equalTo: photoView.topAnchor,
             constant: 16
         )
+        
         topTextFieldTopConstraint.priority = .defaultLow
         
         NSLayoutConstraint.activate([
@@ -167,6 +175,31 @@ class MemeEditorViewController: UIViewController {
         
         topTextField.isHidden = true
         bottomTextField.isHidden = true
+    }
+    
+    func countTextFieldConstant() {
+        guard let image = photoView.image else { return }
+        
+        let imageViewHeight = photoView.frame.height
+        let aspectRatio = image.size.height/image.size.width
+        
+        let smallerSide =
+            photoView.frame.height > photoView.frame.width
+            ? photoView.frame.width
+            : photoView.frame.height
+        
+        let contextSize = CGSize(
+            width: smallerSide,
+            height: smallerSide * aspectRatio
+        )
+        
+        if photoView.frame.height > photoView.frame.width {
+            topTextFieldTopConstraint.constant = ((imageViewHeight - contextSize.height) / 2 + 8)
+            bottomTextFieldBottomConstraint.constant = ((imageViewHeight - contextSize.height) / 2 + 8)
+        } else {
+            topTextFieldTopConstraint.constant = 8
+            bottomTextFieldBottomConstraint.constant = 8
+        }
     }
     
     @objc func openPhotoLibrary() {
