@@ -28,7 +28,7 @@ class MemeEditorViewController: UIViewController {
         ]
     }
     var meme: MemeModel?
-    var keyboardHight = 0
+    var keyboardHeight: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,13 +192,14 @@ class MemeEditorViewController: UIViewController {
             width: smallerSide,
             height: smallerSide * aspectRatio
         )
-        
+        let keyboardOffset = max(0, keyboardHeight - view.safeAreaInsets.bottom)
         if photoView.frame.height > photoView.frame.width {
             topTextFieldTopConstraint.constant = ((imageViewHeight - contextSize.height) / 2 + 8)
-            bottomTextFieldBottomConstraint.constant = ((imageViewHeight - contextSize.height) / 2 + 8)
+            let baseOffset = max((imageViewHeight - contextSize.height) / 2, keyboardOffset)
+            bottomTextFieldBottomConstraint.constant = baseOffset + 8
         } else {
             topTextFieldTopConstraint.constant = 8
-            bottomTextFieldBottomConstraint.constant = 8
+            bottomTextFieldBottomConstraint.constant = 8 + keyboardOffset
         }
     }
     
@@ -233,8 +234,10 @@ class MemeEditorViewController: UIViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        guard bottomTextField.isEditing else { return }
-        let height = getKeyboardHight(notification)
+        guard bottomTextField.isEditing else {
+            return
+        }
+        keyboardHeight = getKeyboardHight(notification)
         let duration = getKeyboardAnimationDuration(notification)
         let curve = getKeyboardAnimationCurve(notification)
         
@@ -244,15 +247,18 @@ class MemeEditorViewController: UIViewController {
             delay: 0,
             options: UIView.animationOptions(for: curve),
             animations: {
-                self.bottomTextFieldBottomConstraint.constant = height
-                self.view.layoutIfNeeded()
+                //We call setNeedsLayout to work around edge case when we rotate
+                //device with keyboard visible. In which case viewDidLayoutSubviews is
+                //called before keyboardWillShow and layoutIfNeeded in this animation block
+                //does not trigger another layout cycle.
+                self.view.setNeedsLayout()
         },
             completion: nil
         )
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
-        let height: CGFloat = 16.0
+        keyboardHeight = 0.0
         let duration = getKeyboardAnimationDuration(notification)
         let curve = getKeyboardAnimationCurve(notification)
         
@@ -262,7 +268,6 @@ class MemeEditorViewController: UIViewController {
             delay: 0,
             options: UIView.animationOptions(for: curve),
             animations: {
-                self.bottomTextFieldBottomConstraint.constant = height
                 self.view.layoutIfNeeded()
         },
             completion: nil
