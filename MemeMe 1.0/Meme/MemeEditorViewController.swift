@@ -17,6 +17,10 @@ class MemeEditorViewController: UIViewController {
     let bottomTextField = UITextField()
     var bottomTextFieldBottomConstraint = NSLayoutConstraint()
     var topTextFieldTopConstraint = NSLayoutConstraint()
+    var topTextFieldLeadingConstraint = NSLayoutConstraint()
+    var topTextFieldTrailingConstraint = NSLayoutConstraint()
+    var bottomTextFieldLeadingConstraint = NSLayoutConstraint()
+    var bottomTextFieldTrailingConstraint = NSLayoutConstraint()
     var memeTextAttributes: [NSAttributedString.Key: Any] {
         let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
             ?? UIFont.systemFont(ofSize: 40)
@@ -54,6 +58,10 @@ class MemeEditorViewController: UIViewController {
         super.viewDidLayoutSubviews()
         topTextFieldTopConstraint.constant = countTextFieldsConstants().top
         bottomTextFieldBottomConstraint.constant = countTextFieldsConstants().bottom
+        topTextFieldLeadingConstraint.constant = countTextFieldLeadingConstants()
+        topTextFieldTrailingConstraint.constant = countTextFieldLeadingConstants()
+        bottomTextFieldLeadingConstraint.constant = countTextFieldLeadingConstants()
+        bottomTextFieldTrailingConstraint.constant = countTextFieldLeadingConstants()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -123,8 +131,27 @@ class MemeEditorViewController: UIViewController {
         topTextField.setContentCompressionResistancePriority(.required, for: .vertical)
         bottomTextField.setContentHuggingPriority(.required, for: .vertical)
         bottomTextField.setContentCompressionResistancePriority(.required, for: .vertical)
-        topTextFieldTopConstraint = topTextField.topAnchor.constraint(
+        topTextFieldTopConstraint =
+            topTextField.topAnchor.constraint(
             equalTo: photoView.topAnchor,
+            constant: 16
+        )
+        topTextFieldLeadingConstraint =
+            topTextField.leadingAnchor.constraint(
+            equalTo: view.leadingAnchor,
+            constant: 16
+        )
+        topTextFieldTrailingConstraint =
+                view.trailingAnchor.constraint(
+                equalTo: topTextField.trailingAnchor,
+                constant: 16
+        )
+        bottomTextFieldLeadingConstraint = bottomTextField.leadingAnchor.constraint(
+            equalTo: view.leadingAnchor,
+            constant: 16
+        )
+        bottomTextFieldTrailingConstraint =             view.trailingAnchor.constraint(
+            equalTo: bottomTextField.trailingAnchor,
             constant: 16
         )
         
@@ -133,22 +160,10 @@ class MemeEditorViewController: UIViewController {
         NSLayoutConstraint.activate([
             topTextFieldTopConstraint,
             topTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            topTextField.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            view.trailingAnchor.constraint(
-                equalTo: topTextField.trailingAnchor,
-                constant: 16
-            ),
-            bottomTextField.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: 16
-            ),
-            view.trailingAnchor.constraint(
-                equalTo: bottomTextField.trailingAnchor,
-                constant: 16
-            ),
+            topTextFieldLeadingConstraint,
+            topTextFieldTrailingConstraint,
+            bottomTextFieldLeadingConstraint,
+            bottomTextFieldTrailingConstraint,
             bottomTextField.topAnchor.constraint(
                 greaterThanOrEqualTo: topTextField.bottomAnchor,
                 constant: 8
@@ -163,7 +178,7 @@ class MemeEditorViewController: UIViewController {
         topTextField.minimumFontSize = 12
         topTextField.autocapitalizationType = .allCharacters
         bottomTextField.borderStyle = .none
-        bottomTextField.text = "BOTTOM"
+        bottomTextField.text = "TOP"
         bottomTextField.autocapitalizationType = .allCharacters
         bottomTextField.isUserInteractionEnabled = false
         bottomTextField.adjustsFontSizeToFitWidth = true
@@ -205,6 +220,33 @@ class MemeEditorViewController: UIViewController {
             bottomConstant = 8 + keyboardOffset
         }
         return (topConstant, bottomConstant)
+    }
+    
+    func countTextFieldLeadingConstants() -> CGFloat {
+//        return 16
+        var leadingConstant: CGFloat = 0.0
+        
+        guard let image = photoView.image else { return (leadingConstant)}
+        
+        let imageViewWidth = photoView.frame.width
+        let aspectRatio = image.size.width/image.size.height
+        
+        let smallerSide =
+            photoView.frame.height > photoView.frame.width
+            ? photoView.frame.width
+            : photoView.frame.height
+        
+        let contextSize = CGSize(
+            width: smallerSide * aspectRatio,
+            height: smallerSide
+        )
+        
+        if photoView.frame.width > photoView.frame.height {
+            leadingConstant = ((imageViewWidth - contextSize.width) / 2 + 16)
+        } else {
+            leadingConstant = 16
+        }
+        return leadingConstant
     }
     
     @objc func openPhotoLibrary() {
@@ -311,38 +353,56 @@ class MemeEditorViewController: UIViewController {
         meme = MemeModel(topTetx: topTextField.text!, bottomText: bottomTextField.text!, originalImage: photoView.image!, memedImage: memedImage)
     }
     
+    func textAttributes(fontSize size: CGFloat) -> [NSAttributedString.Key: Any] {
+        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: size)
+            ?? UIFont.systemFont(ofSize: 40)
+        return [
+            NSAttributedString.Key.strokeColor: UIColor.black,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.strokeWidth: -3.0
+        ]
+    }
+    
     func generateMemedImage() -> UIImage {
         guard let imageMeme = photoView.image,
         let topText = topTextField.text,
-        let bottomText = bottomTextField.text else {
+        let bottomText = bottomTextField.text,
+        let topFontSize = topTextField.font?.pointSize,
+        let bottomFontSize = bottomTextField.font?.pointSize else {
             return UIImage()
         }
+        let topTextAttributes = textAttributes(fontSize: topFontSize)
+        let bottomTextAttributes = textAttributes(fontSize: bottomFontSize)
+        
         let topTextFieldSize = topTextField.frame.size
         
         let bottomTextFieldSize = bottomTextField.frame.size
-        let aspectRatio = imageMeme.size.width/imageMeme.size.height
+        
         let imageViewSize = photoView.frame.size
         
-        let smallerSide = imageViewSize.height > imageViewSize.width
-            ? imageViewSize.width
-            : imageViewSize.height
+        let isPortrait = imageViewSize.height > imageViewSize.width
+        let aspectRatio = isPortrait ?
+            (imageMeme.size.height/imageMeme.size.width)
+            : (imageMeme.size.width/imageMeme.size.height)
+        let smallerSide = isPortrait ? imageViewSize.width : imageViewSize.height
         
         let contextSize = CGSize(
-            width: smallerSide * aspectRatio,
-            height: smallerSide
+            width: smallerSide * (isPortrait ? 1 : aspectRatio),
+            height: smallerSide * (isPortrait ? aspectRatio : 1)
         )
         let topLabel = UILabel()
         topLabel.textAlignment = .center
         topLabel.attributedText = NSAttributedString(
             string: topText,
-            attributes: memeTextAttributes
+            attributes: topTextAttributes
         )
         
         let bottomLabel = UILabel()
         bottomLabel.textAlignment = .center
         bottomLabel.attributedText = NSAttributedString(
             string: bottomText,
-            attributes: memeTextAttributes
+            attributes: bottomTextAttributes
         )
         
         let actualTopSize = topLabel.sizeThatFits(topTextFieldSize)
@@ -352,26 +412,31 @@ class MemeEditorViewController: UIViewController {
         let convertedRectBottom = self.view.convert(bottomTextField.frame, to: photoView)
         
         UIGraphicsBeginImageContextWithOptions(contextSize, false, UIScreen.main.scale)
+        let topTextOnImageViewY = convertedRectTop.origin.y
+        let bottomTextOnImageViewY = convertedRectBottom.origin.y
+        let deltaY = (imageViewSize.height - contextSize.height)/2
+        let topTextOnImageY = topTextOnImageViewY - deltaY
+        let bottomTextOnImageY = bottomTextOnImageViewY - deltaY
         
         let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
         imageMeme.draw(in: contextRect)
         let topTextRect = CGRect(
             origin: CGPoint(
                 x: contextRect.midX.advanced(by: -actualTopSize.width/2.0),
-                y: convertedRectTop.origin.y
+                y: topTextOnImageY
             ),
             size: actualTopSize
         )
         let bottomTextRect = CGRect(
             origin: CGPoint(
                 x: contextRect.midX.advanced(by: -actualBottomSize.width/2.0),
-                y: convertedRectBottom.origin.y
+                y: bottomTextOnImageY
             ),
             size: actualBottomSize
         )
         
-        topText.draw(in: topTextRect, withAttributes: memeTextAttributes)
-        bottomText.draw(in: bottomTextRect, withAttributes: memeTextAttributes)
+        topText.draw(in: topTextRect, withAttributes: topTextAttributes)
+        bottomText.draw(in: bottomTextRect, withAttributes: bottomTextAttributes)
 
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
