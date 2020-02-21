@@ -9,7 +9,7 @@
 import UIKit
 import MobileCoreServices
 
-class MemeEditorViewController: UIViewController {
+final class MemeEditorViewController: UIViewController {
     let photoView = UIImageView(frame: .zero)
     let label = UILabel()
     let cameraButton = UIBarButtonItem()
@@ -42,22 +42,22 @@ class MemeEditorViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
-        sudcribeToKeyboardNotifications()
+        subscribeToKeyboardNotifications()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         topTextFieldTopConstraint.constant = countTextFieldsConstants().top
         bottomTextFieldBottomConstraint.constant = countTextFieldsConstants().bottom
-        topTextFieldLeadingConstraint.constant = countTextFieldHorizontalConstant()
-        topTextFieldTrailingConstraint.constant = countTextFieldHorizontalConstant()
-        bottomTextFieldLeadingConstraint.constant = countTextFieldHorizontalConstant()
-        bottomTextFieldTrailingConstraint.constant = countTextFieldHorizontalConstant()
+        topTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
+        topTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
+        bottomTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
+        bottomTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        unsudcribeToKeyboardNotifications()
+        unsudcribeFromKeyboardNotifications()
     }
     
     func setDefaultValues() {
@@ -69,6 +69,7 @@ class MemeEditorViewController: UIViewController {
         navigationItem.leftBarButtonItem?.isEnabled = false
         navigationItem.rightBarButtonItem?.isEnabled = false
     }
+    
     private func setUpNavigationBar() {
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
@@ -216,18 +217,18 @@ class MemeEditorViewController: UIViewController {
         if isPortrait {
             let imageViewHeight = photoView.frame.height
             let contextSize = calculateContextSize(image: image)
-            topConstant = ((imageViewHeight - contextSize.height) / 2 + 8)
+            topConstant = ((imageViewHeight - contextSize.height) / 2 + 16)
             let baseOffset = max((imageViewHeight - contextSize.height) / 2, keyboardOffset)
-            bottomConstant = baseOffset + 8
+            bottomConstant = baseOffset + 16
         } else {
-            topConstant = 8
-            bottomConstant = 8 + keyboardOffset
+            topConstant = 16
+            bottomConstant = 16 + keyboardOffset
         }
         return (topConstant, bottomConstant)
     }
     
-    func countTextFieldHorizontalConstant() -> CGFloat {
-        guard let image = photoView.image else { return 0.0}
+    func calculateHorizontalTextFieldOffset() -> CGFloat {
+        guard let image = photoView.image else { return 0.0 }
         let contextSize = calculateContextSize(image: image)
         return isPortrait ? 16 : ((photoView.frame.width - contextSize.width) / 2 + 16)
     }
@@ -251,6 +252,8 @@ class MemeEditorViewController: UIViewController {
     @objc func cancel() {
         photoView.image = nil
         setDefaultValues()
+        topTextField.resignFirstResponder()
+        bottomTextField.resignFirstResponder()
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
         }
@@ -271,7 +274,7 @@ class MemeEditorViewController: UIViewController {
             options: UIView.animationOptions(for: curve),
             animations: {
                 //We call setNeedsLayout to work around edge case when we rotate
-                //device with keyboard visible. In which case viewDidLayoutSubviews is
+                //device with a keyboard visible. In which case viewDidLayoutSubviews is
                 //called before keyboardWillShow and layoutIfNeeded in this animation block
                 //does not trigger another layout cycle.
                 self.view.setNeedsLayout()
@@ -315,12 +318,12 @@ class MemeEditorViewController: UIViewController {
         return keyboardSize.cgRectValue.height
     }
     
-    func sudcribeToKeyboardNotifications() {
+    func subscribeToKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func unsudcribeToKeyboardNotifications() {
+    func unsudcribeFromKeyboardNotifications() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -330,7 +333,7 @@ class MemeEditorViewController: UIViewController {
         meme = MemeModel(topTetx: topTextField.text!, bottomText: bottomTextField.text!, originalImage: photoView.image!, memedImage: memedImage)
     }
     
-    func calculateSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
+    func calculateLabelSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
         let label = UILabel()
         label.textAlignment = .center
         label.attributedText = NSAttributedString(
@@ -344,7 +347,7 @@ class MemeEditorViewController: UIViewController {
         // Step 1
         let renderingData = prepareRenderingData()!
         // Step 2
-        let finalImage = drawImage(with: renderingData)!
+        let finalImage = drawImage(with: renderingData)! //FIXME: remove optionality
         return finalImage
     }
     
@@ -386,7 +389,7 @@ class MemeEditorViewController: UIViewController {
         let convertedFrame = view.convert(textField.frame, to: photoView)
         let deltaY = (imageViewSize.height - contextRect.size.height)/2
         
-        let actualSize = calculateSize(
+        let actualSize = calculateLabelSize(
             for: text,
             thatFits: textField.frame.size,
             attributes: memeTextAttributes(fontSize: fontSize)
