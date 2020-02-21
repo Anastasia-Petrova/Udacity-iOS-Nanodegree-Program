@@ -67,7 +67,7 @@ final class MemeEditorViewController: UIViewController {
         topTextField.text = "TOP"
         bottomTextField.text = "BOTTOM"
         navigationItem.leftBarButtonItem?.isEnabled = false
-        navigationItem.rightBarButtonItem?.isEnabled = false
+//        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     private func setUpNavigationBar() {
@@ -250,13 +250,14 @@ final class MemeEditorViewController: UIViewController {
     }
     
     @objc func cancel() {
-        photoView.image = nil
-        setDefaultValues()
-        topTextField.resignFirstResponder()
-        bottomTextField.resignFirstResponder()
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-        }
+        self.navigationController?.popViewController(animated: true)
+//        photoView.image = nil
+//        setDefaultValues()
+//        topTextField.resignFirstResponder()
+//        bottomTextField.resignFirstResponder()
+//        UIView.animate(withDuration: 0.2) {
+//            self.view.layoutIfNeeded()
+//        }
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -434,7 +435,7 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
             self.topTextField.isUserInteractionEnabled = true
             self.bottomTextField.isUserInteractionEnabled = true
             self.navigationItem.leftBarButtonItem?.isEnabled = true
-            self.navigationItem.rightBarButtonItem?.isEnabled = true
+//            self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
 }
