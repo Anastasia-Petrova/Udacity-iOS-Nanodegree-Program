@@ -69,6 +69,9 @@ final class SentMemesViewController: UIViewController {
 }
 
 extension SentMemesViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 

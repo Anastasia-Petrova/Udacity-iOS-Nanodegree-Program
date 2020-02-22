@@ -15,6 +15,7 @@
 		6D362BAB23FAE6950078AF3D /* PhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D362BAA23FAE6950078AF3D /* PhotoBrowser.swift */; };
 		6D77B4D32401A1A20028A0CE /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D77B4D22401A1A20028A0CE /* TableViewDataSource.swift */; };
 		6D77B4D52401A24C0028A0CE /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D77B4D42401A24C0028A0CE /* TableViewCell.swift */; };
+		6D77B4D72401B4070028A0CE /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D77B4D62401B4070028A0CE /* DetailViewController.swift */; };
 		6DCE64C623FFDD8900D00513 /* MemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE64C523FFDD8900D00513 /* MemeTests.swift */; };
 		6DCE64CE23FFDE2400D00513 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DCE64CD23FFDE2300D00513 /* Assets.xcassets */; };
 		6DCE64D023FFDE7500D00513 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE64CF23FFDE7500D00513 /* Bundle.swift */; };
@@ -43,6 +44,7 @@
 		6D362BAA23FAE6950078AF3D /* PhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoBrowser.swift; sourceTree = "<group>"; };
 		6D77B4D22401A1A20028A0CE /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		6D77B4D42401A24C0028A0CE /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		6D77B4D62401B4070028A0CE /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		6DCE64C323FFDD8900D00513 /* MemeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCE64C523FFDD8900D00513 /* MemeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeTests.swift; sourceTree = "<group>"; };
 		6DCE64C723FFDD8900D00513 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,14 +94,15 @@
 			isa = PBXGroup;
 			children = (
 				6D362B9023FAB9B70078AF3D /* AppDelegate.swift */,
+				6D77B4D62401B4070028A0CE /* DetailViewController.swift */,
 				6D362B9B23FAB9B90078AF3D /* LaunchScreen.storyboard */,
 				6D362BA423FACD6F0078AF3D /* MemeEditorViewController.swift */,
 				6DD84E6223FC459000CAFFD0 /* MemeModel.swift */,
-				6D77B4D22401A1A20028A0CE /* TableViewDataSource.swift */,
-				6D77B4D42401A24C0028A0CE /* TableViewCell.swift */,
 				6D362BAA23FAE6950078AF3D /* PhotoBrowser.swift */,
 				6D362B9223FAB9B70078AF3D /* SceneDelegate.swift */,
 				6DE3C5092400437D00589BCC /* SentMemesViewController.swift */,
+				6D77B4D42401A24C0028A0CE /* TableViewCell.swift */,
+				6D77B4D22401A1A20028A0CE /* TableViewDataSource.swift */,
 				6D362B9923FAB9B90078AF3D /* Assets.xcassets */,
 				6D362B9E23FAB9B90078AF3D /* Info.plist */,
 			);
@@ -218,6 +221,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D77B4D72401B4070028A0CE /* DetailViewController.swift in Sources */,
 				6DE3C50A2400437D00589BCC /* SentMemesViewController.swift in Sources */,
 				6D77B4D52401A24C0028A0CE /* TableViewCell.swift in Sources */,
 				6D362B9123FAB9B70078AF3D /* AppDelegate.swift in Sources */,
