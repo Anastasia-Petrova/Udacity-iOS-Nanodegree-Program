@@ -9,18 +9,28 @@
 import UIKit
 
 final class SentMemesViewController: UIViewController {
+    let tableView = UITableView()
+    let tableViewDataSource = TableViewDataSource()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.title = "Sent Memes"
+        tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.dataSource = tableViewDataSource
+        tableView.delegate = self
         setUpNavigationBar()
         setUpTableView()
         setUpTabBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setToolbarHidden(true, animated: true)
+    }
+    
     private func setUpNavigationBar() {
-        let addItem = UIBarButtonItem(barButtonSystemItem: .add, target: self,  action: #selector(pushEditorViewController))
+        let addItem = UIBarButtonItem(barButtonSystemItem: .add, target: self,  action: #selector(presentEditorViewController))
         navigationItem.rightBarButtonItem = addItem
     }
     
@@ -42,7 +52,6 @@ final class SentMemesViewController: UIViewController {
     }
     
     private func setUpTableView() {
-        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -53,9 +62,13 @@ final class SentMemesViewController: UIViewController {
         ])
     }
     
-    @objc func pushEditorViewController() {
+    @objc func presentEditorViewController() {
         let vc = MemeEditorViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+}
+
+extension SentMemesViewController: UITableViewDelegate {
+    
 }
 
