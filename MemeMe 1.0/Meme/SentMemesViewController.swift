@@ -64,7 +64,7 @@ final class SentMemesViewController: UIViewController {
     
     @objc func presentEditorViewController() {
         let vc = MemeEditorViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.present(vc, animated: true)
     }
 }
 

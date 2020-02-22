@@ -71,15 +71,27 @@ final class MemeEditorViewController: UIViewController {
     }
     
     private func setUpNavigationBar() {
+        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
+        view.addSubview(navBar)
+        let navItem = UINavigationItem()
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-        navigationItem.leftBarButtonItem = actionItem
-        navigationItem.rightBarButtonItem = cancelItem
+        navItem.leftBarButtonItem = actionItem
+        navItem.rightBarButtonItem = cancelItem
+        navBar.setItems([navItem], animated: false)
     }
     
     private func setUpToolBar() {
-        navigationController?.setToolbarHidden(false, animated: true)
-        navigationController?.toolbar.contentMode = .center
+        let toolBar = UIToolbar()
+        toolBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(toolBar)
+        NSLayoutConstraint.activate([
+            toolBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            toolBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toolBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toolBar.heightAnchor.constraint(equalToConstant: 44)
+        ])
+        toolBar.contentMode = .center
         cameraButton.image = UIImage(systemName: "camera.fill")
         cameraButton.style = .plain
         cameraButton.target = self
@@ -88,7 +100,7 @@ final class MemeEditorViewController: UIViewController {
 
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let items = [flexibleSpace, cameraButton, flexibleSpace, albumButton, flexibleSpace]
-        self.toolbarItems = items
+        toolBar.setItems(items, animated: false)
     }
     
     private func setUpImageView() {
@@ -250,7 +262,7 @@ final class MemeEditorViewController: UIViewController {
     }
     
     @objc func cancel() {
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true, completion: nil)
 //        photoView.image = nil
 //        setDefaultValues()
 //        topTextField.resignFirstResponder()
