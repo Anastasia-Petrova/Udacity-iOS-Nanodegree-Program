@@ -28,7 +28,7 @@ final class MemeEditorViewController: UIViewController {
         super.viewDidLoad()
         topTextField.delegate = self
         bottomTextField.delegate = self
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .darkGray
         self.view.addSubview(photoView)
         
         setUpNavigationBar()
@@ -78,7 +78,7 @@ final class MemeEditorViewController: UIViewController {
     }
     
     private func setUpToolBar() {
-        navigationController?.isToolbarHidden = false
+        navigationController?.setToolbarHidden(false, animated: true)
         navigationController?.toolbar.contentMode = .center
         cameraButton.image = UIImage(systemName: "camera.fill")
         cameraButton.style = .plain
