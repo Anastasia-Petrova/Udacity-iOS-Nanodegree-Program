@@ -10,6 +10,8 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
+    let navBar = UINavigationBar()
+    let toolBar = UIToolbar()
     let photoView = UIImageView(frame: .zero)
     let label = UILabel()
     let cameraButton = UIBarButtonItem()
@@ -29,7 +31,9 @@ final class MemeEditorViewController: UIViewController {
         topTextField.delegate = self
         bottomTextField.delegate = self
         self.view.backgroundColor = .darkGray
+        self.view.addSubview(navBar)
         self.view.addSubview(photoView)
+        self.view.addSubview(toolBar)
         
         setUpNavigationBar()
         setUpImageView()
@@ -71,8 +75,13 @@ final class MemeEditorViewController: UIViewController {
     }
     
     private func setUpNavigationBar() {
-        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 44))
-        view.addSubview(navBar)
+        navBar.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            navBar.topAnchor.constraint(equalTo: view.topAnchor),
+            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            navBar.heightAnchor.constraint(equalToConstant: 44)
+        ])
         let navItem = UINavigationItem()
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
@@ -82,16 +91,14 @@ final class MemeEditorViewController: UIViewController {
     }
     
     private func setUpToolBar() {
-        let toolBar = UIToolbar()
         toolBar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(toolBar)
+        toolBar.contentMode = .center
         NSLayoutConstraint.activate([
             toolBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             toolBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             toolBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toolBar.heightAnchor.constraint(equalToConstant: 44)
         ])
-        toolBar.contentMode = .center
         cameraButton.image = UIImage(systemName: "camera.fill")
         cameraButton.style = .plain
         cameraButton.target = self
@@ -106,8 +113,8 @@ final class MemeEditorViewController: UIViewController {
     private func setUpImageView() {
         photoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            photoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            photoView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            photoView.topAnchor.constraint(equalTo: navBar.bottomAnchor),
+            photoView.bottomAnchor.constraint(equalTo: toolBar.topAnchor),
             photoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             photoView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
