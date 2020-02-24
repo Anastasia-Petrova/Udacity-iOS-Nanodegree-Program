@@ -11,7 +11,7 @@ import UIKit
 final class SentMemesViewController: UIViewController {
     let tableView = UITableView()
     let tableViewDataSource = TableViewDataSource()
-    let collectionView = UICollectionView()
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
     let collectionViewDataSource = CollectionViewDataSource()
 
     override func viewDidLoad() {
@@ -21,11 +21,19 @@ final class SentMemesViewController: UIViewController {
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = tableViewDataSource
         tableView.delegate = self
+        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
         collectionView.dataSource = collectionViewDataSource
         collectionView.delegate = self
         setUpNavigationBar()
         setUpTableView()
+//        setUpCollectionView()
         setUpTabBar()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        if let layout = collectionView.collectionViewLayout as? CollectionViewLayout {
+            layout.setWidth(width: view.frame.width)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +72,18 @@ final class SentMemesViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+    }
+    
+    private func setUpCollectionView() {
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+        collectionView.backgroundColor = .red
     }
     
     @objc func presentEditorViewController() {
