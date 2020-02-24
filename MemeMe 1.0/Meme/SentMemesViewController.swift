@@ -13,6 +13,7 @@ final class SentMemesViewController: UIViewController {
     let tableViewDataSource = TableViewDataSource()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
     let collectionViewDataSource = CollectionViewDataSource()
+    let tabBar = UITabBar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,8 +27,9 @@ final class SentMemesViewController: UIViewController {
         collectionView.delegate = self
         setUpNavigationBar()
         setUpTableView()
-//        setUpCollectionView()
+        setUpCollectionView()
         setUpTabBar()
+        tabBar.selectedItem = tabBar.items?.first
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,7 +49,7 @@ final class SentMemesViewController: UIViewController {
     }
     
     private func setUpTabBar() {
-        let tabBar = UITabBar()
+        tabBar.delegate = self
         tabBar.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(tabBar)
         let gridBarItem = UITabBarItem()
@@ -84,6 +86,7 @@ final class SentMemesViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
         collectionView.backgroundColor = .red
+        collectionView.isHidden = true
     }
     
     @objc func presentEditorViewController() {
@@ -102,5 +105,18 @@ extension SentMemesViewController: UITableViewDelegate {
 
 extension SentMemesViewController: UICollectionViewDelegate {
     
+}
+
+extension SentMemesViewController: UITabBarDelegate {
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        guard let selectedIndex = tabBar.items?.firstIndex(of: item) else { return }
+        if selectedIndex == 0 {
+            collectionView.isHidden = true
+            tableView.isHidden = false
+        } else {
+            tableView.isHidden = true
+            collectionView.isHidden = false
+        }
+    }
 }
 
