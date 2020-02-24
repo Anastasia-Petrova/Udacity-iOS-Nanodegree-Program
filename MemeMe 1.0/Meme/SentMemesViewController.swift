@@ -104,6 +104,11 @@ extension SentMemesViewController: UITableViewDelegate {
 }
 
 extension SentMemesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = DetailViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+//        collectionView.deselectItem(at: indexPath, animated: false)
+    }
 }
 
 extension SentMemesViewController: UITabBarDelegate {
