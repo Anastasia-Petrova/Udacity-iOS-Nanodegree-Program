@@ -11,6 +11,8 @@ import UIKit
 final class SentMemesViewController: UIViewController {
     let tableView = UITableView()
     let tableViewDataSource = TableViewDataSource()
+    let collectionView = UICollectionView()
+    let collectionViewDataSource = CollectionViewDataSource()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +21,8 @@ final class SentMemesViewController: UIViewController {
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = tableViewDataSource
         tableView.delegate = self
+        collectionView.dataSource = collectionViewDataSource
+        collectionView.delegate = self
         setUpNavigationBar()
         setUpTableView()
         setUpTabBar()
@@ -72,6 +76,11 @@ extension SentMemesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = DetailViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
+}
+
+extension SentMemesViewController: UICollectionViewDelegate {
+    
 }
 
