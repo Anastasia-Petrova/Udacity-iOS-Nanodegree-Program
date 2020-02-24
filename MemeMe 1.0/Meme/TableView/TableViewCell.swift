@@ -8,11 +8,10 @@
 
 import UIKit
 
-class TableViewCell: UITableViewCell {
+final class TableViewCell: UITableViewCell {
     let stackView = UIStackView()
     let memeImageView = UIImageView(image: UIImage(named: "placeholder"))
     let memeName = UILabel()
-    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
