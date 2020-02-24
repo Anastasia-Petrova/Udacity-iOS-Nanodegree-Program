@@ -9,18 +9,20 @@
 import UIKit
 
 final class CollectionViewCell: UICollectionViewCell {
-    let imageView = UIImageView()
+    let memeImageView = UIImageView()
     
     override init(frame: CGRect) {
     super.init(frame: frame)
-        self.contentView.addSubview(imageView)
+        self.contentView.addSubview(memeImageView)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            memeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            memeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            memeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            memeImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        imageView.contentMode = .scaleAspectFill
+        memeImageView.contentMode = .scaleToFill
+        memeImageView.clipsToBounds = true
+        self.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
