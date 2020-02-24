@@ -9,7 +9,8 @@
 import UIKit
 
 final class CollectionViewLayout: UICollectionViewFlowLayout {
-    static let spacing: CGFloat = 8.0
+    static let spacing: CGFloat = 4.0
+    
     override init() {
         super.init()
         self.itemSize = .zero
@@ -19,8 +20,8 @@ final class CollectionViewLayout: UICollectionViewFlowLayout {
             bottom: 0,
             right: 0
         )
-        self.minimumInteritemSpacing = 0
-        self.minimumLineSpacing = Self.spacing/2.0
+        self.minimumInteritemSpacing = Self.spacing
+        self.minimumLineSpacing = Self.spacing
         self.scrollDirection = .vertical
     }
     
@@ -29,8 +30,7 @@ final class CollectionViewLayout: UICollectionViewFlowLayout {
     }
     
     func setWidth(width: CGFloat) {
-        let itemWidth = (width - Self.spacing * 3)/3.0
+        let itemWidth = (width - Self.spacing * 2)/3.0
         self.itemSize = CGSize(width: itemWidth, height: itemWidth)
     }
-    
 }

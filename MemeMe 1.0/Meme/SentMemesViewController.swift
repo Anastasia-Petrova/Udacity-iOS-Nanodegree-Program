@@ -85,7 +85,7 @@ final class SentMemesViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
-        collectionView.backgroundColor = .red
+        collectionView.backgroundColor = .white
         collectionView.isHidden = true
     }
     
@@ -104,7 +104,6 @@ extension SentMemesViewController: UITableViewDelegate {
 }
 
 extension SentMemesViewController: UICollectionViewDelegate {
-    
 }
 
 extension SentMemesViewController: UITabBarDelegate {

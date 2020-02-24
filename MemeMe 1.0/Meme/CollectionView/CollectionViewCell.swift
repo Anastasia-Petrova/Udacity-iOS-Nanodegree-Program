@@ -13,16 +13,16 @@ final class CollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
     super.init(frame: frame)
-        self.contentView.addSubview(memeImageView)
+        memeImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(memeImageView)
         NSLayoutConstraint.activate([
             memeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             memeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             memeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             memeImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        memeImageView.contentMode = .scaleToFill
+        memeImageView.contentMode = .scaleAspectFill
         memeImageView.clipsToBounds = true
-        self.backgroundColor = .green
     }
     
     required init?(coder: NSCoder) {
