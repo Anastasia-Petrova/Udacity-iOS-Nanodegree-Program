@@ -12,6 +12,7 @@ import MobileCoreServices
 final class MemeEditorViewController: UIViewController {
     let defaults = UserDefaults.standard
     let navBar = UINavigationBar()
+    let navItem = UINavigationItem()
     let toolBar = UIToolbar()
     let photoView = UIImageView(frame: .zero)
     let label = UILabel()
@@ -71,7 +72,7 @@ final class MemeEditorViewController: UIViewController {
         bottomTextField.isHidden = true
         topTextField.text = "TOP"
         bottomTextField.text = "BOTTOM"
-        navigationItem.leftBarButtonItem?.isEnabled = false
+        navItem.leftBarButtonItem?.isEnabled = false
 //        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
@@ -83,7 +84,6 @@ final class MemeEditorViewController: UIViewController {
             navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navBar.heightAnchor.constraint(equalToConstant: 44)
         ])
-        let navItem = UINavigationItem()
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
         navItem.leftBarButtonItem = actionItem
@@ -474,7 +474,7 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
             self.bottomTextField.isHidden = false
             self.topTextField.isUserInteractionEnabled = true
             self.bottomTextField.isUserInteractionEnabled = true
-            self.navigationItem.leftBarButtonItem?.isEnabled = true
+            self.navItem.leftBarButtonItem?.isEnabled = true
 //            self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
