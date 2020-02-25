@@ -10,6 +10,7 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
+    let defaults = UserDefaults.standard
     let navBar = UINavigationBar()
     let toolBar = UIToolbar()
     let photoView = UIImageView(frame: .zero)
@@ -350,7 +351,27 @@ final class MemeEditorViewController: UIViewController {
     
     func save() {
         let memedImage = generateMemedImage()
-        meme = MemeModel(topTetx: topTextField.text!, bottomText: bottomTextField.text!, originalImage: photoView.image!, memedImage: memedImage)
+        let storage = UserStorage()
+        let date = Date()
+        let id = UUID()
+        let _ = storage.saveImage(image: memedImage, id: id)
+        meme = MemeModel(
+            id: id,
+            topTetx: topTextField.text!,
+            bottomText: bottomTextField.text!,
+            date: date
+        )
+        guard let meme = meme else {
+            return
+        }
+        var memes: [MemeModel] = []
+        if let decodedData = UserDefaults.standard.data(forKey: "memes") {
+            let existingMemes = try! JSONDecoder().decode([MemeModel].self, from: decodedData)
+            memes.append(contentsOf: existingMemes)
+        }
+        memes.append(meme)
+        let encodedData = try! JSONEncoder().encode(memes)
+        defaults.set(encodedData, forKey: "memes")
     }
     
     func calculateLabelSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {

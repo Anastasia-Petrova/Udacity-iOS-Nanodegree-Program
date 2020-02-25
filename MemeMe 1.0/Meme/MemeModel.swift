@@ -8,9 +8,12 @@
 
 import UIKit
 
-struct MemeModel {
+struct MemeModel: Codable {
+    let id: UUID
     var topTetx: String
     var bottomText: String
-    let originalImage: UIImage
-    let memedImage: UIImage
+//    let originalImage: UIImage
+//    let memedImage: UIImage
+//    let url: URL
+    let date: Date
 }

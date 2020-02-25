@@ -10,18 +10,21 @@ import Foundation
 import UIKit
 
 class UserStorage {
-    public func saveImage(image: UIImage, date: Date) {
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("memeImages")
-        if !FileManager.default.fileExists(atPath: directoryURL.path) {
+    public static let memesDirectory: URL = FileManager.default
+        .urls(for: .documentDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent("memeImages")
+    
+    public func saveImage(image: UIImage, id: UUID) -> URL {
+        if !FileManager.default.fileExists(atPath: Self.memesDirectory.path) {
             do {
-                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
-                print("created directory at url: \(directoryURL)")
+                try FileManager.default.createDirectory(at: Self.memesDirectory, withIntermediateDirectories: true, attributes: nil)
+                print("created directory at url: \(Self.memesDirectory)")
             } catch {
                 print(error)
             }
         }
         
-        let fileURL = directoryURL.appendingPathComponent("\(date)")
+        let fileURL = Self.memesDirectory.appendingPathComponent(id.uuidString)
         do {
             try image.pngData()?.write(to: fileURL, options: .atomic)
             print("image saved to url: \(fileURL)")
@@ -29,18 +32,26 @@ class UserStorage {
         } catch {
             print(error)
         }
+        let finalPath = fileURL
+            .pathComponents
+            .dropFirst(fileURL.pathComponents.count - 2)
+            .reduce("") { $0 + "/" + $1 }
+        
+        return URL(string: finalPath)!
     }
     
     func deleteImage(url: URL) -> Void {
-        
+        let fileManager = FileManager.default
+        try! fileManager.removeItem(at: url)
     }
     
-    func getAllImages() -> [UIImage] {
+    func getAllImages() -> [UIImage?] {
         var images: [UIImage] = []
-        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("memeImages")
+        
         let fileManager = FileManager.default
-        let directoryContents = try! fileManager.contentsOfDirectory(at: directoryURL, includingPropertiesForKeys: nil)
-        for imageURL in directoryContents {
+        let directoryContents = try? fileManager.contentsOfDirectory(at: Self.memesDirectory, includingPropertiesForKeys: nil)
+        guard let directoryContent = directoryContents else { return [] }
+        for imageURL in directoryContent {
             if let image = UIImage(contentsOfFile: imageURL.path) {
                 images.append(image)
             } else {
@@ -51,6 +62,8 @@ class UserStorage {
     }
 
     func deleteAllImages() -> Void {
-        
+        let memesFolderURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("memeImages")
+        let fileManager = FileManager.default
+        try! fileManager.removeItem(at: memesFolderURL)
     }
 }

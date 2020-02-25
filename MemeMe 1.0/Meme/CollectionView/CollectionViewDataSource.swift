@@ -24,5 +24,4 @@ extension DataSource: UICollectionViewDataSource {
         cell.memeImageView.image = memes[indexPath.row]
         return cell
     }
-    
 }
