@@ -8,7 +8,9 @@
 
 import UIKit
 
-final class TableViewDataSource: NSObject, UITableViewDataSource {
+final class DataSource: NSObject {}
+
+extension DataSource: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

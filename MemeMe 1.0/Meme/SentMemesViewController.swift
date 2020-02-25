@@ -10,9 +10,9 @@ import UIKit
 
 final class SentMemesViewController: UIViewController {
     let tableView = UITableView()
-    let tableViewDataSource = TableViewDataSource()
+    let tableViewDataSource = DataSource()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
-    let collectionViewDataSource = CollectionViewDataSource()
+    let collectionViewDataSource = DataSource()
     let tabBar = UITabBar()
 
     override func viewDidLoad() {
@@ -25,6 +25,7 @@ final class SentMemesViewController: UIViewController {
         collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
         collectionView.dataSource = collectionViewDataSource
         collectionView.delegate = self
+        
         setUpNavigationBar()
         setUpTableView()
         setUpCollectionView()
@@ -85,6 +86,7 @@ final class SentMemesViewController: UIViewController {
             collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+        
         collectionView.backgroundColor = .white
         collectionView.isHidden = true
     }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CollectionViewDataSource: NSObject,UICollectionViewDataSource {
+extension DataSource: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -24,5 +24,4 @@ final class CollectionViewDataSource: NSObject,UICollectionViewDataSource {
         return cell
     }
     
-
 }
