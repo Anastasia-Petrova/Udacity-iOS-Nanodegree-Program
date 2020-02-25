@@ -31,7 +31,8 @@ final class TableViewCell: UITableViewCell {
         stackView.spacing = 8
         memeName.font = UIFont.systemFont(ofSize: 20)
         memeName.numberOfLines = 1
-        memeImageView.contentMode = .scaleAspectFit
+        memeImageView.contentMode = .scaleAspectFill
+        memeImageView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
