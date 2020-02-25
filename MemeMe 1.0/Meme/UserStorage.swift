@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class UserStorage {
-    public func saveImage(image: UIImage) {
+    public func saveImage(image: UIImage, date: Date) {
         let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("memeImages")
         if !FileManager.default.fileExists(atPath: directoryURL.path) {
             do {
@@ -21,7 +21,7 @@ class UserStorage {
             }
         }
         
-        let fileURL = directoryURL.appendingPathComponent("memeImage")
+        let fileURL = directoryURL.appendingPathComponent("\(date)")
         do {
             try image.pngData()?.write(to: fileURL, options: .atomic)
             print("image saved to url: \(fileURL)")
