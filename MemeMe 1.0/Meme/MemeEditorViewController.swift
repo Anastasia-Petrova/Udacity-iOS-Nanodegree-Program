@@ -351,10 +351,9 @@ final class MemeEditorViewController: UIViewController {
     
     func save() {
         let memedImage = generateMemedImage()
-        let storage = UserStorage()
         let date = Date()
         let id = UUID()
-        let _ = storage.saveImage(image: memedImage, id: id)
+        try? ImageStorage.saveImage(image: memedImage, id: id)
         meme = MemeModel(
             id: id,
             topTetx: topTextField.text!,
@@ -496,7 +495,7 @@ extension MemeEditorViewController: UITextFieldDelegate {
 
 extension UIView {
     class func animationOptions(for curve: UIView.AnimationCurve) -> UIView.AnimationOptions {
-        switch (curve) {
+        switch curve {
         case .easeInOut: return .curveEaseInOut
         case .easeIn: return .curveEaseIn
         case .easeOut: return .curveEaseOut

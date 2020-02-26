@@ -13,7 +13,5 @@ struct MemeModel: Codable {
     var topTetx: String
     var bottomText: String
 //    let originalImage: UIImage
-//    let memedImage: UIImage
-//    let url: URL
     let date: Date
 }
