@@ -9,7 +9,17 @@
 import UIKit
 
 final class DetailViewController: UIViewController {
+    let image: UIImage
 
+    init(image: UIImage) {
+        self.image = image
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -28,6 +38,6 @@ final class DetailViewController: UIViewController {
         ])
         imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "test")
+        imageView.image = image
     }
 }

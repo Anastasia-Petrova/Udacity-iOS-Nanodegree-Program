@@ -99,17 +99,22 @@ final class SentMemesViewController: UIViewController {
 
 extension SentMemesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = DetailViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-        tableView.deselectRow(at: indexPath, animated: false)
+        let cell = tableViewDataSource.tableView(tableView, cellForRowAt: indexPath) as? TableViewCell
+        if let image = cell?.memeImageView.image {
+            let vc = DetailViewController(image: image)
+            self.navigationController?.pushViewController(vc, animated: true)
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
     }
 }
 
 extension SentMemesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = DetailViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-//        collectionView.deselectItem(at: indexPath, animated: false)
+        let cell = collectionViewDataSource.collectionView(collectionView, cellForItemAt: indexPath) as? CollectionViewCell
+        if let image = cell?.memeImageView.image {
+            let vc = DetailViewController(image: image)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 

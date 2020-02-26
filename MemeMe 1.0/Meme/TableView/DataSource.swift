@@ -15,6 +15,11 @@ final class DataSource: NSObject {
 
 extension DataSource: UITableViewDataSource {
     
+    //TODO: create enum MemesStorage with API:
+    //getAllMemes
+    //deleteAllMemes
+    //addMeme
+    //removeMeme
     func decodeData() -> [MemeModel]{
         guard let encodedData = UserDefaults.standard.data(forKey: "memes") else {
             return []
@@ -34,12 +39,12 @@ extension DataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         cell.memeImageView.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        //TODO: Load memes once and assign to property
         let memesArray = decodeData()
         let meme = memesArray[indexPath.row]
         cell.memeName.text = meme.topTetx + " " + meme.bottomText
-//        let dateString = "\(memesArray[indexPath.row].date)"
+
         let directoryURL = UserStorage.memesDirectory.appendingPathComponent(meme.id.uuidString)
-//        print("saved meme url: \(memesArray[indexPath.row].url), correct url: \(directoryURL.path)")
         cell.memeImageView.image = UIImage(contentsOfFile: directoryURL.path)
         return cell
     }

@@ -20,6 +20,7 @@ extension DataSource: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
+        //TODO: Load images once and assign to property images: [UIImage]
         let memes = userStorage.getAllImages()
         cell.memeImageView.image = memes[indexPath.row]
         return cell
