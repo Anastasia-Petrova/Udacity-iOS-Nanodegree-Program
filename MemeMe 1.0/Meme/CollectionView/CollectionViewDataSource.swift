@@ -14,15 +14,13 @@ extension DataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let memes = userStorage.getAllImages()
         return memes.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
-        //TODO: Load images once and assign to property images: [UIImage]
-        let memes = userStorage.getAllImages()
-        cell.memeImageView.image = memes[indexPath.row]
+        let textAndImageArray = getAllIMages()
+        cell.memeImageView.image = textAndImageArray[indexPath.row].image
         return cell
     }
 }

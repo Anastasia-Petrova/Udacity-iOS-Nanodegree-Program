@@ -18,6 +18,19 @@ final class DataSource: NSObject {
         }
         return try! JSONDecoder().decode([MemeModel].self, from: encodedData)
     }
+    
+    func getAllIMages() -> [(text: String, image: UIImage)] {
+        let sortedMemes = memes.sorted(by: { $1.date > $0.date })
+        var textAndImagesArray: [(String, UIImage)] = []
+        sortedMemes.forEach { meme in
+            let text = meme.topTetx + "..." + meme.bottomText
+            let directoryURL = ImageStorage.memesDirectory.appendingPathComponent(meme.id.uuidString)
+            if let image = UIImage(contentsOfFile: directoryURL.path) {
+                textAndImagesArray.append((text, image))
+            }
+        }
+        return textAndImagesArray
+    }
 }
 
 extension DataSource: UITableViewDataSource {
@@ -32,17 +45,9 @@ extension DataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         cell.memeImageView.heightAnchor.constraint(equalToConstant: 140).isActive = true
-        let meme = memes[indexPath.row]
-        cell.memeName.text = meme.topTetx + " " + meme.bottomText
-        if memesImagesForIndex[indexPath.row] != nil {
-            cell.memeImageView.image = memesImagesForIndex[indexPath.row]
-        } else {
-            let directoryURL = ImageStorage.memesDirectory.appendingPathComponent(meme.id.uuidString)
-            let image = UIImage(contentsOfFile: directoryURL.path)
-            cell.memeImageView.image = image
-            memesImagesForIndex[indexPath.row] = image
-//            tableView.reloadRows(at: [indexPath], with: .none)
-        }
+        let textAndImageArray = getAllIMages()
+        cell.memeName.text = textAndImageArray[indexPath.row].text
+        cell.memeImageView.image = textAndImageArray[indexPath.row].image
         return cell
     }
 }
