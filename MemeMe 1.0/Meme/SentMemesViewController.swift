@@ -88,6 +88,11 @@ final class SentMemesViewController: UIViewController {
         
         collectionView.backgroundColor = .white
         collectionView.isHidden = true
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        longPress.minimumPressDuration = 1.0
+        longPress.delaysTouchesBegan = true
+        collectionView.addGestureRecognizer(longPress)
     }
     
     @objc func presentEditorViewController() {
@@ -98,6 +103,38 @@ final class SentMemesViewController: UIViewController {
         }
         self.navigationController?.present(vc, animated: true)
     }
+    
+    @objc func handleLongPress(_ longPress: UILongPressGestureRecognizer) {
+//        if longPress.state != .ended {
+//            return
+//        }
+        //TODO: set done button in viewDidLoad and immediately make if isHidden = true
+        //and then just set isHidden true/false when needed instead of re-creating button
+        //like it is done now
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,  action: #selector(doneAction))
+        
+        navigationItem.leftBarButtonItem = doneItem
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        //TODO: do not dig into optional items of tabBar. Assign whatever tab bar item we need
+        //to access as property and use it directly
+        tabBar.items?.first?.isEnabled = false
+        dataSource.isEditModeOn = true
+        collectionView.reloadData()
+        //TODO: Make sure this is really needed
+        self.view.layoutIfNeeded()
+    }
+    
+    @objc func doneAction() {
+        //TODO: just set doneItem property isHidden true
+        navigationItem.leftBarButtonItem = nil
+        //TODO: use property
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        //TODO: use property
+        tabBar.items?.first?.isEnabled = true
+        dataSource.isEditModeOn = false
+        collectionView.reloadData()
+    }
+
 }
 
 extension SentMemesViewController: UITableViewDelegate {
