@@ -25,6 +25,7 @@
 		6DCE64D023FFDE7500D00513 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCE64CF23FFDE7500D00513 /* Bundle.swift */; };
 		6DD84E6323FC459000CAFFD0 /* MemeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84E6223FC459000CAFFD0 /* MemeModel.swift */; };
 		6DE3C50A2400437D00589BCC /* SentMemesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE3C5092400437D00589BCC /* SentMemesViewController.swift */; };
+		6DFCD348240808190016BA84 /* MemesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFCD347240808190016BA84 /* MemesStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		6DCE64CF23FFDE7500D00513 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		6DD84E6223FC459000CAFFD0 /* MemeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeModel.swift; sourceTree = "<group>"; };
 		6DE3C5092400437D00589BCC /* SentMemesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMemesViewController.swift; sourceTree = "<group>"; };
+		6DFCD347240808190016BA84 /* MemesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				6D362B9023FAB9B70078AF3D /* AppDelegate.swift */,
 				6D77B4D62401B4070028A0CE /* DetailViewController.swift */,
 				6D73C7722405546B007D5925 /* ImageStorage.swift */,
+				6DFCD347240808190016BA84 /* MemesStorage.swift */,
 				6D362B9B23FAB9B90078AF3D /* LaunchScreen.storyboard */,
 				6D362BA423FACD6F0078AF3D /* MemeEditorViewController.swift */,
 				6DD84E6223FC459000CAFFD0 /* MemeModel.swift */,
@@ -258,6 +261,7 @@
 				6D7948192403FA9E00AB0038 /* CollectionViewDataSource.swift in Sources */,
 				6D5851A6240402730038066B /* CollectionViewLayout.swift in Sources */,
 				6D362BA523FACD6F0078AF3D /* MemeEditorViewController.swift in Sources */,
+				6DFCD348240808190016BA84 /* MemesStorage.swift in Sources */,
 				6D362B9323FAB9B70078AF3D /* SceneDelegate.swift in Sources */,
 				6D77B4D32401A1A20028A0CE /* DataSource.swift in Sources */,
 				6DD84E6323FC459000CAFFD0 /* MemeModel.swift in Sources */,
