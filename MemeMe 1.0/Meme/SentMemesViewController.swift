@@ -92,7 +92,11 @@ final class SentMemesViewController: UIViewController {
     }
     
     @objc func presentEditorViewController() {
-        let vc = MemeEditorViewController()
+        let vc = MemeEditorViewController { [weak self] in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
+        }
         self.navigationController?.present(vc, animated: true)
     }
 }

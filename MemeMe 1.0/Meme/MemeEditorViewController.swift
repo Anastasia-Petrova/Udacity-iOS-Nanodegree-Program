@@ -10,6 +10,7 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
+    
     let defaults = UserDefaults.standard
     let navBar = UINavigationBar()
     let navItem = UINavigationItem()
@@ -27,6 +28,16 @@ final class MemeEditorViewController: UIViewController {
     var bottomTextFieldTrailingConstraint = NSLayoutConstraint()
     var meme: MemeModel?
     var keyboardHeight: CGFloat = 0.0
+    let newMemeAddedCallback: () -> Void
+    
+    init(callback: @escaping () -> Void) {
+        newMemeAddedCallback = callback
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +84,6 @@ final class MemeEditorViewController: UIViewController {
         topTextField.text = "TOP"
         bottomTextField.text = "BOTTOM"
         navItem.leftBarButtonItem?.isEnabled = false
-//        navigationItem.rightBarButtonItem?.isEnabled = false
     }
     
     private func setUpNavigationBar() {
@@ -371,6 +381,7 @@ final class MemeEditorViewController: UIViewController {
         memes.append(meme)
         let encodedData = try! JSONEncoder().encode(memes)
         defaults.set(encodedData, forKey: "memes")
+        newMemeAddedCallback()
     }
     
     func calculateLabelSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
@@ -474,7 +485,6 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
             self.topTextField.isUserInteractionEnabled = true
             self.bottomTextField.isUserInteractionEnabled = true
             self.navItem.leftBarButtonItem?.isEnabled = true
-//            self.navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
 }
