@@ -151,9 +151,17 @@ extension SentMemesViewController: UITableViewDelegate {
 extension SentMemesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = dataSource.collectionView(collectionView, cellForItemAt: indexPath) as? CollectionViewCell
-        if let image = cell?.memeImageView.image {
-            let vc = DetailViewController(image: image)
-            self.navigationController?.pushViewController(vc, animated: true)
+        
+        //TODO: remove this code
+        if dataSource.isEditModeOn {
+            dataSource.deleteMeme(indexPath: indexPath)
+            collectionView.deleteItems(at: [indexPath])
+            dataSource.reloadData()
+        } else {
+            if let image = cell?.memeImageView.image {
+                let vc = DetailViewController(image: image)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
 }
