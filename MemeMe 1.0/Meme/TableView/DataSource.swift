@@ -33,6 +33,10 @@ final class DataSource: NSObject {
     }
     
     func deleteMeme(indexPath: IndexPath) {
+        let item = memes[indexPath.row]
+        let id = item.id
+        let directoryURL = ImageStorage.memesDirectory.appendingPathComponent(id.uuidString)
+        try? ImageStorage.deleteImage(url: directoryURL)
         memes.remove(at: indexPath.row)
         let encodedData = try! JSONEncoder().encode(memes)
         UserDefaults.standard.set(encodedData, forKey: "memes")
