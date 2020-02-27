@@ -11,6 +11,8 @@ import UIKit
 final class DataSource: NSObject {
     var memesImagesForIndex: [Int : UIImage] = [:]
     lazy var memes = decodeData()
+    
+    var isEditModeOn: Bool = false
 
     func decodeData() -> [MemeModel] {
         guard let encodedData = UserDefaults.standard.data(forKey: "memes") else {
