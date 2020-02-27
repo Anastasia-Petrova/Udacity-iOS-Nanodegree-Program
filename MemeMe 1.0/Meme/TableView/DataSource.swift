@@ -50,4 +50,11 @@ extension DataSource: UITableViewDataSource {
         cell.memeImageView.image = textAndImageArray[indexPath.row].image
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            memes.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } 
+    }
 }
