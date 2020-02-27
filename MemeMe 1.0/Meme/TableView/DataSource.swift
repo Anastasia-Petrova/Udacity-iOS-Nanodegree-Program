@@ -31,6 +31,12 @@ final class DataSource: NSObject {
         }
         return textAndImagesArray
     }
+    
+    func deleteMeme(indexPath: IndexPath) {
+        memes.remove(at: indexPath.row)
+        let encodedData = try! JSONEncoder().encode(memes)
+        UserDefaults.standard.set(encodedData, forKey: "memes")
+    }
 }
 
 extension DataSource: UITableViewDataSource {
@@ -53,7 +59,7 @@ extension DataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            memes.remove(at: indexPath.row)
+            deleteMeme(indexPath: indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } 
     }
