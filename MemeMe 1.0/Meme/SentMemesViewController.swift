@@ -10,9 +10,8 @@ import UIKit
 
 final class SentMemesViewController: UIViewController {
     let tableView = UITableView()
-    let tableViewDataSource = DataSource()
+    let dataSource = DataSource()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
-    let collectionViewDataSource = DataSource()
     let tabBar = UITabBar()
 
     override func viewDidLoad() {
@@ -20,10 +19,10 @@ final class SentMemesViewController: UIViewController {
         self.view.backgroundColor = .white
         self.title = "Sent Memes"
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.dataSource = tableViewDataSource
+        tableView.dataSource = dataSource
         tableView.delegate = self
         collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
-        collectionView.dataSource = collectionViewDataSource
+        collectionView.dataSource = dataSource
         collectionView.delegate = self
         
         setUpNavigationBar()
@@ -93,9 +92,9 @@ final class SentMemesViewController: UIViewController {
     
     @objc func presentEditorViewController() {
         let vc = MemeEditorViewController { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
+            self?.dataSource.reloadData()
+            self?.tableView.reloadData()
+            self?.collectionView.reloadData()
         }
         self.navigationController?.present(vc, animated: true)
     }
@@ -103,7 +102,7 @@ final class SentMemesViewController: UIViewController {
 
 extension SentMemesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableViewDataSource.tableView(tableView, cellForRowAt: indexPath) as? TableViewCell
+        let cell = dataSource.tableView(tableView, cellForRowAt: indexPath) as? TableViewCell
         if let image = cell?.memeImageView.image {
             let vc = DetailViewController(image: image)
             self.navigationController?.pushViewController(vc, animated: true)
@@ -114,7 +113,7 @@ extension SentMemesViewController: UITableViewDelegate {
 
 extension SentMemesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionViewDataSource.collectionView(collectionView, cellForItemAt: indexPath) as? CollectionViewCell
+        let cell = dataSource.collectionView(collectionView, cellForItemAt: indexPath) as? CollectionViewCell
         if let image = cell?.memeImageView.image {
             let vc = DetailViewController(image: image)
             self.navigationController?.pushViewController(vc, animated: true)
@@ -128,9 +127,11 @@ extension SentMemesViewController: UITabBarDelegate {
         if selectedIndex == 0 {
             collectionView.isHidden = true
             tableView.isHidden = false
+            tableView.reloadData()
         } else {
             tableView.isHidden = true
             collectionView.isHidden = false
+            collectionView.reloadData()
         }
     }
 }
