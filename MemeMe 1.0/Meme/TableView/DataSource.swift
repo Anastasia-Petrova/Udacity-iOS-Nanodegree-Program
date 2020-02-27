@@ -19,6 +19,13 @@ final class DataSource: NSObject {
         return try! JSONDecoder().decode([MemeModel].self, from: encodedData)
     }
     
+    func reloadData() {
+        guard let encodedData = UserDefaults.standard.data(forKey: "memes") else {
+            return
+        }
+        memes = try! JSONDecoder().decode([MemeModel].self, from: encodedData)
+    }
+    
     func getAllIMages() -> [(text: String, image: UIImage)] {
         let sortedMemes = memes.sorted(by: { $1.date > $0.date })
         var textAndImagesArray: [(String, UIImage)] = []
@@ -65,6 +72,7 @@ extension DataSource: UITableViewDataSource {
         if editingStyle == .delete {
             deleteMeme(indexPath: indexPath)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            reloadData()
         } 
     }
 }
