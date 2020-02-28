@@ -12,6 +12,7 @@ import MobileCoreServices
 final class MemeEditorViewController: UIViewController {
     let navBar = UINavigationBar()
     let navItem = UINavigationItem()
+    var navBarHeightConstraint = NSLayoutConstraint()
     let toolBar = UIToolbar()
     let photoView = UIImageView(frame: .zero)
     let label = UILabel()
@@ -68,6 +69,8 @@ final class MemeEditorViewController: UIViewController {
         topTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
         bottomTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
         bottomTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
+        navBarHeightConstraint.constant = isPortrait ? 44 : 32
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -86,11 +89,12 @@ final class MemeEditorViewController: UIViewController {
     
     private func setUpNavigationBar() {
         navBar.translatesAutoresizingMaskIntoConstraints = false
+        navBarHeightConstraint = navBar.heightAnchor.constraint(equalToConstant: 44)
         NSLayoutConstraint.activate([
             navBar.topAnchor.constraint(equalTo: view.topAnchor),
             navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navBar.heightAnchor.constraint(equalToConstant: 44)
+            navBarHeightConstraint
         ])
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
@@ -365,17 +369,16 @@ final class MemeEditorViewController: UIViewController {
             return
         }
         var memes: [MemeModel] = []
-        //TODO: Use MemesStorage
-        if let decodedData = UserDefaults.standard.data(forKey: "memes") {
-            let existingMemes = try! JSONDecoder().decode([MemeModel].self, from: decodedData)
-            memes.append(contentsOf: existingMemes)
-        }
+        let existingMemes = (try? MemesStorage.loadMemes()) ?? []
+        memes.append(contentsOf: existingMemes)
         memes.append(meme)
-        //TODO: fix
-        try? MemesStorage.save(memes: memes)
-//        let encodedData = try! JSONEncoder().encode(memes)
-//        MemesStorage.defaults.set(encodedData, forKey: "memes")
-        newMemeAddedCallback()
+        do {
+            try MemesStorage.save(memes: memes)
+            newMemeAddedCallback()
+        } catch {
+            //FIX ME
+            print(error)
+        }
     }
     
     func calculateLabelSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
