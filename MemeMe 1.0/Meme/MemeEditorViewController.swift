@@ -10,9 +10,6 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
-    let navBar = UINavigationBar()
-    let navItem = UINavigationItem()
-    var navBarHeightConstraint = NSLayoutConstraint()
     let toolBar = UIToolbar()
     let photoView = UIImageView(frame: .zero)
     let label = UILabel()
@@ -43,7 +40,6 @@ final class MemeEditorViewController: UIViewController {
         topTextField.delegate = self
         bottomTextField.delegate = self
         self.view.backgroundColor = .darkGray
-        self.view.addSubview(navBar)
         self.view.addSubview(photoView)
         self.view.addSubview(toolBar)
         
@@ -69,8 +65,6 @@ final class MemeEditorViewController: UIViewController {
         topTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
         bottomTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
         bottomTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
-        navBarHeightConstraint.constant = isPortrait ? 44 : 32
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,23 +78,14 @@ final class MemeEditorViewController: UIViewController {
         bottomTextField.isHidden = true
         topTextField.text = "TOP"
         bottomTextField.text = "BOTTOM"
-        navItem.leftBarButtonItem?.isEnabled = false
+        navigationItem.leftBarButtonItem?.isEnabled = false
     }
     
     private func setUpNavigationBar() {
-        navBar.translatesAutoresizingMaskIntoConstraints = false
-        navBarHeightConstraint = navBar.heightAnchor.constraint(equalToConstant: 44)
-        NSLayoutConstraint.activate([
-            navBar.topAnchor.constraint(equalTo: view.topAnchor),
-            navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            navBarHeightConstraint
-        ])
         let actionItem = UIBarButtonItem(barButtonSystemItem: .action, target: self,  action: #selector(openActivityView))
         let cancelItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.cancel))
-        navItem.leftBarButtonItem = actionItem
-        navItem.rightBarButtonItem = cancelItem
-        navBar.setItems([navItem], animated: false)
+        navigationItem.leftBarButtonItem = actionItem
+        navigationItem.rightBarButtonItem = cancelItem
     }
     
     private func setUpToolBar() {
@@ -126,7 +111,7 @@ final class MemeEditorViewController: UIViewController {
     private func setUpImageView() {
         photoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            photoView.topAnchor.constraint(equalTo: navBar.bottomAnchor),
+            photoView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             photoView.bottomAnchor.constraint(equalTo: toolBar.topAnchor),
             photoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             photoView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -481,7 +466,7 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
             self.bottomTextField.isHidden = false
             self.topTextField.isUserInteractionEnabled = true
             self.bottomTextField.isUserInteractionEnabled = true
-            self.navItem.leftBarButtonItem?.isEnabled = true
+            self.navigationItem.leftBarButtonItem?.isEnabled = true
         }
     }
 }

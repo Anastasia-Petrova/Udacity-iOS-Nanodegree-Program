@@ -102,7 +102,8 @@ final class SentMemesViewController: UIViewController {
             self?.collectionView.reloadData()
         }
         let nvc = UINavigationController(rootViewController: vc)
-        self.navigationController?.present(nvc, animated: true)
+//        nvc.setNavigationBarHidden(true, animated: false)
+        self.present(nvc, animated: true)
     }
     
     @objc func handleLongPress(_ longPress: UILongPressGestureRecognizer) {
