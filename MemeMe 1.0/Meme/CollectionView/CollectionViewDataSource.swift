@@ -30,8 +30,8 @@ extension DataSource: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
-        let textAndImageArray = getAllIMages()
-        cell.memeImageView.image = textAndImageArray[indexPath.row].image
+        
+        cell.memeImageView.image = data[indexPath.row].image
         if isEditModeOn {
             cell.deleteImageView.isHidden = false
             let transform = setUpTransform(indexPath: indexPath)

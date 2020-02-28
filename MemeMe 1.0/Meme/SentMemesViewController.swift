@@ -13,6 +13,8 @@ final class SentMemesViewController: UIViewController {
     let dataSource = DataSource()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
     let tabBar = UITabBar()
+    let tableBarItem = UITabBarItem()
+    let collectionBarItem = UITabBarItem()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,7 @@ final class SentMemesViewController: UIViewController {
         setUpTableView()
         setUpCollectionView()
         setUpTabBar()
-        tabBar.selectedItem = tabBar.items?.first
+        tabBar.selectedItem = tableBarItem
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,17 +54,15 @@ final class SentMemesViewController: UIViewController {
         tabBar.delegate = self
         tabBar.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(tabBar)
-        let gridBarItem = UITabBarItem()
-        let collectionBarItem = UITabBarItem()
         NSLayoutConstraint.activate([
             tabBar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
         
-        gridBarItem.image = UIImage(systemName: "rectangle.split.3x3")
-        collectionBarItem.image = UIImage(systemName: "list.dash")
-        tabBar.setItems([collectionBarItem, gridBarItem], animated: false)
+        collectionBarItem.image = UIImage(systemName: "rectangle.split.3x3")
+        tableBarItem.image = UIImage(systemName: "list.dash")
+        tabBar.setItems([tableBarItem, collectionBarItem], animated: false)
     }
     
     private func setUpTableView() {
@@ -101,7 +101,8 @@ final class SentMemesViewController: UIViewController {
             self?.tableView.reloadData()
             self?.collectionView.reloadData()
         }
-        self.navigationController?.present(vc, animated: true)
+        let nvc = UINavigationController(rootViewController: vc)
+        self.navigationController?.present(nvc, animated: true)
     }
     
     @objc func handleLongPress(_ longPress: UILongPressGestureRecognizer) {
@@ -115,22 +116,17 @@ final class SentMemesViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = doneItem
         navigationItem.rightBarButtonItem?.isEnabled = false
-        //TODO: do not dig into optional items of tabBar. Assign whatever tab bar item we need
-        //to access as property and use it directly
-        tabBar.items?.first?.isEnabled = false
+        tableBarItem.isEnabled = false
+        collectionBarItem.isEnabled = false
         dataSource.isEditModeOn = true
         collectionView.reloadData()
-        //TODO: Make sure this is really needed
-        self.view.layoutIfNeeded()
     }
     
     @objc func doneAction() {
-        //TODO: just set doneItem property isHidden true
         navigationItem.leftBarButtonItem = nil
-        //TODO: use property
         navigationItem.rightBarButtonItem?.isEnabled = true
-        //TODO: use property
-        tabBar.items?.first?.isEnabled = true
+        tableBarItem.isEnabled = true
+        collectionBarItem.isEnabled = true
         dataSource.isEditModeOn = false
         collectionView.reloadData()
     }
@@ -154,9 +150,14 @@ extension SentMemesViewController: UICollectionViewDelegate {
         
         //TODO: remove this code
         if dataSource.isEditModeOn {
-            dataSource.deleteMeme(indexPath: indexPath)
-            collectionView.deleteItems(at: [indexPath])
-            dataSource.reloadData()
+            do {
+                try ImageStorage.deleteImage(id: dataSource.memes[indexPath.row].id)
+                dataSource.deleteMeme(indexPath: indexPath)
+                collectionView.deleteItems(at: [indexPath])
+                dataSource.reloadData()
+            } catch {
+                print(error)
+            }
         } else {
             if let image = cell?.memeImageView.image {
                 let vc = DetailViewController(image: image)
