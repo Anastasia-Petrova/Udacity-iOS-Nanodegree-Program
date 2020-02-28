@@ -10,42 +10,36 @@ import UIKit
 
 final class DataSource: NSObject {
     var memesImagesForIndex: [Int : UIImage] = [:]
-    lazy var memes = decodeData()
+    var memes: [MemeModel]
+    var data: [(text: String, image: UIImage)]
     
     var isEditModeOn: Bool = false
-
-    func decodeData() -> [MemeModel] {
-        guard let encodedData = UserDefaults.standard.data(forKey: "memes") else {
-            return []
-        }
-        return try! JSONDecoder().decode([MemeModel].self, from: encodedData)
+    
+    override init() {
+        memes = (try? MemesStorage.loadMemes()) ?? []
+        data = Self.mapMemesToData(memes)
+        super.init()
     }
+    
     
     func reloadData() {
-        guard let encodedData = UserDefaults.standard.data(forKey: "memes") else {
-            return
-        }
-        memes = try! JSONDecoder().decode([MemeModel].self, from: encodedData)
+        memes = (try? MemesStorage.loadMemes()) ?? []
+        data = Self.mapMemesToData(memes)
     }
     
-    func getAllIMages() -> [(text: String, image: UIImage)] {
-        let sortedMemes = memes.sorted(by: { $1.date > $0.date })
-        var textAndImagesArray: [(String, UIImage)] = []
-        sortedMemes.forEach { meme in
-            let text = meme.topTetx + "..." + meme.bottomText
-            let directoryURL = ImageStorage.memesDirectory.appendingPathComponent(meme.id.uuidString)
-            if let image = UIImage(contentsOfFile: directoryURL.path) {
-                textAndImagesArray.append((text, image))
+    static func mapMemesToData(_ memes: [MemeModel]) -> [(text: String, image: UIImage)] {
+        memes
+            .sorted(by: { $1.date > $0.date })
+            .compactMap {
+            if let image = ImageStorage.getImage(id: $0.id) {
+                return ($0.text, image)
+            } else {
+                return nil
             }
         }
-        return textAndImagesArray
     }
     
     func deleteMeme(indexPath: IndexPath) {
-        let item = memes[indexPath.row]
-        let id = item.id
-        let directoryURL = ImageStorage.memesDirectory.appendingPathComponent(id.uuidString)
-        try? ImageStorage.deleteImage(url: directoryURL)
         memes.remove(at: indexPath.row)
         let encodedData = try! JSONEncoder().encode(memes)
         UserDefaults.standard.set(encodedData, forKey: "memes")
@@ -64,17 +58,27 @@ extension DataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         cell.memeImageView.heightAnchor.constraint(equalToConstant: 140).isActive = true
-        let textAndImageArray = getAllIMages()
-        cell.memeName.text = textAndImageArray[indexPath.row].text
-        cell.memeImageView.image = textAndImageArray[indexPath.row].image
+        cell.memeName.text = data[indexPath.row].text
+        cell.memeImageView.image = data[indexPath.row].image
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            deleteMeme(indexPath: indexPath)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            reloadData()
+            do {
+                try ImageStorage.deleteImage(id: memes[indexPath.row].id)
+                deleteMeme(indexPath: indexPath)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                reloadData()
+            } catch {
+                print(error)
+            }
         } 
+    }
+}
+
+extension MemeModel {
+    var text: String {
+        topText + "..." + bottomText
     }
 }

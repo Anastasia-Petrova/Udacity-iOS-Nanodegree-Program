@@ -10,8 +10,6 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
-    
-    let defaults = UserDefaults.standard
     let navBar = UINavigationBar()
     let navItem = UINavigationItem()
     let toolBar = UIToolbar()
@@ -281,13 +279,6 @@ final class MemeEditorViewController: UIViewController {
     
     @objc func cancel() {
         self.dismiss(animated: true, completion: nil)
-//        photoView.image = nil
-//        setDefaultValues()
-//        topTextField.resignFirstResponder()
-//        bottomTextField.resignFirstResponder()
-//        UIView.animate(withDuration: 0.2) {
-//            self.view.layoutIfNeeded()
-//        }
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
@@ -366,7 +357,7 @@ final class MemeEditorViewController: UIViewController {
         try? ImageStorage.saveImage(image: memedImage, id: id)
         meme = MemeModel(
             id: id,
-            topTetx: topTextField.text!,
+            topText: topTextField.text!,
             bottomText: bottomTextField.text!,
             date: date
         )
@@ -374,13 +365,16 @@ final class MemeEditorViewController: UIViewController {
             return
         }
         var memes: [MemeModel] = []
+        //TODO: Use MemesStorage
         if let decodedData = UserDefaults.standard.data(forKey: "memes") {
             let existingMemes = try! JSONDecoder().decode([MemeModel].self, from: decodedData)
             memes.append(contentsOf: existingMemes)
         }
         memes.append(meme)
-        let encodedData = try! JSONEncoder().encode(memes)
-        defaults.set(encodedData, forKey: "memes")
+        //TODO: fix
+        try? MemesStorage.save(memes: memes)
+//        let encodedData = try! JSONEncoder().encode(memes)
+//        MemesStorage.defaults.set(encodedData, forKey: "memes")
         newMemeAddedCallback()
     }
     

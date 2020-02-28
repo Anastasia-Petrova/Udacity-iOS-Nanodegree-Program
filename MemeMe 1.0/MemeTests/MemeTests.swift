@@ -12,7 +12,7 @@ import XCTest
 final class MemeTests: XCTestCase {
     func test_rendering_portrait() throws {
         XCUIDevice.shared.orientation = .portrait
-        let vc = MemeEditorViewController()
+        let vc = MemeEditorViewController {}
         vc.photoView.image = UIImage(named: "original", in: .unitTests, with: nil)
         vc.view.layoutIfNeeded()
         
@@ -32,13 +32,13 @@ final class MemeTests: XCTestCase {
     
     func test_rendering_landscape() throws {
         XCUIDevice.shared.orientation = .landscapeLeft
-        let vc = MemeEditorViewController()
+        let vc = MemeEditorViewController {}
         vc.photoView.image = UIImage(named: "original", in: .unitTests, with: nil)
         vc.view.layoutIfNeeded()
         
         let actualImageURL = FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("actualImage.png")
+            .appendingPathComponent("actualImage_landscape.png")
         try vc.generateMemedImage().pngData()?.write(to: actualImageURL)
         let actualImage = UIImage(contentsOfFile: actualImageURL.path)
         
