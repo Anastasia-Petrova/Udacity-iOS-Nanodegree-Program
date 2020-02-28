@@ -18,7 +18,6 @@ enum ImageStorage {
         if !FileManager.default.fileExists(atPath: Self.memesDirectory.path) {
             do {
                 try FileManager.default.createDirectory(at: Self.memesDirectory, withIntermediateDirectories: true, attributes: nil)
-                print("created directory at url: \(Self.memesDirectory)")
             } catch {
                 print(error)
             }
@@ -33,18 +32,21 @@ enum ImageStorage {
         }
     }
     
-    static func deleteImage(url: URL) throws -> Void {
+    static func deleteImage(id: UUID) throws -> Void {
         let fileManager = FileManager.default
+        let url = ImageStorage.memesDirectory.appendingPathComponent(id.uuidString)
         try? fileManager.removeItem(at: url)
     }
     
-    static func getAllImages() throws -> [UIImage] {
+    static func getImage(id: UUID) -> UIImage? {
+        let url = ImageStorage.memesDirectory.appendingPathComponent(id.uuidString)
+        return UIImage(contentsOfFile: url.path)
+    }
+    
+    static func getAllImageURLs() throws -> [URL] {
         let fileManager = FileManager.default
-        let directoryContents = try? fileManager.contentsOfDirectory(at: Self.memesDirectory, includingPropertiesForKeys: nil)
-        guard let directoryContent = directoryContents else { return [] }
-        return directoryContent.compactMap { imageURL in
-            UIImage(contentsOfFile: imageURL.path)
-        }
+        let directoryContents = try fileManager.contentsOfDirectory(at: Self.memesDirectory, includingPropertiesForKeys: nil)
+        return directoryContents
     }
 
     static func deleteAllImages() throws -> Void {
