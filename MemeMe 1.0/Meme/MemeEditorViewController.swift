@@ -10,7 +10,12 @@ import UIKit
 import MobileCoreServices
 
 final class MemeEditorViewController: UIViewController {
-    let toolBar = UIToolbar()
+    let toolBar = UIToolbar(
+        //This is a workaround for [apparently] UIToolbar bug where it breaks
+        //contraints of private subviews (e.g. _UIModernBarButton: centerY)
+        //https://forums.developer.apple.com/thread/121474
+        frame: CGRect(origin: .zero, size: CGSize(width: 320, height: 44))
+    )
     let photoView = UIImageView(frame: .zero)
     let label = UILabel()
     let cameraButton = UIBarButtonItem()
@@ -39,9 +44,10 @@ final class MemeEditorViewController: UIViewController {
         super.viewDidLoad()
         topTextField.delegate = self
         bottomTextField.delegate = self
-        self.view.backgroundColor = .darkGray
-        self.view.addSubview(photoView)
-        self.view.addSubview(toolBar)
+        toolBar.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .darkGray
+        view.addSubview(photoView)
+        view.addSubview(toolBar)
         
         setUpNavigationBar()
         setUpImageView()
@@ -57,8 +63,8 @@ final class MemeEditorViewController: UIViewController {
         subscribeToKeyboardNotifications()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         topTextFieldTopConstraint.constant = countTextFieldsConstants().top
         bottomTextFieldBottomConstraint.constant = countTextFieldsConstants().bottom
         topTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
@@ -89,8 +95,6 @@ final class MemeEditorViewController: UIViewController {
     }
     
     private func setUpToolBar() {
-        toolBar.translatesAutoresizingMaskIntoConstraints = false
-        toolBar.contentMode = .center
         NSLayoutConstraint.activate([
             toolBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             toolBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -101,10 +105,23 @@ final class MemeEditorViewController: UIViewController {
         cameraButton.style = .plain
         cameraButton.target = self
         cameraButton.action = #selector(openCamera)
-        let albumButton = UIBarButtonItem(title: "Album", style: .plain, target: self, action: #selector(openPhotoLibrary))
-
+        let albumButton = UIBarButtonItem(
+            title: "Album",
+            style: .plain,
+            target: self,
+            action: #selector(openPhotoLibrary)
+        )
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let items = [flexibleSpace, cameraButton, flexibleSpace, albumButton, flexibleSpace]
+        let flexibleSpace2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let flexibleSpace3 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let items = [
+            flexibleSpace2,
+            cameraButton,
+            flexibleSpace,
+            albumButton,
+            flexibleSpace3
+        ]
+        
         toolBar.setItems(items, animated: false)
     }
     
@@ -147,26 +164,24 @@ final class MemeEditorViewController: UIViewController {
         topTextField.setContentCompressionResistancePriority(.required, for: .vertical)
         bottomTextField.setContentHuggingPriority(.required, for: .vertical)
         bottomTextField.setContentCompressionResistancePriority(.required, for: .vertical)
-        topTextFieldTopConstraint =
-            topTextField.topAnchor.constraint(
+        
+        topTextFieldTopConstraint = topTextField.topAnchor.constraint(
             equalTo: photoView.topAnchor,
             constant: 16
         )
-        topTextFieldLeadingConstraint =
-            topTextField.leadingAnchor.constraint(
+        topTextFieldLeadingConstraint = topTextField.leadingAnchor.constraint(
             equalTo: view.leadingAnchor,
             constant: 16
         )
-        topTextFieldTrailingConstraint =
-                view.trailingAnchor.constraint(
-                equalTo: topTextField.trailingAnchor,
-                constant: 16
+        topTextFieldTrailingConstraint = view.trailingAnchor.constraint(
+            equalTo: topTextField.trailingAnchor,
+            constant: 16
         )
         bottomTextFieldLeadingConstraint = bottomTextField.leadingAnchor.constraint(
             equalTo: view.leadingAnchor,
             constant: 16
         )
-        bottomTextFieldTrailingConstraint =             view.trailingAnchor.constraint(
+        bottomTextFieldTrailingConstraint = view.trailingAnchor.constraint(
             equalTo: bottomTextField.trailingAnchor,
             constant: 16
         )
