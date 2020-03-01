@@ -19,7 +19,7 @@ final class MemeTests: XCTestCase {
         let actualImageURL = FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("actualImage.png")
-        try vc.generateMemedImage().pngData()?.write(to: actualImageURL)
+        try vc.generateMemedImage()?.pngData()?.write(to: actualImageURL)
         let actualImage = UIImage(contentsOfFile: actualImageURL.path)
         
         let expectedImageUrl = URL(fileURLWithPath: "\(#file)", isDirectory: false)
@@ -39,7 +39,7 @@ final class MemeTests: XCTestCase {
         let actualImageURL = FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("actualImage_landscape.png")
-        try vc.generateMemedImage().pngData()?.write(to: actualImageURL)
+        try vc.generateMemedImage()?.pngData()?.write(to: actualImageURL)
         let actualImage = UIImage(contentsOfFile: actualImageURL.path)
         
         let expectedImageUrl = URL(fileURLWithPath: "\(#file)", isDirectory: false)
