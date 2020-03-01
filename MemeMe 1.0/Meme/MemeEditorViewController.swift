@@ -17,7 +17,7 @@ final class MemeEditorViewController: UIViewController {
         frame: CGRect(origin: .zero, size: CGSize(width: 320, height: 44))
     )
     let photoView = UIImageView(frame: .zero)
-    let label = UILabel()
+    let instructionLabel = UILabel()
     let cameraButton = UIBarButtonItem()
     let topTextField = UITextField()
     let bottomTextField = UITextField()
@@ -27,12 +27,11 @@ final class MemeEditorViewController: UIViewController {
     var topTextFieldTrailingConstraint = NSLayoutConstraint()
     var bottomTextFieldLeadingConstraint = NSLayoutConstraint()
     var bottomTextFieldTrailingConstraint = NSLayoutConstraint()
-    var meme: MemeModel?
     var keyboardHeight: CGFloat = 0.0
-    let newMemeAddedCallback: () -> Void
+    let didSaveMemeCallback: () -> Void
     
     init(callback: @escaping () -> Void) {
-        newMemeAddedCallback = callback
+        didSaveMemeCallback = callback
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -79,11 +78,11 @@ final class MemeEditorViewController: UIViewController {
     }
     
     func setDefaultValues() {
-        self.label.isHidden = false
+        self.instructionLabel.isHidden = false
         topTextField.isHidden = true
         bottomTextField.isHidden = true
-        topTextField.text = "TOP"
-        bottomTextField.text = "BOTTOM"
+        topTextField.text = Labels.EditorScreen.TextField.topText
+        bottomTextField.text = Labels.EditorScreen.TextField.bottomText
         navigationItem.leftBarButtonItem?.isEnabled = false
     }
     
@@ -95,33 +94,26 @@ final class MemeEditorViewController: UIViewController {
     }
     
     private func setUpToolBar() {
+        func spacer() -> UIBarButtonItem {
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        }
         NSLayoutConstraint.activate([
             toolBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             toolBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             toolBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             toolBar.heightAnchor.constraint(equalToConstant: 44)
         ])
-        cameraButton.image = UIImage(systemName: "camera.fill")
+        cameraButton.image = UIImage(systemName: Labels.EditorScreen.Toolbar.cameraButtonImageName)
         cameraButton.style = .plain
         cameraButton.target = self
         cameraButton.action = #selector(openCamera)
         let albumButton = UIBarButtonItem(
-            title: "Album",
+            title: Labels.EditorScreen.Toolbar.albumButtonTitle,
             style: .plain,
             target: self,
             action: #selector(openPhotoLibrary)
         )
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let flexibleSpace2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let flexibleSpace3 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let items = [
-            flexibleSpace2,
-            cameraButton,
-            flexibleSpace,
-            albumButton,
-            flexibleSpace3
-        ]
-        
+        let items = [spacer(), cameraButton, spacer(), albumButton, spacer()]
         toolBar.setItems(items, animated: false)
     }
     
@@ -138,16 +130,16 @@ final class MemeEditorViewController: UIViewController {
     }
     
     func setUpPickImageLabel() {
-        label.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(label)
-        label.font = .systemFont(ofSize: 30, weight: .medium)
-        label.numberOfLines = 0
-        label.text = "Pick an image"
-        label.textColor = .white
-        label.textAlignment = .center
+        instructionLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(instructionLabel)
+        instructionLabel.font = .systemFont(ofSize: 30, weight: .medium)
+        instructionLabel.numberOfLines = 0
+        instructionLabel.text = Labels.EditorScreen.instructionText
+        instructionLabel.textColor = .white
+        instructionLabel.textAlignment = .center
         NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            instructionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            instructionLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
@@ -274,11 +266,20 @@ final class MemeEditorViewController: UIViewController {
     }
     
     @objc func openActivityView() {
-        let image = generateMemedImage()
-        let controller = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(controller, animated: true, completion: { [weak self] in
-            self?.save()
-        })
+        guard let image = generateMemedImage() else {
+            presentAlert(
+                title: Labels.EditorScreen.Alert.createMemeErrorText,
+                message: Labels.EditorScreen.Alert.createMemeErrorDescription
+            )
+            return
+        }
+        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        activityVC.completionWithItemsHandler = { [weak self] _, completed, _, error in
+            if completed && error == nil {
+                self?.save(image: image)
+            }
+        }
+        present(activityVC, animated: true, completion: nil)
     }
     
     @objc func cancel() {
@@ -354,31 +355,53 @@ final class MemeEditorViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func save() {
-        let memedImage = generateMemedImage()
-        let date = Date()
+    func save(image: UIImage) {
         let id = UUID()
-        try? ImageStorage.saveImage(image: memedImage, id: id)
-        meme = MemeModel(
+        let meme = MemeModel(
             id: id,
-            topText: topTextField.text!,
-            bottomText: bottomTextField.text!,
-            date: date
+            topText: topTextField.text ?? "",
+            bottomText: bottomTextField.text ?? "",
+            date: Date()
         )
-        guard let meme = meme else {
-            return
-        }
-        var memes: [MemeModel] = []
-        let existingMemes = (try? MemesStorage.loadMemes()) ?? []
-        memes.append(contentsOf: existingMemes)
-        memes.append(meme)
         do {
-            try MemesStorage.save(memes: memes)
-            newMemeAddedCallback()
+            try ImageStorage.saveImage(image: image, id: id)
+            let existingMemes = MemesStorage.loadMemes()
+            try MemesStorage.save(memes: existingMemes + [meme])
+            didSaveMemeCallback()
+        } catch ImageStorage.Error.imageNotFound {
+            presentAlert(
+                title: ImageStorage.Error.imageNotFound.title,
+                message: ImageStorage.Error.imageNotFound.localizedDescription
+            )
+        } catch MemesStorage.Error.encodingFailed {
+            presentAlert(
+                title: Labels.EditorScreen.Alert.saveErrorText,
+                message: Labels.EditorScreen.Alert.unrecoverableSaveErrorDescription
+            )
+            //attempt to clean-up the mess after save failure
+            try? ImageStorage.deleteImage(id: id)
         } catch {
-            //FIX ME
-            print(error)
+            presentAlert(
+                title: Labels.EditorScreen.Alert.saveErrorText,
+                message: error.localizedDescription
+            )
         }
+    }
+    
+    func presentAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: Labels.EditorScreen.Alert.okButtonTitle,
+                style: .default,
+                handler: nil
+            )
+        )
+        present(alert, animated: true, completion: nil)
     }
     
     func calculateLabelSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
@@ -391,23 +414,23 @@ final class MemeEditorViewController: UIViewController {
         return label.sizeThatFits(size)
     }
     
-    func generateMemedImage() -> UIImage {
-        // Step 1
-        let renderingData = prepareRenderingData()!
-        // Step 2
-        let finalImage = drawImage(with: renderingData)! //FIXME: remove optionality
+    func generateMemedImage() -> UIImage? {
+        guard let renderingData = prepareRenderingData(),
+            let finalImage = drawImage(with: renderingData) else {
+            return nil
+        }
         return finalImage
     }
     
     func prepareRenderingData() -> RenderingData? {
         guard let image = photoView.image,
-            let topText = topTextField.text,
-            let bottomText = bottomTextField.text,
             let topFontSize = topTextField.font?.pointSize,
             let bottomFontSize = bottomTextField.font?.pointSize else {
                 return nil
         }
         
+        let topText = topTextField.text ?? ""
+        let bottomText = bottomTextField.text ?? ""
         let contextSize = calculateContextSize(image: image)
         let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
         
@@ -475,7 +498,7 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
         }
         
         dismiss(animated: true) {
-            self.label.isHidden = true
+            self.instructionLabel.isHidden = true
             self.photoView.image = image
             self.topTextField.isHidden = false
             self.bottomTextField.isHidden = false
@@ -489,7 +512,6 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
 extension MemeEditorViewController: UINavigationControllerDelegate {}
 
 extension MemeEditorViewController: UITextFieldDelegate {
-    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.text = ""
     }

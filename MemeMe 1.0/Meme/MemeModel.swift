@@ -12,6 +12,5 @@ struct MemeModel: Codable {
     let id: UUID
     var topText: String
     var bottomText: String
-//    let originalImage: UIImage
     let date: Date
 }
