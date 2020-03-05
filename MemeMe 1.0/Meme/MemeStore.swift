@@ -9,29 +9,25 @@
 import UIKit
 
 enum MemeStore {
-    enum `Error`: Swift.Error {
-        case encodingFailed
-    }
-    private static let defaults = UserDefaults.standard
-    private static let key = "memes"
+    private static let memesKey = "memes"
     
     public static func save(memes: [MemeModel]) throws {
         do {
             let encodedData = try JSONEncoder().encode(memes)
-            UserDefaults.standard.set(encodedData, forKey: MemeStore.key)
+            UserDefaults.standard.set(encodedData, forKey: memesKey)
         } catch {
             throw Error.encodingFailed
         }
     }
     
     public static func loadMemes() -> [MemeModel] {
-        guard let encodedData = UserDefaults.standard.data(forKey: MemeStore.key) else {
+        guard let encodedData = UserDefaults.standard.data(forKey: memesKey) else {
             return []
         }
         do {
             return try JSONDecoder().decode([MemeModel].self, from: encodedData)
         } catch {
-            UserDefaults.standard.removeObject(forKey: MemeStore.key)
+            UserDefaults.standard.removeObject(forKey: memesKey)
             return []
         }
     }
@@ -40,7 +36,13 @@ enum MemeStore {
         var array = memes
         array.remove(at: indexPath.row)
         let encodedData = try! JSONEncoder().encode(memes)
-        UserDefaults.standard.set(encodedData, forKey: MemeStore.key)
+        UserDefaults.standard.set(encodedData, forKey: memesKey)
         return array
+    }
+}
+
+extension MemeStore {
+    enum `Error`: Swift.Error {
+        case encodingFailed
     }
 }
