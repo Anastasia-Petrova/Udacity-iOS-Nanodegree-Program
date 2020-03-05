@@ -32,25 +32,13 @@ enum ImageStore {
     }
     
     static func deleteImage(id: UUID) throws -> Void {
-        let url = ImageStore.memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
+        let url = memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
         try FileManager.default.removeItem(at: url)
     }
     
     static func getImage(id: UUID) -> UIImage? {
-        let url = ImageStore.memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
+        let url = memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
         return UIImage(contentsOfFile: url.path)
-    }
-    
-    static func getAllImageURLs() throws -> [URL] {
-        let directoryContents = try FileManager.default.contentsOfDirectory(
-            at: memeImagesDirectoryURL,
-            includingPropertiesForKeys: nil
-        )
-        return directoryContents
-    }
-
-    static func deleteAllImages() throws -> Void {
-        try? FileManager.default.removeItem(at: memeImagesDirectoryURL)
     }
 }
 
