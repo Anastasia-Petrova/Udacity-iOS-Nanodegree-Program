@@ -16,14 +16,14 @@ final class DataSource: NSObject {
     var isEditModeOn: Bool = false
     
     override init() {
-        memes = (try? MemesStorage.loadMemes()) ?? []
+        memes = (try? MemeStore.loadMemes()) ?? []
         data = Self.mapMemesToData(memes)
         super.init()
     }
     
     
     func reloadData() {
-        memes = (try? MemesStorage.loadMemes()) ?? []
+        memes = (try? MemeStore.loadMemes()) ?? []
         data = Self.mapMemesToData(memes)
     }
     
@@ -31,7 +31,7 @@ final class DataSource: NSObject {
         memes
             .sorted(by: { $1.date > $0.date })
             .compactMap {
-            if let image = ImageStorage.getImage(id: $0.id) {
+            if let image = ImageStore.getImage(id: $0.id) {
                 return ($0.text, image)
             } else {
                 return nil
@@ -66,7 +66,7 @@ extension DataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             do {
-                try ImageStorage.deleteImage(id: memes[indexPath.row].id)
+                try ImageStore.deleteImage(id: memes[indexPath.row].id)
                 deleteMeme(indexPath: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 reloadData()

@@ -364,22 +364,22 @@ final class MemeEditorViewController: UIViewController {
             date: Date()
         )
         do {
-            try ImageStorage.saveImage(image: image, id: id)
-            let existingMemes = MemesStorage.loadMemes()
-            try MemesStorage.save(memes: existingMemes + [meme])
+            try ImageStore.saveImage(image: image, id: id)
+            let existingMemes = MemeStore.loadMemes()
+            try MemeStore.save(memes: existingMemes + [meme])
             didSaveMemeCallback()
-        } catch ImageStorage.Error.imageNotFound {
+        } catch ImageStore.Error.imageNotFound {
             presentAlert(
-                title: ImageStorage.Error.imageNotFound.title,
-                message: ImageStorage.Error.imageNotFound.localizedDescription
+                title: ImageStore.Error.imageNotFound.title,
+                message: ImageStore.Error.imageNotFound.localizedDescription
             )
-        } catch MemesStorage.Error.encodingFailed {
+        } catch MemeStore.Error.encodingFailed {
             presentAlert(
                 title: Labels.EditorScreen.Alert.saveErrorText,
                 message: Labels.EditorScreen.Alert.unrecoverableSaveErrorDescription
             )
             //attempt to clean-up the mess after save failure
-            try? ImageStorage.deleteImage(id: id)
+            try? ImageStore.deleteImage(id: id)
         } catch {
             presentAlert(
                 title: Labels.EditorScreen.Alert.saveErrorText,

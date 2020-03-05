@@ -152,7 +152,7 @@ extension SentMemesViewController: UICollectionViewDelegate {
         //TODO: remove this code
         if dataSource.isEditModeOn {
             do {
-                try ImageStorage.deleteImage(id: dataSource.memes[indexPath.row].id)
+                try ImageStore.deleteImage(id: dataSource.memes[indexPath.row].id)
                 dataSource.deleteMeme(indexPath: indexPath)
                 collectionView.deleteItems(at: [indexPath])
                 dataSource.reloadData()

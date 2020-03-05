@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum ImageStorage {
+enum ImageStore {
     enum `Error`: Swift.Error {
         case imageNotFound
         
@@ -34,7 +34,7 @@ enum ImageStorage {
     
     public static func saveImage(image: UIImage, id: UUID) throws {
         guard let imageData = image.pngData() else {
-            throw ImageStorage.Error.imageNotFound
+            throw ImageStore.Error.imageNotFound
         }
         if !FileManager.default.fileExists(atPath: Self.memesDirectory.path) {
             try FileManager.default.createDirectory(
@@ -48,12 +48,12 @@ enum ImageStorage {
     }
     
     static func deleteImage(id: UUID) throws -> Void {
-        let url = ImageStorage.memesDirectory.appendingPathComponent(id.uuidString)
+        let url = ImageStore.memesDirectory.appendingPathComponent(id.uuidString)
         try FileManager.default.removeItem(at: url)
     }
     
     static func getImage(id: UUID) -> UIImage? {
-        let url = ImageStorage.memesDirectory.appendingPathComponent(id.uuidString)
+        let url = ImageStore.memesDirectory.appendingPathComponent(id.uuidString)
         return UIImage(contentsOfFile: url.path)
     }
     
