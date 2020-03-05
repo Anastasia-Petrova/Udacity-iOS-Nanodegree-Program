@@ -258,11 +258,11 @@ final class MemeEditorViewController: UIViewController {
     }
     
     @objc func openPhotoLibrary() {
-        VideoBrowser.startMediaBrowser(delegate: self, sourceType: .photoLibrary)
+        PhotoLibraryBrowser.presentPhotoLibraryBrowser(delegate: self, sourceType: .photoLibrary)
     }
     
     @objc func openCamera() {
-        VideoBrowser.startMediaBrowser(delegate: self, sourceType: .camera)
+        PhotoLibraryBrowser.presentPhotoLibraryBrowser(delegate: self, sourceType: .camera)
     }
     
     @objc func openActivityView() {
