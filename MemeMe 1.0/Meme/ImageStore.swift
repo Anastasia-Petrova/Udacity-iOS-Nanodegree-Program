@@ -10,6 +10,51 @@ import Foundation
 import UIKit
 
 enum ImageStore {
+    static let memeImagesDirectoryName = "memeImages"
+    
+    public static let memeImagesDirectoryURL: URL = FileManager.default
+        .urls(for: .documentDirectory, in: .userDomainMask)[0]
+        .appendingPathComponent(memeImagesDirectoryName)
+    
+    public static func saveImage(image: UIImage, id: UUID) throws {
+        guard let imageData = image.pngData() else {
+            throw ImageStore.Error.imageNotFound
+        }
+        if !FileManager.default.fileExists(atPath: memeImagesDirectoryURL.path) {
+            try FileManager.default.createDirectory(
+                at: memeImagesDirectoryURL,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+        }
+        let fileURL = memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
+        try imageData.write(to: fileURL, options: .atomic)
+    }
+    
+    static func deleteImage(id: UUID) throws -> Void {
+        let url = ImageStore.memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
+        try FileManager.default.removeItem(at: url)
+    }
+    
+    static func getImage(id: UUID) -> UIImage? {
+        let url = ImageStore.memeImagesDirectoryURL.appendingPathComponent(id.uuidString)
+        return UIImage(contentsOfFile: url.path)
+    }
+    
+    static func getAllImageURLs() throws -> [URL] {
+        let directoryContents = try FileManager.default.contentsOfDirectory(
+            at: memeImagesDirectoryURL,
+            includingPropertiesForKeys: nil
+        )
+        return directoryContents
+    }
+
+    static func deleteAllImages() throws -> Void {
+        try? FileManager.default.removeItem(at: memeImagesDirectoryURL)
+    }
+}
+
+extension ImageStore {
     enum `Error`: Swift.Error {
         case imageNotFound
         
@@ -26,46 +71,5 @@ enum ImageStore {
                 return Labels.ImageStorage.Error.imageNotFoundDescription
             }
         }
-    }
-    
-    public static let memesDirectory: URL = FileManager.default
-        .urls(for: .documentDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("memeImages")
-    
-    public static func saveImage(image: UIImage, id: UUID) throws {
-        guard let imageData = image.pngData() else {
-            throw ImageStore.Error.imageNotFound
-        }
-        if !FileManager.default.fileExists(atPath: Self.memesDirectory.path) {
-            try FileManager.default.createDirectory(
-                at: Self.memesDirectory,
-                withIntermediateDirectories: true,
-                attributes: nil
-            )
-        }
-        let fileURL = Self.memesDirectory.appendingPathComponent(id.uuidString)
-        try imageData.write(to: fileURL, options: .atomic)
-    }
-    
-    static func deleteImage(id: UUID) throws -> Void {
-        let url = ImageStore.memesDirectory.appendingPathComponent(id.uuidString)
-        try FileManager.default.removeItem(at: url)
-    }
-    
-    static func getImage(id: UUID) -> UIImage? {
-        let url = ImageStore.memesDirectory.appendingPathComponent(id.uuidString)
-        return UIImage(contentsOfFile: url.path)
-    }
-    
-    static func getAllImageURLs() throws -> [URL] {
-        let directoryContents = try FileManager.default.contentsOfDirectory(
-            at: Self.memesDirectory,
-            includingPropertiesForKeys: nil
-        )
-        return directoryContents
-    }
-
-    static func deleteAllImages() throws -> Void {
-        try? FileManager.default.removeItem(at: Self.memesDirectory)
     }
 }
