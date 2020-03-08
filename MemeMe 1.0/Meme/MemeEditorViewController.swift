@@ -106,12 +106,12 @@ final class MemeEditorViewController: UIViewController {
         cameraButton.image = UIImage(systemName: Labels.EditorScreen.Toolbar.cameraButtonImageName)
         cameraButton.style = .plain
         cameraButton.target = self
-        cameraButton.action = #selector(openCamera)
+        cameraButton.action = #selector(presentCamera)
         let albumButton = UIBarButtonItem(
             title: Labels.EditorScreen.Toolbar.albumButtonTitle,
             style: .plain,
             target: self,
-            action: #selector(openPhotoLibrary)
+            action: #selector(presentPhotoLibrary)
         )
         let items = [spacer(), cameraButton, spacer(), albumButton, spacer()]
         toolBar.setItems(items, animated: false)
@@ -257,12 +257,20 @@ final class MemeEditorViewController: UIViewController {
         return isPortrait ? 16 : ((photoView.frame.width - contextSize.width) / 2 + 16)
     }
     
-    @objc func openPhotoLibrary() {
-        PhotoLibraryBrowser.presentPhotoLibraryBrowser(delegate: self, sourceType: .photoLibrary)
+    @objc func presentPhotoLibrary() {
+        presentPicker(for: .photoLibrary)
+    }
+
+    @objc func presentCamera() {
+        presentPicker(for: .camera)
     }
     
-    @objc func openCamera() {
-        PhotoLibraryBrowser.presentPhotoLibraryBrowser(delegate: self, sourceType: .camera)
+    func presentPicker(for sourceType: UIImagePickerController.SourceType) {
+        guard let imagePicker = UIImagePickerController(sourceType: sourceType) else {
+            return
+        }
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
     }
     
     @objc func openActivityView() {
