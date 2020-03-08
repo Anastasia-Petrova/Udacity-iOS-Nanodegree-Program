@@ -19,7 +19,7 @@ final class SavedMemesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        self.title = "Sent Memes"
+        self.title = Labels.SavedMemesScreen.title
         tableView.register(
             SavedMemesTableCell.self,
             forCellReuseIdentifier: SavedMemesTableCell.identifier

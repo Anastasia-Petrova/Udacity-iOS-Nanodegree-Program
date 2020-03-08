@@ -39,4 +39,8 @@ enum Labels {
             static let imageNotFoundDescription = "Looks like your image is empty. Try another one."
         }
     }
+    
+    enum SavedMemesScreen {
+        static let title = "Sent Memes"
+    }
 }

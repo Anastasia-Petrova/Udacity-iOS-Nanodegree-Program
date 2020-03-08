@@ -481,16 +481,3 @@ extension UIView {
         }
     }
 }
-
-extension MemeEditorViewController {
-    struct RenderingData {
-        let contextRect: CGRect
-        let image: UIImage
-        let topText: String
-        let bottomText: String
-        let topTextRect: CGRect
-        let bottomTextRect: CGRect
-        let topTextAttributes: [NSAttributedString.Key : Any]
-        let bottomTextAttributes: [NSAttributedString.Key : Any]
-    }
-}
