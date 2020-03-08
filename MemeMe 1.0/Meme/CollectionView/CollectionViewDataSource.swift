@@ -9,14 +9,15 @@
 import UIKit
 
 extension DataSource: UICollectionViewDataSource {
-    
-    //TODO: Rename. Its not a transform. It does not set up anything. This name is shite.
-    func setUpTransform(indexPath: IndexPath) -> CAKeyframeAnimation {
+    func makeWiggleAnimation(for indexPath: IndexPath) -> CAKeyframeAnimation {
         let transformAnim  = CAKeyframeAnimation(keyPath:"transform")
-        transformAnim.values  = [NSValue(caTransform3D: CATransform3DMakeRotation(0.04, 0.0, 0.0, 1.0)),NSValue(caTransform3D: CATransform3DMakeRotation(-0.04 , 0, 0, 1))]
+        transformAnim.values  = [
+            NSValue(caTransform3D: CATransform3DMakeRotation(0.04, 0.0, 0.0, 1.0)),
+            NSValue(caTransform3D: CATransform3DMakeRotation(-0.04 , 0, 0, 1))
+        ]
         transformAnim.autoreverses = true
-        transformAnim.duration  = (Double(indexPath.row).truncatingRemainder(dividingBy: 2.0)) == 0 ? 0.115 : 0.105
-        transformAnim.repeatCount = Float.infinity
+        transformAnim.duration  = indexPath.row % 2 == 0 ? 0.115 : 0.105
+        transformAnim.repeatCount = .infinity
         return transformAnim
     }
 
@@ -34,8 +35,8 @@ extension DataSource: UICollectionViewDataSource {
         cell.memeImageView.image = data[indexPath.row].image
         if isEditModeOn {
             cell.deleteImageView.isHidden = false
-            let transform = setUpTransform(indexPath: indexPath)
-            cell.layer.add(transform, forKey: "transform")
+            let animation = makeWiggleAnimation(for: indexPath)
+            cell.layer.add(animation, forKey: "transform")
         } else {
             cell.deleteImageView.isHidden = true
             cell.layer.removeAllAnimations()
