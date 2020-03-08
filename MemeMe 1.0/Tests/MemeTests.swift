@@ -6,7 +6,7 @@
 //  Copyright © 2020 Anastasia Petrova. All rights reserved.
 //
 
-@testable import Meme
+@testable import MemeMe
 import XCTest
 
 final class MemeTests: XCTestCase {
