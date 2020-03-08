@@ -9,6 +9,8 @@
 import UIKit
 
 final class TableViewCell: UITableViewCell {
+    static let identifier = "TableViewCell"
+    
     let stackView = UIStackView()
     let memeImageView = UIImageView(image: UIImage(named: "placeholder"))
     let memeName = UILabel()

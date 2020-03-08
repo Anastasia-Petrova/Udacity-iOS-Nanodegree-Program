@@ -9,6 +9,8 @@
 import UIKit
 
 final class CollectionViewCell: UICollectionViewCell {
+    static let identifier = "CollectionViewCell"
+    
     let memeImageView = UIImageView()
     let deleteImageView = UIImageView()
     

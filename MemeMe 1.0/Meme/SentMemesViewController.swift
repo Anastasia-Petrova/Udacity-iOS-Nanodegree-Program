@@ -10,7 +10,7 @@ import UIKit
 
 final class SentMemesViewController: UIViewController {
     let tableView = UITableView()
-    let dataSource = DataSource()
+    let dataSource = MemeDataSource()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
     let tabBar = UITabBar()
     let tableBarItem = UITabBarItem()
@@ -20,10 +20,17 @@ final class SentMemesViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.title = "Sent Memes"
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(
+            TableViewCell.self,
+            forCellReuseIdentifier: TableViewCell.identifier
+        )
         tableView.dataSource = dataSource
         tableView.delegate = self
-        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
+        
+        collectionView.register(
+            CollectionViewCell.self,
+            forCellWithReuseIdentifier: CollectionViewCell.identifier
+        )
         collectionView.dataSource = dataSource
         collectionView.delegate = self
         
@@ -124,7 +131,6 @@ final class SentMemesViewController: UIViewController {
         dataSource.isEditModeOn = false
         collectionView.reloadData()
     }
-
 }
 
 extension SentMemesViewController: UITableViewDelegate {
@@ -140,17 +146,38 @@ extension SentMemesViewController: UITableViewDelegate {
 
 extension SentMemesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = dataSource.collectionView(collectionView, cellForItemAt: indexPath) as? CollectionViewCell
-        
         if dataSource.isEditModeOn {
             dataSource.deleteMeme(at: indexPath)
             collectionView.deleteItems(at: [indexPath])
         } else {
-            if let image = cell?.memeImageView.image {
-                let vc = DetailViewController(image: image)
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
+            let image = dataSource.memeViewModels[indexPath.row].image
+            let vc = DetailViewController(image: image)
+            navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let memeCell = cell as? CollectionViewCell else { return }
+        
+        memeCell.deleteImageView.isHidden = !dataSource.isEditModeOn
+        if dataSource.isEditModeOn {
+            let animation = makeWiggleAnimation(for: indexPath)
+            memeCell.layer.add(animation, forKey: "transform")
+        } else {
+            memeCell.layer.removeAllAnimations()
+        }
+    }
+    
+    private func makeWiggleAnimation(for indexPath: IndexPath) -> CAKeyframeAnimation {
+        let transformAnim  = CAKeyframeAnimation(keyPath:"transform")
+        transformAnim.values  = [
+            NSValue(caTransform3D: CATransform3DMakeRotation(0.04, 0.0, 0.0, 1.0)),
+            NSValue(caTransform3D: CATransform3DMakeRotation(-0.04 , 0, 0, 1))
+        ]
+        transformAnim.autoreverses = true
+        transformAnim.duration  = indexPath.row % 2 == 0 ? 0.115 : 0.105
+        transformAnim.repeatCount = .infinity
+        return transformAnim
     }
 }
 
