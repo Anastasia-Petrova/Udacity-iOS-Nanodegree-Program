@@ -1,5 +1,5 @@
 //
-//  UserStorage.swift
+//  ImageStore.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 25/02/2020.

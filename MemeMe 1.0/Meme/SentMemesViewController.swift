@@ -102,17 +102,10 @@ final class SentMemesViewController: UIViewController {
             self?.collectionView.reloadData()
         }
         let nvc = UINavigationController(rootViewController: vc)
-//        nvc.setNavigationBarHidden(true, animated: false)
         self.present(nvc, animated: true)
     }
     
     @objc func handleLongPress(_ longPress: UILongPressGestureRecognizer) {
-//        if longPress.state != .ended {
-//            return
-//        }
-        //TODO: set done button in viewDidLoad and immediately make if isHidden = true
-        //and then just set isHidden true/false when needed instead of re-creating button
-        //like it is done now
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,  action: #selector(doneAction))
         
         navigationItem.leftBarButtonItem = doneItem
@@ -149,16 +142,9 @@ extension SentMemesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = dataSource.collectionView(collectionView, cellForItemAt: indexPath) as? CollectionViewCell
         
-        //TODO: remove this code
         if dataSource.isEditModeOn {
-            do {
-                try ImageStore.deleteImage(id: dataSource.memes[indexPath.row].meme.id)
-                dataSource.deleteMeme(indexPath: indexPath)
-                collectionView.deleteItems(at: [indexPath])
-                dataSource.reloadData()
-            } catch {
-                print(error)
-            }
+            dataSource.deleteMeme(at: indexPath)
+            collectionView.deleteItems(at: [indexPath])
         } else {
             if let image = cell?.memeImageView.image {
                 let vc = DetailViewController(image: image)

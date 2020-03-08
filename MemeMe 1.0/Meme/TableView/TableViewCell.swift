@@ -27,7 +27,8 @@ final class TableViewCell: UITableViewCell {
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            memeImageView.heightAnchor.constraint(equalToConstant: 140)
         ])
         stackView.alignment = .center
         stackView.distribution = .fillEqually

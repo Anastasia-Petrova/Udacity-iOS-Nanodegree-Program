@@ -1,5 +1,5 @@
 //
-//  MemeViewController.swift
+//  MemeEditorViewController.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 17/02/2020.
@@ -365,7 +365,7 @@ final class MemeEditorViewController: UIViewController {
     
     func save(image: UIImage) {
         let id = UUID()
-        let meme = MemeModel(
+        let meme = Meme(
             id: id,
             topText: topTextField.text ?? "",
             bottomText: bottomTextField.text ?? "",

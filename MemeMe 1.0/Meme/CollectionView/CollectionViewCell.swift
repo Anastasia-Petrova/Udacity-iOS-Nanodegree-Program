@@ -10,7 +10,6 @@ import UIKit
 
 final class CollectionViewCell: UICollectionViewCell {
     let memeImageView = UIImageView()
-    //TODO: make this a button
     let deleteImageView = UIImageView()
     
     override init(frame: CGRect) {
@@ -47,7 +46,4 @@ final class CollectionViewCell: UICollectionViewCell {
         deleteImageView.isHidden = true
     }
     
-//    func buttonSelector() {
-//        didTapDeleteButton()
-//    }
 }
