@@ -9,40 +9,46 @@
 import UIKit
 
 final class DataSource: NSObject {
-    var memesImagesForIndex: [Int : UIImage] = [:]
-    var memes: [MemeModel]
-    var data: [(text: String, image: UIImage)]
+    struct MemeViewModel {
+        let meme: MemeModel
+        let image: UIImage
+    }
+    
+    var memes: [MemeViewModel]
     
     var isEditModeOn: Bool = false
     
     override init() {
-        memes = (try? MemeStore.loadMemes()) ?? []
-        data = Self.mapMemesToData(memes)
+        let memeModels = MemeStore.loadMemes()
+        memes = Self.mapMemesToViewModels(memeModels)
         super.init()
     }
     
-    
     func reloadData() {
-        memes = (try? MemeStore.loadMemes()) ?? []
-        data = Self.mapMemesToData(memes)
+        let memeModels = MemeStore.loadMemes()
+        memes = Self.mapMemesToViewModels(memeModels)
     }
     
-    static func mapMemesToData(_ memes: [MemeModel]) -> [(text: String, image: UIImage)] {
+    static func mapMemesToViewModels(_ memes: [MemeModel]) -> [MemeViewModel] {
         memes
             .sorted(by: { $1.date > $0.date })
             .compactMap {
-            if let image = ImageStore.getImage(id: $0.id) {
-                return ($0.text, image)
-            } else {
-                return nil
-            }
+                if let image = ImageStore.getImage(id: $0.id) {
+                    return MemeViewModel(
+                        meme: $0,
+                        image: image
+                    )
+                } else {
+                    return nil
+                }
         }
     }
     
     func deleteMeme(indexPath: IndexPath) {
         memes.remove(at: indexPath.row)
-        let encodedData = try! JSONEncoder().encode(memes)
-        UserDefaults.standard.set(encodedData, forKey: "memes")
+        if let encodedData = try? JSONEncoder().encode(memes.map { $0.meme }) {
+            UserDefaults.standard.set(encodedData, forKey: "memes")
+        }
     }
 }
 
@@ -58,15 +64,15 @@ extension DataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
         cell.memeImageView.heightAnchor.constraint(equalToConstant: 140).isActive = true
-        cell.memeName.text = data[indexPath.row].text
-        cell.memeImageView.image = data[indexPath.row].image
+        cell.memeName.text = memes[indexPath.row].text
+        cell.memeImageView.image = memes[indexPath.row].image
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             do {
-                try ImageStore.deleteImage(id: memes[indexPath.row].id)
+                try ImageStore.deleteImage(id: memes[indexPath.row].meme.id)
                 deleteMeme(indexPath: indexPath)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 reloadData()
@@ -77,8 +83,8 @@ extension DataSource: UITableViewDataSource {
     }
 }
 
-extension MemeModel {
+extension DataSource.MemeViewModel {
     var text: String {
-        topText + "..." + bottomText
+        meme.topText + "..." + meme.bottomText
     }
 }

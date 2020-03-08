@@ -15,8 +15,12 @@ final class TableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setUpSubviews()
+    }
+    
+    func setUpSubviews() {
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.addSubview(stackView)
+        contentView.addSubview(stackView)
         stackView.addArrangedSubview(memeImageView)
         stackView.addArrangedSubview(memeName)
         NSLayoutConstraint.activate([
@@ -38,5 +42,4 @@ final class TableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
