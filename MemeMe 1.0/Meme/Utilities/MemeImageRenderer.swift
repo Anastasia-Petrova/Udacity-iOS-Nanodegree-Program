@@ -10,12 +10,16 @@ import UIKit
 
 struct MemeImageRenderer {
     let isPortrait: Bool
-    let photoView: UIImageView
-    let view: UIView
-    let topTextField: UITextField
-    let bottomTextField: UITextField
+    let image: UIImage
+    let imageFrame: CGRect
+    let topTextFrame: CGRect
+    let bottomTextFrame: CGRect
+    let topText: String
+    let bottomText: String
+    let topFont: UIFont
+    let bottomFont: UIFont
     
-    func generateMemedImage() -> UIImage? {
+    func render() -> UIImage? {
         guard let renderingData = prepareRenderingData(),
             let finalImage = drawImage(with: renderingData) else {
             return nil
@@ -24,31 +28,34 @@ struct MemeImageRenderer {
     }
     
     private func prepareRenderingData() -> RenderingData? {
-        guard let image = photoView.image,
-            let topFontSize = topTextField.font?.pointSize,
-            let bottomFontSize = bottomTextField.font?.pointSize else {
-                return nil
-        }
-        
-        let topText = topTextField.text ?? ""
-        let bottomText = bottomTextField.text ?? ""
-        let contextSize = calculateContextSize(image: image)
-        let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
-        
+        let contextRect = CGRect(
+            origin: CGPoint.zero,
+            size: calculateContextSize(image: image)
+        )
         return RenderingData(
             contextRect: contextRect,
             image: image,
             topText: topText,
             bottomText: bottomText,
-            topTextRect: prepareTextRect(contextRect: contextRect, textField: topTextField),
-            bottomTextRect: prepareTextRect(contextRect: contextRect, textField: bottomTextField),
-            topTextAttributes: textAttributes(for: topFontSize),
-            bottomTextAttributes: textAttributes(for: bottomFontSize)
+            topTextRect: calculateTextRect(
+                contextRect: contextRect,
+                textFrame: topTextFrame,
+                text: topText,
+                font: topFont
+            ),
+            bottomTextRect: calculateTextRect(
+                contextRect: contextRect,
+                textFrame: bottomTextFrame,
+                text: bottomText,
+                font: bottomFont
+            ),
+            topTextAttributes: textAttributes(for: topFont.pointSize),
+            bottomTextAttributes: textAttributes(for: bottomFont.pointSize)
         )
     }
     
     private func calculateContextSize(image: UIImage) -> CGSize {
-        let imageViewSize = photoView.frame.size
+        let imageViewSize = imageFrame.size
         let aspectRatio = image.aspectRatio(isPortrait: isPortrait)
         let smallerSide = isPortrait ? imageViewSize.width : imageViewSize.height
         return CGSize(
@@ -57,19 +64,16 @@ struct MemeImageRenderer {
         )
     }
     
-    private func prepareTextRect(contextRect: CGRect, textField: UITextField) -> CGRect {
-        guard let text = textField.text,
-            let fontSize = textField.font?.pointSize else {
-            return .zero
-        }
+    private func calculateTextRect(contextRect: CGRect, textFrame: CGRect, text: String, font: UIFont) -> CGRect {
+        let fontSize = font.pointSize
         
-        let imageViewSize = photoView.frame.size
-        let convertedFrame = view.convert(textField.frame, to: photoView)
+        let imageViewSize = imageFrame.size
+        let convertedFrame = textFrame//view.convert(textField.frame, to: photoView)
         let deltaY = (imageViewSize.height - contextRect.size.height)/2
         
         let actualSize = calculateLabelSize(
             for: text,
-            thatFits: textField.frame.size,
+            thatFits: convertedFrame.size,
             attributes: textAttributes(for: fontSize)
         )
         

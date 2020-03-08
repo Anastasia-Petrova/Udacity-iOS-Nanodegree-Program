@@ -1,5 +1,5 @@
 //
-//  CollectionViewLayout.swift
+//  SavedMemesCollectionLayout.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 24/02/2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class CollectionViewLayout: UICollectionViewFlowLayout {
+final class SavedMemesCollectionLayout: UICollectionViewFlowLayout {
     static let spacing: CGFloat = 4.0
     
     override init() {

@@ -1,5 +1,5 @@
 //
-//  CollectionViewCell.swift
+//  SavedMemesCollectionCell.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 24/02/2020.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-final class CollectionViewCell: UICollectionViewCell {
-    static let identifier = "CollectionViewCell"
+final class SavedMemesCollectionCell: UICollectionViewCell {
+    static let identifier = "SavedMemesCollectionCell"
     
     let memeImageView = UIImageView()
     let deleteImageView = UIImageView()
@@ -47,5 +47,4 @@ final class CollectionViewCell: UICollectionViewCell {
         deleteImageView.tintColor = .red
         deleteImageView.isHidden = true
     }
-    
 }

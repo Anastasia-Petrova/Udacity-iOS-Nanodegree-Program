@@ -212,13 +212,16 @@ final class MemeEditorViewController: UIViewController {
         bottomTextField.textAlignment = .center
     }
     
-    var memeTextAttributes: [NSAttributedString.Key: Any] {
-        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
+    var memeFont: UIFont {
+        UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
             ?? UIFont.systemFont(ofSize: 40)
+    }
+    
+    var memeTextAttributes: [NSAttributedString.Key: Any] {
         return [
             NSAttributedString.Key.strokeColor: UIColor.black,
             NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: font,
+            NSAttributedString.Key.font: memeFont,
             NSAttributedString.Key.strokeWidth: -3.0
         ]
     }
@@ -275,7 +278,7 @@ final class MemeEditorViewController: UIViewController {
     }
     
     @objc func openActivityView() {
-        guard let image = generateMemedImage() else {
+        guard let image = renderMemeImage() else {
             presentAlert(
                 title: Labels.EditorScreen.Alert.createMemeErrorText,
                 message: Labels.EditorScreen.Alert.createMemeErrorDescription
@@ -413,21 +416,25 @@ final class MemeEditorViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func generateMemedImage() -> UIImage? {
+    func renderMemeImage() -> UIImage? {
+        guard let image = photoView.image else { return nil }
+        
         let renderer = MemeImageRenderer(
             isPortrait: isPortrait,
-            photoView: photoView,
-            view: view,
-            topTextField: topTextField,
-            bottomTextField: bottomTextField
+            image: image,
+            imageFrame: photoView.frame,
+            topTextFrame: view.convert(topTextField.frame, to: photoView),
+            bottomTextFrame: view.convert(bottomTextField.frame, to: photoView),
+            topText: topTextField.text ?? "",
+            bottomText: bottomTextField.text ?? "",
+            topFont: topTextField.font ?? memeFont,
+            bottomFont: bottomTextField.font ?? memeFont
         )
         
-        return renderer.generateMemedImage()
+        return renderer.render()
     }
     
-    var isPortrait: Bool {
-        return view.frame.height > view.frame.width
-    }
+    var isPortrait: Bool { view.frame.height > view.frame.width }
 }
 
 extension MemeEditorViewController: UIImagePickerControllerDelegate {
@@ -485,16 +492,5 @@ extension MemeEditorViewController {
         let bottomTextRect: CGRect
         let topTextAttributes: [NSAttributedString.Key : Any]
         let bottomTextAttributes: [NSAttributedString.Key : Any]
-    }
-}
-
-extension UIImage {
-    func aspectRatio(isPortrait: Bool) -> CGFloat {
-        let dividend = isPortrait ? size.height : size.width
-        let denominator = isPortrait ? size.width : size.height
-        guard denominator > 0 else {
-            return 0
-        }
-        return dividend/denominator
     }
 }

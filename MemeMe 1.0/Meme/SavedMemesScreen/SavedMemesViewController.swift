@@ -1,5 +1,5 @@
 //
-//  SentMemesViewController.swift
+//  SavedMemesViewController.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 21/02/2020.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-final class SentMemesViewController: UIViewController {
+final class SavedMemesViewController: UIViewController {
     let tableView = UITableView()
-    let dataSource = MemeDataSource()
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: CollectionViewLayout())
+    let dataSource = SavedMemesDataSource()
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: SavedMemesCollectionLayout())
     let tabBar = UITabBar()
     let tableBarItem = UITabBarItem()
     let collectionBarItem = UITabBarItem()
@@ -21,15 +21,15 @@ final class SentMemesViewController: UIViewController {
         self.view.backgroundColor = .white
         self.title = "Sent Memes"
         tableView.register(
-            TableViewCell.self,
-            forCellReuseIdentifier: TableViewCell.identifier
+            SavedMemesTableCell.self,
+            forCellReuseIdentifier: SavedMemesTableCell.identifier
         )
         tableView.dataSource = dataSource
         tableView.delegate = self
         
         collectionView.register(
-            CollectionViewCell.self,
-            forCellWithReuseIdentifier: CollectionViewCell.identifier
+            SavedMemesCollectionCell.self,
+            forCellWithReuseIdentifier: SavedMemesCollectionCell.identifier
         )
         collectionView.dataSource = dataSource
         collectionView.delegate = self
@@ -42,7 +42,7 @@ final class SentMemesViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        if let layout = collectionView.collectionViewLayout as? CollectionViewLayout {
+        if let layout = collectionView.collectionViewLayout as? SavedMemesCollectionLayout {
             layout.setWidth(width: view.frame.width)
         }
     }
@@ -133,31 +133,31 @@ final class SentMemesViewController: UIViewController {
     }
 }
 
-extension SentMemesViewController: UITableViewDelegate {
+extension SavedMemesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = dataSource.tableView(tableView, cellForRowAt: indexPath) as? TableViewCell
+        let cell = dataSource.tableView(tableView, cellForRowAt: indexPath) as? SavedMemesTableCell
         if let image = cell?.memeImageView.image {
-            let vc = DetailViewController(image: image)
+            let vc = MemeImageViewController(image: image)
             self.navigationController?.pushViewController(vc, animated: true)
             tableView.deselectRow(at: indexPath, animated: false)
         }
     }
 }
 
-extension SentMemesViewController: UICollectionViewDelegate {
+extension SavedMemesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if dataSource.isEditModeOn {
             dataSource.deleteMeme(at: indexPath)
             collectionView.deleteItems(at: [indexPath])
         } else {
             let image = dataSource.memeViewModels[indexPath.row].image
-            let vc = DetailViewController(image: image)
+            let vc = MemeImageViewController(image: image)
             navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let memeCell = cell as? CollectionViewCell else { return }
+        guard let memeCell = cell as? SavedMemesCollectionCell else { return }
         
         memeCell.deleteImageView.isHidden = !dataSource.isEditModeOn
         if dataSource.isEditModeOn {
@@ -181,7 +181,7 @@ extension SentMemesViewController: UICollectionViewDelegate {
     }
 }
 
-extension SentMemesViewController: UITabBarDelegate {
+extension SavedMemesViewController: UITabBarDelegate {
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let selectedIndex = tabBar.items?.firstIndex(of: item) else { return }
         if selectedIndex == 0 {

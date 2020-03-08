@@ -1,5 +1,5 @@
 //
-//  TableViewCell.swift
+//  SavedMemesTableCell.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 22/02/2020.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-final class TableViewCell: UITableViewCell {
-    static let identifier = "TableViewCell"
+final class SavedMemesTableCell: UITableViewCell {
+    static let identifier = "SavedMemesTableCell"
     
     let stackView = UIStackView()
     let memeImageView = UIImageView(image: UIImage(named: "placeholder"))

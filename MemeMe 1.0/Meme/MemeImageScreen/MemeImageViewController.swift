@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DetailViewController: UIViewController {
+final class MemeImageViewController: UIViewController {
     let image: UIImage
 
     init(image: UIImage) {

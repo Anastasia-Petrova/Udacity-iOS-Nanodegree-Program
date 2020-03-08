@@ -1,5 +1,5 @@
 //
-//  MemeDataSource.swift
+//  SavedMemesDataSource.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 08/03/2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class MemeDataSource: NSObject {
+final class SavedMemesDataSource: NSObject {
     var memeViewModels: [MemeViewModel] = []
     var isEditModeOn: Bool = false
     
@@ -35,7 +35,7 @@ final class MemeDataSource: NSObject {
     }
 }
 
-extension MemeDataSource {
+extension SavedMemesDataSource {
     struct MemeViewModel {
         let id: UUID
         let text: String
@@ -43,7 +43,7 @@ extension MemeDataSource {
     }
 }
 
-extension MemeDataSource.MemeViewModel {
+extension SavedMemesDataSource.MemeViewModel {
     init(meme: Meme, image: UIImage) {
         id = meme.id
         text = meme.topText + "..." + meme.bottomText
@@ -53,7 +53,7 @@ extension MemeDataSource.MemeViewModel {
 
 //MARK: - UITableViewDataSource
 
-extension MemeDataSource: UITableViewDataSource {
+extension SavedMemesDataSource: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -63,7 +63,7 @@ extension MemeDataSource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath) as! TableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SavedMemesTableCell.identifier, for: indexPath) as! SavedMemesTableCell
         cell.memeName.text = memeViewModels[indexPath.row].text
         cell.memeImageView.image = memeViewModels[indexPath.row].image
         return cell
@@ -79,7 +79,7 @@ extension MemeDataSource: UITableViewDataSource {
 
 //MARK: - UICollectionViewDataSource
 
-extension MemeDataSource: UICollectionViewDataSource {
+extension SavedMemesDataSource: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -89,7 +89,7 @@ extension MemeDataSource: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifier, for: indexPath) as! CollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SavedMemesCollectionCell.identifier, for: indexPath) as! SavedMemesCollectionCell
         
         cell.memeImageView.image = memeViewModels[indexPath.row].image
         return cell
