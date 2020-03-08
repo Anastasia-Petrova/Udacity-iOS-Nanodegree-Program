@@ -205,16 +205,16 @@ final class MemeEditorViewController: UIViewController {
         bottomTextField.isUserInteractionEnabled = false
         bottomTextField.adjustsFontSizeToFitWidth = true
         
-        topTextField.defaultTextAttributes = memeTextAttributes(fontSize: 40)
-        bottomTextField.defaultTextAttributes = memeTextAttributes(fontSize: 40)
+        topTextField.defaultTextAttributes = memeTextAttributes
+        bottomTextField.defaultTextAttributes = memeTextAttributes
         
         topTextField.textAlignment = .center
         bottomTextField.textAlignment = .center
     }
     
-    func memeTextAttributes(fontSize size: CGFloat) -> [NSAttributedString.Key: Any] {
-        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: size)
-            ?? UIFont.systemFont(ofSize: size)
+    var memeTextAttributes: [NSAttributedString.Key: Any] {
+        let font = UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)
+            ?? UIFont.systemFont(ofSize: 40)
         return [
             NSAttributedString.Key.strokeColor: UIColor.black,
             NSAttributedString.Key.foregroundColor: UIColor.white,
@@ -223,7 +223,7 @@ final class MemeEditorViewController: UIViewController {
         ]
     }
     
-    func calculateContextSize(image: UIImage) -> CGSize {
+    func calculateVisibleImageSize(image: UIImage) -> CGSize {
         let imageViewSize = photoView.frame.size
         let aspectRatio = image.aspectRatio(isPortrait: isPortrait)
         let smallerSide = isPortrait ? imageViewSize.width : imageViewSize.height
@@ -241,7 +241,7 @@ final class MemeEditorViewController: UIViewController {
         let keyboardOffset = max(0, keyboardHeight - view.safeAreaInsets.bottom)
         if isPortrait {
             let imageViewHeight = photoView.frame.height
-            let contextSize = calculateContextSize(image: image)
+            let contextSize = calculateVisibleImageSize(image: image)
             topConstant = ((imageViewHeight - contextSize.height) / 2 + 16)
             let baseOffset = max((imageViewHeight - contextSize.height) / 2, keyboardOffset)
             bottomConstant = baseOffset + 16
@@ -254,7 +254,7 @@ final class MemeEditorViewController: UIViewController {
     
     func calculateHorizontalTextFieldOffset() -> CGFloat {
         guard let image = photoView.image else { return 0.0 }
-        let contextSize = calculateContextSize(image: image)
+        let contextSize = calculateVisibleImageSize(image: image)
         return isPortrait ? 16 : ((photoView.frame.width - contextSize.width) / 2 + 16)
     }
     
@@ -413,88 +413,20 @@ final class MemeEditorViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func calculateLabelSize(for text: String, thatFits size: CGSize, attributes: [NSAttributedString.Key : Any]) -> CGSize {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.attributedText = NSAttributedString(
-            string: text,
-            attributes: attributes
-        )
-        return label.sizeThatFits(size)
-    }
-    
     func generateMemedImage() -> UIImage? {
-        guard let renderingData = prepareRenderingData(),
-            let finalImage = drawImage(with: renderingData) else {
-            return nil
-        }
-        return finalImage
-    }
-    
-    func prepareRenderingData() -> RenderingData? {
-        guard let image = photoView.image,
-            let topFontSize = topTextField.font?.pointSize,
-            let bottomFontSize = bottomTextField.font?.pointSize else {
-                return nil
-        }
-        
-        let topText = topTextField.text ?? ""
-        let bottomText = bottomTextField.text ?? ""
-        let contextSize = calculateContextSize(image: image)
-        let contextRect = CGRect(origin: CGPoint.zero, size: contextSize)
-        
-        return RenderingData(
-            contextRect: contextRect,
-            image: image,
-            topText: topText,
-            bottomText: bottomText,
-            topTextRect: prepareTextRect(contextRect: contextRect, textField: topTextField),
-            bottomTextRect: prepareTextRect(contextRect: contextRect, textField: bottomTextField),
-            topTextAttributes: memeTextAttributes(fontSize: topFontSize),
-            bottomTextAttributes: memeTextAttributes(fontSize: bottomFontSize)
+        let renderer = MemeImageRenderer(
+            isPortrait: isPortrait,
+            photoView: photoView,
+            view: view,
+            topTextField: topTextField,
+            bottomTextField: bottomTextField
         )
+        
+        return renderer.generateMemedImage()
     }
     
     var isPortrait: Bool {
         return view.frame.height > view.frame.width
-    }
-    
-    func prepareTextRect(contextRect: CGRect, textField: UITextField) -> CGRect {
-        guard let text = textField.text,
-            let fontSize = textField.font?.pointSize else {
-            return .zero
-        }
-        
-        let imageViewSize = photoView.frame.size
-        let convertedFrame = view.convert(textField.frame, to: photoView)
-        let deltaY = (imageViewSize.height - contextRect.size.height)/2
-        
-        let actualSize = calculateLabelSize(
-            for: text,
-            thatFits: textField.frame.size,
-            attributes: memeTextAttributes(fontSize: fontSize)
-        )
-        
-        return CGRect(
-            origin: CGPoint(
-                x: contextRect.midX.advanced(by: -actualSize.width/2.0),
-                y: convertedFrame.origin.y - deltaY
-            ),
-            size: actualSize
-        )
-    }
-    
-    func drawImage(with data: RenderingData) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(data.contextRect.size, false, UIScreen.main.scale)
-        
-        data.image.draw(in: data.contextRect)
-        data.topText.draw(in: data.topTextRect, withAttributes: data.topTextAttributes)
-        data.bottomText.draw(in: data.bottomTextRect, withAttributes: data.bottomTextAttributes)
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage
     }
 }
 
