@@ -1,5 +1,5 @@
 //
-//  MemesStorage.swift
+//  MemeStore.swift
 //  Meme
 //
 //  Created by Anastasia Petrova on 27/02/2020.
@@ -11,7 +11,7 @@ import UIKit
 enum MemeStore {
     private static let memesKey = "memes"
     
-    public static func save(memes: [MemeModel]) throws {
+    public static func save(memes: [Meme]) throws {
         do {
             let encodedData = try JSONEncoder().encode(memes)
             UserDefaults.standard.set(encodedData, forKey: memesKey)
@@ -20,24 +20,26 @@ enum MemeStore {
         }
     }
     
-    public static func loadMemes() -> [MemeModel] {
+    public static func loadMemes() -> [Meme] {
         guard let encodedData = UserDefaults.standard.data(forKey: memesKey) else {
             return []
         }
         do {
-            return try JSONDecoder().decode([MemeModel].self, from: encodedData)
+            return try JSONDecoder().decode([Meme].self, from: encodedData)
         } catch {
             UserDefaults.standard.removeObject(forKey: memesKey)
             return []
         }
     }
     
-    public static func delete(memes: [MemeModel], indexPath: IndexPath) -> [MemeModel] {
-        var array = memes
-        array.remove(at: indexPath.row)
-        let encodedData = try! JSONEncoder().encode(memes)
-        UserDefaults.standard.set(encodedData, forKey: memesKey)
-        return array
+    public static func deleteMeme(id: UUID) {
+        let allButOne = MemeStore
+            .loadMemes()
+            .filter { $0.id != id }
+            
+        if let encodedData = try? JSONEncoder().encode(allButOne) {
+            UserDefaults.standard.set(encodedData, forKey: "memes")
+        }
     }
 }
 

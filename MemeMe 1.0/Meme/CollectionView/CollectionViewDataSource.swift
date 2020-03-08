@@ -26,13 +26,13 @@ extension DataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return memes.count
+        return memeViewModels.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
         
-        cell.memeImageView.image = memes[indexPath.row].image
+        cell.memeImageView.image = memeViewModels[indexPath.row].image
         if isEditModeOn {
             cell.deleteImageView.isHidden = false
             let animation = makeWiggleAnimation(for: indexPath)
