@@ -64,8 +64,9 @@ final class MemeEditorViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        topTextFieldTopConstraint.constant = countTextFieldsConstants().top
-        bottomTextFieldBottomConstraint.constant = countTextFieldsConstants().bottom
+        let textFieldConstraints = calculateTextFieldsConstants()
+        topTextFieldTopConstraint.constant = textFieldConstraints.top
+        bottomTextFieldBottomConstraint.constant = textFieldConstraints.bottom
         topTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
         topTextFieldTrailingConstraint.constant = calculateHorizontalTextFieldOffset()
         bottomTextFieldLeadingConstraint.constant = calculateHorizontalTextFieldOffset()
@@ -232,7 +233,7 @@ final class MemeEditorViewController: UIViewController {
         )
     }
     
-    func countTextFieldsConstants() -> (top: CGFloat, bottom: CGFloat) {
+    func calculateTextFieldsConstants() -> (top: CGFloat, bottom: CGFloat) {
         var topConstant: CGFloat = 0.0
         var bottomConstant: CGFloat = 0.0
         guard let image = photoView.image else { return (topConstant, bottomConstant)}
