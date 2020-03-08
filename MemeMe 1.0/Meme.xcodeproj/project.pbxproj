@@ -163,9 +163,9 @@
 			children = (
 				6D79481A2403FB0F00AB0038 /* SavedMemesCollectionCell.swift */,
 				6D5851A5240402730038066B /* SavedMemesCollectionLayout.swift */,
+				6D049AA3241578C7005EE31C /* SavedMemesDataSource.swift */,
 				6D77B4D42401A24C0028A0CE /* SavedMemesTableCell.swift */,
 				6DE3C5092400437D00589BCC /* SavedMemesViewController.swift */,
-				6D049AA3241578C7005EE31C /* SavedMemesDataSource.swift */,
 			);
 			path = SavedMemesScreen;
 			sourceTree = "<group>";
