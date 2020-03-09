@@ -104,6 +104,22 @@ final class SavedMemesViewController: UIViewController {
         collectionView.addGestureRecognizer(longPress)
     }
     
+    private func turnOnEditingMode(_ doneItem: UIBarButtonItem) {
+        navigationItem.leftBarButtonItem = doneItem
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        tableBarItem.isEnabled = false
+        collectionBarItem.isEnabled = false
+        dataSource.isEditModeOn = true
+    }
+    
+    private func turnOffEditingMode() {
+        navigationItem.leftBarButtonItem = nil
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        tableBarItem.isEnabled = true
+        collectionBarItem.isEnabled = true
+        dataSource.isEditModeOn = false
+    }
+    
     @objc func presentEditorViewController() {
         let vc = MemeEditorViewController { [weak self] in
             self?.dataSource.reloadData()
@@ -117,25 +133,13 @@ final class SavedMemesViewController: UIViewController {
     @objc func handleLongPress(_ longPress: UILongPressGestureRecognizer) {
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,  action: #selector(doneAction))
         
-        navigationItem.leftBarButtonItem = doneItem
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        tableBarItem.isEnabled = false
-        collectionBarItem.isEnabled = false
-        dataSource.isEditModeOn = true
+        turnOnEditingMode(doneItem)
         collectionView.reloadData()
     }
     
     @objc func doneAction() {
         turnOffEditingMode()
         collectionView.reloadData()
-    }
-    
-    func turnOffEditingMode() {
-        navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem?.isEnabled = true
-        tableBarItem.isEnabled = true
-        collectionBarItem.isEnabled = true
-        dataSource.isEditModeOn = false
     }
 }
 
