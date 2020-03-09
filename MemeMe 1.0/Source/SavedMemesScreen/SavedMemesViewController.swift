@@ -81,6 +81,7 @@ final class SavedMemesViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+        tableView.backgroundView = BackgroundView()
     }
     
     private func setUpCollectionView() {
@@ -94,6 +95,7 @@ final class SavedMemesViewController: UIViewController {
         ])
         
         collectionView.backgroundColor = .white
+        collectionView.backgroundView = BackgroundView()
         collectionView.isHidden = true
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
