@@ -126,12 +126,16 @@ final class SavedMemesViewController: UIViewController {
     }
     
     @objc func doneAction() {
+        turnOffEditingMode()
+        collectionView.reloadData()
+    }
+    
+    func turnOffEditingMode() {
         navigationItem.leftBarButtonItem = nil
         navigationItem.rightBarButtonItem?.isEnabled = true
         tableBarItem.isEnabled = true
         collectionBarItem.isEnabled = true
         dataSource.isEditModeOn = false
-        collectionView.reloadData()
     }
 }
 
@@ -151,6 +155,9 @@ extension SavedMemesViewController: UICollectionViewDelegate {
         if dataSource.isEditModeOn {
             dataSource.deleteMeme(at: indexPath)
             collectionView.deleteItems(at: [indexPath])
+            if collectionView.numberOfItems(inSection: 0) == 0 {
+                turnOffEditingMode()
+            }
         } else {
             let image = dataSource.memeViewModels[indexPath.row].image
             let vc = MemeImageViewController(image: image)
