@@ -59,13 +59,9 @@ extension SavedMemesDataSource: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if memeViewModels.count == 0 {
-            tableView.separatorStyle = .none
-            tableView.backgroundView?.isHidden = false
-        } else {
-            tableView.separatorStyle = .singleLine
-            tableView.backgroundView?.isHidden = true
-        }
+        let isEmpty = memeViewModels.isEmpty
+        tableView.backgroundView?.isHidden = !isEmpty
+        tableView.separatorStyle = isEmpty ? .none : .singleLine
         return memeViewModels.count
     }
     
@@ -92,11 +88,7 @@ extension SavedMemesDataSource: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if memeViewModels.count == 0 {
-            collectionView.backgroundView?.isHidden = false
-        } else {
-            collectionView.backgroundView?.isHidden = true
-        }
+        collectionView.backgroundView?.isHidden = !memeViewModels.isEmpty
         return memeViewModels.count
     }
 

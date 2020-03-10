@@ -104,20 +104,18 @@ final class SavedMemesViewController: UIViewController {
         collectionView.addGestureRecognizer(longPress)
     }
     
-    private func turnOnEditingMode(_ doneItem: UIBarButtonItem) {
+    private func setEditingMode(on isOn: Bool) {
+        let doneItem = isOn ? UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(doneAction)
+        ) : nil
+        
         navigationItem.leftBarButtonItem = doneItem
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        tableBarItem.isEnabled = false
-        collectionBarItem.isEnabled = false
-        dataSource.isEditModeOn = true
-    }
-    
-    private func turnOffEditingMode() {
-        navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem?.isEnabled = true
-        tableBarItem.isEnabled = true
-        collectionBarItem.isEnabled = true
-        dataSource.isEditModeOn = false
+        navigationItem.rightBarButtonItem?.isEnabled = !isOn
+        tableBarItem.isEnabled = !isOn
+        collectionBarItem.isEnabled = !isOn
+        dataSource.isEditModeOn = isOn
     }
     
     @objc func presentEditorViewController() {
@@ -131,14 +129,12 @@ final class SavedMemesViewController: UIViewController {
     }
     
     @objc func handleLongPress(_ longPress: UILongPressGestureRecognizer) {
-        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self,  action: #selector(doneAction))
-        
-        turnOnEditingMode(doneItem)
+        setEditingMode(on: true)
         collectionView.reloadData()
     }
     
     @objc func doneAction() {
-        turnOffEditingMode()
+        setEditingMode(on: false)
         collectionView.reloadData()
     }
 }
@@ -160,7 +156,7 @@ extension SavedMemesViewController: UICollectionViewDelegate {
             dataSource.deleteMeme(at: indexPath)
             collectionView.deleteItems(at: [indexPath])
             if collectionView.numberOfItems(inSection: 0) == 0 {
-                turnOffEditingMode()
+                setEditingMode(on: false)
             }
         } else {
             let image = dataSource.memeViewModels[indexPath.row].image

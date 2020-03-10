@@ -42,5 +42,6 @@ enum Labels {
     
     enum SavedMemesScreen {
         static let title = "Sent Memes"
+        static let backgroundLabel = "You haven't created any memes yet"
     }
 }

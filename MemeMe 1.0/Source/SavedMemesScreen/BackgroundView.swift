@@ -35,7 +35,7 @@ final class BackgroundView: UIView {
         label.text = Labels.EditorScreen.instructionText
         label.textColor = .lightGray
         label.textAlignment = .center
-        label.text = "You haven't created any memes yet"
+        label.text = Labels.SavedMemesScreen.backgroundLabel
         stackView.addArrangedSubview(imageView)
         stackView.addArrangedSubview(label)
         
