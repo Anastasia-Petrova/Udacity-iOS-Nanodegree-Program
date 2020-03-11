@@ -8,6 +8,6 @@
 
 - [x] [Pitch Perfect](https://github.com/Anastasia-Petrova/Udacity/tree/master/PitchPerfect)
 - [x] [MemeMe 1.0](https://github.com/Anastasia-Petrova/Udacity/tree/master/MemeMe%201.0)
-- [ ] [MemeMe 2.0](https://github.com/Anastasia-Petrova/Udacity/tree/master/MemeMe%202.0) (In progress...)
-- [ ] [On the Map](https://github.com/Anastasia-Petrova/Udacity/tree/master/On%20the%20Map)
+- [x] [MemeMe 2.0](https://github.com/Anastasia-Petrova/Udacity/tree/master/MemeMe%202.0)
+- [ ] [On the Map](https://github.com/Anastasia-Petrova/Udacity/tree/master/On%20the%20Map) (In progress...)
 - [ ] [Virtual Tourist](https://github.com/Anastasia-Petrova/Udacity/tree/master/Virtual%20Tourist)
