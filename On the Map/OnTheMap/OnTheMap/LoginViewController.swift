@@ -9,7 +9,6 @@
 import UIKit
 
 final class LoginViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -17,21 +16,8 @@ final class LoginViewController: UIViewController {
     }
 
     func setUpLiginView() {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stackView)
-        stackView.axis = .vertical
-        stackView.spacing = 40
-        
-        
         let imageView = UIImageView(image: UIImage(named:  "logo-u"))
         imageView.contentMode = .scaleAspectFit
-        
-        let textfieldsStackView = UIStackView()
-        textfieldsStackView.translatesAutoresizingMaskIntoConstraints = false
-        textfieldsStackView.axis = .vertical
-        textfieldsStackView.distribution = .fillEqually
-        textfieldsStackView.spacing = 6
         
         let emailTextField = UITextField()
         emailTextField.borderStyle = .roundedRect
@@ -53,13 +39,6 @@ final class LoginViewController: UIViewController {
         loginButton.titleLabel?.font = .systemFont(ofSize: 12)
         loginButton.setTitle("LOG IN", for: .normal)
         
-        let singUpStackView = UIStackView()
-        singUpStackView.translatesAutoresizingMaskIntoConstraints = false
-        singUpStackView.axis = .horizontal
-        singUpStackView.distribution = .equalCentering
-        singUpStackView.alignment = .center
-        singUpStackView.spacing = 8
-        
         let singUpLabel = UILabel()
         singUpLabel.font = .systemFont(ofSize: 12, weight: .light)
         singUpLabel.numberOfLines = 1
@@ -73,23 +52,48 @@ final class LoginViewController: UIViewController {
         singUpButton.setTitleColor(.systemBlue, for: .normal)
         singUpButton.titleLabel?.font = .systemFont(ofSize: 12)
         
-        singUpStackView.addArrangedSubview(UIView())
-        singUpStackView.addArrangedSubview(singUpLabel)
-        singUpStackView.addArrangedSubview(singUpButton)
-        singUpStackView.addArrangedSubview(UIView())
+        let singUpStackView = UIStackView(
+            arrangedSubviews: [
+                UIView(),
+                singUpLabel,
+                singUpButton,
+                UIView()
+            ]
+        )
+        singUpStackView.translatesAutoresizingMaskIntoConstraints = false
+        singUpStackView.axis = .horizontal
+        singUpStackView.distribution = .equalCentering
+        singUpStackView.alignment = .center
+        singUpStackView.spacing = 8
         
-        textfieldsStackView.addArrangedSubview(emailTextField)
-        textfieldsStackView.addArrangedSubview(passwordTextField)
-        textfieldsStackView.addArrangedSubview(loginButton)
-        textfieldsStackView.addArrangedSubview(singUpStackView)
+        let textFieldsStackView = UIStackView(
+            arrangedSubviews: [
+                emailTextField,
+                passwordTextField,
+                loginButton,
+                singUpStackView
+            ]
+        )
+        textFieldsStackView.translatesAutoresizingMaskIntoConstraints = false
+        textFieldsStackView.axis = .vertical
+        textFieldsStackView.distribution = .fillEqually
+        textFieldsStackView.spacing = 6
         
-        stackView.addArrangedSubview(imageView)
-        stackView.addArrangedSubview(textfieldsStackView)
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                imageView,
+                textFieldsStackView
+            ]
+        )
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView)
+        stackView.axis = .vertical
+        stackView.spacing = 60
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 40),
-            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 40),
-            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -40)
+            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
+            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
         ])
     }
 }
