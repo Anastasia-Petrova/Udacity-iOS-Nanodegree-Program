@@ -18,6 +18,7 @@ final class MapViewController: UIViewController {
         self.view.backgroundColor = .white
         self.title = "On the Map"
         setUpMapView()
+        setUpNavigationBar()
         setUpTabBar()
     }
     
@@ -30,6 +31,31 @@ final class MapViewController: UIViewController {
             mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+    }
+    
+    private func setUpNavigationBar() {
+        let addItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(handleAddAction)
+        )
+        let refreshItem = UIBarButtonItem(
+            barButtonSystemItem: .refresh,
+            target: self,
+            action: #selector(handleRefreshAction)
+        )
+        
+        let logoutButton = UIBarButtonItem(
+            title: "LOGOUT",
+            style: .plain,
+            target: self,
+            action: #selector(handleLogout)
+        )
+        logoutButton.setTitleTextAttributes([
+            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: .semibold),
+            NSAttributedString.Key.foregroundColor : UIColor.systemBlue], for: .normal)
+        navigationItem.leftBarButtonItem = logoutButton
+        navigationItem.rightBarButtonItems = [addItem, refreshItem]
     }
     
     private func setUpTabBar() {
@@ -46,6 +72,18 @@ final class MapViewController: UIViewController {
         let tableBarItem = UITabBarItem()
         tableBarItem.image = UIImage(systemName: "list.bullet")
         tabBar.setItems([mapBarItem, tableBarItem], animated: false)
+    }
+    
+    @objc func handleAddAction() {
+        
+    }
+    
+    @objc func handleRefreshAction() {
+        
+    }
+    
+    @objc func handleLogout() {
+        
     }
 }
 
