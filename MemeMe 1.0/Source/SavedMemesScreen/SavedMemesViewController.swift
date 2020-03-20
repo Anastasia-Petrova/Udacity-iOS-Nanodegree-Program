@@ -10,6 +10,7 @@ import UIKit
 
 final class SavedMemesViewController: UIViewController {
     let tableView = UITableView()
+    let dataSource = SavedMemesDataSource()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: SavedMemesCollectionLayout())
     let tabBar = UITabBar()
     let tableBarItem = UITabBarItem()
