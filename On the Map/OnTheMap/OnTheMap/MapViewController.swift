@@ -9,17 +9,19 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+final class MapViewController: UIViewController {
     let mapView = MKMapView(frame: .zero)
+    let tabBar = UITabBar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.title = "On the Map"
         setUpMapView()
+        setUpTabBar()
     }
     
-    func setUpMapView() {
+    private func setUpMapView() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(mapView)
         NSLayoutConstraint.activate([
@@ -29,5 +31,24 @@ class MapViewController: UIViewController {
             mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
+    
+    private func setUpTabBar() {
+        tabBar.delegate = self
+        tabBar.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(tabBar)
+        NSLayoutConstraint.activate([
+            tabBar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+        let mapBarItem = UITabBarItem()
+        mapBarItem.image = UIImage(systemName: "map")
+        let tableBarItem = UITabBarItem()
+        tableBarItem.image = UIImage(systemName: "list.bullet")
+        tabBar.setItems([mapBarItem, tableBarItem], animated: false)
+    }
+}
 
+extension MapViewController: UITabBarDelegate {
+    
 }
