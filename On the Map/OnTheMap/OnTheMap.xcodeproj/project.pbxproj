@@ -61,14 +61,14 @@
 			isa = PBXGroup;
 			children = (
 				6D666504241A538A0017CDA7 /* AppDelegate.swift */,
+				6D66650D241A53900017CDA7 /* Assets.xcassets */,
+				6D666512241A53900017CDA7 /* Info.plist */,
 				6D66650F241A53900017CDA7 /* LaunchScreen.storyboard */,
 				6D666508241A538A0017CDA7 /* LoginViewController.swift */,
 				6D5EFEA0242554ED00FB5DC8 /* MapViewController.swift */,
-				6D5EFE9E24254D9F00FB5DC8 /* UdacityClient.swift */,
 				6D5EFEA224255BD300FB5DC8 /* RequestSessionIDResponse.swift */,
 				6D666506241A538A0017CDA7 /* SceneDelegate.swift */,
-				6D66650D241A53900017CDA7 /* Assets.xcassets */,
-				6D666512241A53900017CDA7 /* Info.plist */,
+				6D5EFE9E24254D9F00FB5DC8 /* UdacityClient.swift */,
 			);
 			path = OnTheMap;
 			sourceTree = "<group>";

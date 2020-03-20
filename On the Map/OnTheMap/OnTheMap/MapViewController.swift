@@ -11,15 +11,20 @@ import MapKit
 
 final class MapViewController: UIViewController {
     let mapView = MKMapView(frame: .zero)
+    let tableView = UITableView()
     let tabBar = UITabBar()
+    let mapBarItem = UITabBarItem()
+    let tableBarItem = UITabBarItem()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.title = "On the Map"
         setUpMapView()
+        setUpTableView()
         setUpNavigationBar()
         setUpTabBar()
+        tabBar.selectedItem = mapBarItem
     }
     
     private func setUpMapView() {
@@ -31,6 +36,18 @@ final class MapViewController: UIViewController {
             mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+    }
+    
+    private func setUpTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+        tableView.isHidden = true
     }
     
     private func setUpNavigationBar() {
@@ -67,9 +84,7 @@ final class MapViewController: UIViewController {
             tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
-        let mapBarItem = UITabBarItem()
         mapBarItem.image = UIImage(systemName: "map")
-        let tableBarItem = UITabBarItem()
         tableBarItem.image = UIImage(systemName: "list.bullet")
         tabBar.setItems([mapBarItem, tableBarItem], animated: false)
     }
@@ -88,5 +103,14 @@ final class MapViewController: UIViewController {
 }
 
 extension MapViewController: UITabBarDelegate {
-    
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        guard let selectedIndex = tabBar.items?.firstIndex(of: item) else { return }
+        if selectedIndex == 0 {
+            tableView.isHidden = true
+            mapView.isHidden = false
+        } else {
+            mapView.isHidden = true
+            tableView.isHidden = false
+        }
+    }
 }
