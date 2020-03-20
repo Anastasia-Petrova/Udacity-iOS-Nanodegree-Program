@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StudentsTableCell: UITableViewCell {
+final class StudentsTableCell: UITableViewCell {
     static let identifier = "StudentsTableCell"
     
     let pinImageView = UIImageView(image: UIImage(named: "icon_pin"))

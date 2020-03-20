@@ -12,6 +12,7 @@ import MapKit
 final class MapViewController: UIViewController {
     let mapView = MKMapView(frame: .zero)
     let tableView = UITableView()
+    let dataSource = StudentsTableDataSource() 
     let tabBar = UITabBar()
     let mapBarItem = UITabBarItem()
     let tableBarItem = UITabBarItem()
