@@ -14,8 +14,20 @@ class MapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        mapView.region = 
-
+        self.view.backgroundColor = .white
+        self.title = "On the Map"
+        setUpMapView()
+    }
+    
+    func setUpMapView() {
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(mapView)
+        NSLayoutConstraint.activate([
+            mapView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            mapView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
     }
 
 }
