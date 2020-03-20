@@ -9,6 +9,19 @@
 import UIKit
 
 final class LoginViewController: UIViewController {
+    let emailTextField = UITextField()
+    let passwordTextField = UITextField()
+    let didLogingCallback: () -> Void
+    
+    init(callback: @escaping () -> Void) {
+        didLogingCallback = callback
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -19,17 +32,16 @@ final class LoginViewController: UIViewController {
         let imageView = UIImageView(image: UIImage(named:  "logo-u"))
         imageView.contentMode = .scaleAspectFit
         
-        let emailTextField = UITextField()
         emailTextField.borderStyle = .roundedRect
         emailTextField.placeholder = "Email"
         emailTextField.isUserInteractionEnabled = true
         emailTextField.adjustsFontSizeToFitWidth = true
-
-        let passwordTextField = UITextField()
+        emailTextField.text = "agency.cupid@gmail.com"
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.placeholder = "Password"
         passwordTextField.isUserInteractionEnabled = true
         passwordTextField.adjustsFontSizeToFitWidth = true
+        passwordTextField.text = "qazwsxedc123123"
         
         let loginButton = UIButton()
         loginButton.backgroundColor = .systemBlue
@@ -38,6 +50,7 @@ final class LoginViewController: UIViewController {
         loginButton.layer.borderColor = UIColor.clear.cgColor
         loginButton.titleLabel?.font = .systemFont(ofSize: 12)
         loginButton.setTitle("LOG IN", for: .normal)
+        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         let singUpLabel = UILabel()
         singUpLabel.font = .systemFont(ofSize: 12, weight: .light)
@@ -95,6 +108,12 @@ final class LoginViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
             stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
         ])
+    }
+    
+    @objc func handleLogin() {
+        UdacityClient.requestSessionID(username: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+        print("username: \(emailTextField.text ?? ""), password: \(passwordTextField.text ?? "")")
+        didLogingCallback()
     }
 }
 
