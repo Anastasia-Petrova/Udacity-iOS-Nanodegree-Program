@@ -45,14 +45,14 @@ final class StudentsTableCell: UITableViewCell {
             pinImageView.heightAnchor.constraint(equalToConstant: 140)
         ])
         stackView.alignment = .center
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fill
         stackView.axis = .horizontal
         stackView.spacing = 8
         
         studentStackView.alignment = .center
         studentStackView.distribution = .fillEqually
         studentStackView.axis = .vertical
-//        studentStackView.spacing = 8
+        studentStackView.spacing = 16
         
         pinImageView.contentMode = .scaleAspectFill
         pinImageView.clipsToBounds = true

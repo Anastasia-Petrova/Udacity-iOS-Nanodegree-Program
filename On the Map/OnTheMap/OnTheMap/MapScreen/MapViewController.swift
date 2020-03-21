@@ -21,6 +21,14 @@ final class MapViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         self.title = "On the Map"
+        
+        tableView.register(
+            StudentsTableCell.self,
+            forCellReuseIdentifier: StudentsTableCell.identifier
+        )
+        tableView.dataSource = dataSource
+        tableView.delegate = self
+        
         setUpMapView()
         setUpTableView()
         setUpNavigationBar()
@@ -114,4 +122,8 @@ extension MapViewController: UITabBarDelegate {
             tableView.isHidden = false
         }
     }
+}
+
+extension MapViewController: UITableViewDelegate {
+    
 }
