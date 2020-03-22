@@ -63,7 +63,7 @@ final class MapViewController: UIViewController {
         let addItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(handleAddAction)
+            action: #selector(presentInfoViewController)
         )
         let refreshItem = UIBarButtonItem(
             barButtonSystemItem: .refresh,
@@ -102,8 +102,10 @@ final class MapViewController: UIViewController {
         tabBar.setItems([mapBarItem, tableBarItem], animated: false)
     }
     
-    @objc func handleAddAction() {
-        
+    @objc func presentInfoViewController() {
+        let vc = InformationPostingViewController()
+        let nvc = UINavigationController(rootViewController: vc)
+        self.present(nvc, animated: true)
     }
     
     @objc func handleRefreshAction() {

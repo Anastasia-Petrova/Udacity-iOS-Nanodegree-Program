@@ -16,7 +16,25 @@ final class InformationPostingViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Add Location"
         self.view.backgroundColor = .white
+        setUpNavigationBar()
         setUpInfoView()
+    }
+    
+    private func setUpNavigationBar() {
+        let cancelButton = UIBarButtonItem(
+            title: "CANCEL",
+            style: .plain,
+            target: self,
+            action: #selector(cancel)
+        )
+        cancelButton.setTitleTextAttributes(
+            [
+                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: .semibold),
+                NSAttributedString.Key.foregroundColor : UIColor.systemBlue
+            ],
+            for: .normal
+        )
+        navigationItem.leftBarButtonItem = cancelButton
     }
     
     private func setUpInfoView() {
@@ -74,5 +92,9 @@ final class InformationPostingViewController: UIViewController {
     
     @objc func findLocation() {
         
+    }
+    
+    @objc func cancel() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
