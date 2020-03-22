@@ -55,7 +55,7 @@ final class InformationPostingViewController: UIViewController {
         findLocationButton.layer.cornerRadius = 5
         findLocationButton.layer.borderWidth = 1
         findLocationButton.layer.borderColor = UIColor.clear.cgColor
-        findLocationButton.titleLabel?.font = .systemFont(ofSize: 13)
+        findLocationButton.titleLabel?.font = .systemFont(ofSize: 14)
         findLocationButton.setTitle("FIND LOCATION", for: .normal)
         findLocationButton.addTarget(self, action: #selector(findLocation), for: .touchUpInside)
         

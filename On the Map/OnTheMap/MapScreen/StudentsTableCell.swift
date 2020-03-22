@@ -57,9 +57,9 @@ final class StudentsTableCell: UITableViewCell {
         
         pinImageView.contentMode = .scaleAspectFit
         pinImageView.clipsToBounds = true
-        studentName.font = UIFont.systemFont(ofSize: 15)
+        studentName.font = UIFont.systemFont(ofSize: 16)
         studentName.numberOfLines = 1
-        studentLink.font = UIFont.systemFont(ofSize: 15)
+        studentLink.font = UIFont.systemFont(ofSize: 16)
         studentLink.textColor = .lightGray
         studentLink.numberOfLines = 1
     }

@@ -48,12 +48,12 @@ final class LoginViewController: UIViewController {
         loginButton.layer.cornerRadius = 5
         loginButton.layer.borderWidth = 1
         loginButton.layer.borderColor = UIColor.clear.cgColor
-        loginButton.titleLabel?.font = .systemFont(ofSize: 12)
+        loginButton.titleLabel?.font = .systemFont(ofSize: 14)
         loginButton.setTitle("LOG IN", for: .normal)
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         let singUpLabel = UILabel()
-        singUpLabel.font = .systemFont(ofSize: 12, weight: .light)
+        singUpLabel.font = .systemFont(ofSize: 14, weight: .light)
         singUpLabel.numberOfLines = 1
         singUpLabel.text = "Don't have an account?"
         singUpLabel.textColor = .black
@@ -63,7 +63,7 @@ final class LoginViewController: UIViewController {
         singUpButton.backgroundColor = .clear
         singUpButton.setTitle("Sing Up", for: .normal)
         singUpButton.setTitleColor(.systemBlue, for: .normal)
-        singUpButton.titleLabel?.font = .systemFont(ofSize: 12)
+        singUpButton.titleLabel?.font = .systemFont(ofSize: 14)
         
         let singUpStackView = UIStackView(
             arrangedSubviews: [
@@ -104,6 +104,7 @@ final class LoginViewController: UIViewController {
         stackView.spacing = 60
         
         NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(equalToConstant: 70),
             stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60),
             stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
             stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)

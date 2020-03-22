@@ -97,8 +97,8 @@ final class MapViewController: UIViewController {
             tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
-        mapBarItem.image = UIImage(systemName: "map")
-        tableBarItem.image = UIImage(systemName: "list.bullet")
+        mapBarItem.image = UIImage(named: "mapview")
+        tableBarItem.image = UIImage(named: "listview")
         tabBar.setItems([mapBarItem, tableBarItem], animated: false)
     }
     
