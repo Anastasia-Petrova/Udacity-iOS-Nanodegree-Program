@@ -40,25 +40,27 @@ final class StudentsTableCell: UITableViewCell {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            pinImageView.heightAnchor.constraint(equalToConstant: 140)
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
+            pinImageView.widthAnchor.constraint(equalToConstant: 60),
+            pinImageView.heightAnchor.constraint(equalToConstant: 60)
         ])
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.axis = .horizontal
-        stackView.spacing = 8
+        stackView.spacing = 4
         
-        studentStackView.alignment = .center
-        studentStackView.distribution = .fillEqually
+        studentStackView.alignment = .fill
+        studentStackView.distribution = .fill
         studentStackView.axis = .vertical
-        studentStackView.spacing = 16
+        studentStackView.spacing = 6
         
-        pinImageView.contentMode = .scaleAspectFill
+        pinImageView.contentMode = .scaleAspectFit
         pinImageView.clipsToBounds = true
-        studentName.font = UIFont.systemFont(ofSize: 12)
+        studentName.font = UIFont.systemFont(ofSize: 15)
         studentName.numberOfLines = 1
-        studentLink.font = UIFont.systemFont(ofSize: 12)
+        studentLink.font = UIFont.systemFont(ofSize: 15)
+        studentLink.textColor = .lightGray
         studentLink.numberOfLines = 1
     }
 }

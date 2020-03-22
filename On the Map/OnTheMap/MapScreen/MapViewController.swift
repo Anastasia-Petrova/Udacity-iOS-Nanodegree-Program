@@ -77,9 +77,13 @@ final class MapViewController: UIViewController {
             target: self,
             action: #selector(handleLogout)
         )
-        logoutButton.setTitleTextAttributes([
-            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: .semibold),
-            NSAttributedString.Key.foregroundColor : UIColor.systemBlue], for: .normal)
+        logoutButton.setTitleTextAttributes(
+            [
+                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: .semibold),
+                NSAttributedString.Key.foregroundColor : UIColor.systemBlue
+            ],
+            for: .normal
+        )
         navigationItem.leftBarButtonItem = logoutButton
         navigationItem.rightBarButtonItems = [addItem, refreshItem]
     }
