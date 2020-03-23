@@ -8,21 +8,22 @@
 
 import Foundation
 
-class UdacityClient {
-    
+final class UdacityClient {
     struct Auth {
         static var sessionId = ""
     }
     
-    class func requestSessionID(username: String, password: String) {
+    class func makeSessionIDRequest(username: String, password: String) -> URLRequest {
         var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        // encoding a JSON body from a string, can also use a Codable struct
         request.httpBody = "{\"udacity\": {\"username\": \"\(username)\", \"password\": \"\(password)\"}}".data(using: .utf8)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
+        return request
+    }
+    
+    class func makeSessionIDTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
+        return session.dataTask(with: request) { data, response, error in
             if error != nil {
                 //TODO: Handle error…
                 return
@@ -42,24 +43,38 @@ class UdacityClient {
                 print(error)
             }
         }
+    }
+    
+    class func performSessionIDRequest(username: String, password: String) {
+        let request = makeSessionIDRequest(username: username, password: password)
+        let task = makeSessionIDTask(request: request)
+        
         task.resume()
     }
     
-    class func getUserInfo() {
-        let request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/users/3903878747")!)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-          if error != nil { // Handle error...
-              return
-          }
-          let range = 5..<data!.count
-          let newData = data?.subdata(in: range) /* subset response data! */
-          print(String(data: newData!, encoding: .utf8)!)
+    class func makeGetUserInfoRequest(key: String) -> URLRequest {
+        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/users/\(key)")!)
+    }
+    
+    class func makeGetUserInfoTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
+        return session.dataTask(with: request) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            let range = 5..<data!.count
+            let newData = data?.subdata(in: range) /* subset response data! */
+            print(String(data: newData!, encoding: .utf8)!)
         }
+    }
+    
+    class func getUserInfo(key: String) {
+        let request = makeGetUserInfoRequest(key: key)
+        let task = makeSessionIDTask(request: request)
+        
         task.resume()
     }
     
-    class func logout() {
+    class func makeLogoutRequest() -> URLRequest {
         var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
@@ -70,6 +85,10 @@ class UdacityClient {
         if let xsrfCookie = xsrfCookie {
           request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
         }
+        return request
+    }
+    
+    class func makeLogoutTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
           if error != nil { // Handle error…
@@ -79,6 +98,13 @@ class UdacityClient {
           let newData = data?.subdata(in: range) /* subset response data! */
           print(String(data: newData!, encoding: .utf8)!)
         }
+        return task
+    }
+    
+    class func logout() {
+        //TODO: Extract Request and Task creation into separate function and test them
+        let request = makeLogoutRequest()
+        let task = makeLogoutTask(request: request)
         task.resume()
     }
 }
