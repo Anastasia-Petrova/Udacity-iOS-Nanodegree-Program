@@ -45,6 +45,7 @@ final class InformationPostingViewController: UIViewController {
         locationTextField.placeholder = "Location"
         locationTextField.isUserInteractionEnabled = true
         locationTextField.adjustsFontSizeToFitWidth = true
+        
         linkTextField.borderStyle = .roundedRect
         linkTextField.placeholder = "Link"
         linkTextField.isUserInteractionEnabled = true
@@ -84,9 +85,9 @@ final class InformationPostingViewController: UIViewController {
         stackView.spacing = 60
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60),
-            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
-            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
         ])
     }
     

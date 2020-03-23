@@ -37,6 +37,7 @@ final class LoginViewController: UIViewController {
         emailTextField.isUserInteractionEnabled = true
         emailTextField.adjustsFontSizeToFitWidth = true
         emailTextField.text = "agency.cupid@gmail.com"
+        
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.placeholder = "Password"
         passwordTextField.isUserInteractionEnabled = true
@@ -112,7 +113,7 @@ final class LoginViewController: UIViewController {
     }
     
     @objc func handleLogin() {
-        UdacityClient.requestSessionID(username: emailTextField.text ?? "", password: passwordTextField.text ?? "")
+        UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "")
         print("username: \(emailTextField.text ?? ""), password: \(passwordTextField.text ?? "")")
         didLogingCallback()
     }
