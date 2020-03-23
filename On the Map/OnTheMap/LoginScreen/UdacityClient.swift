@@ -22,7 +22,10 @@ final class UdacityClient {
         return request
     }
     
-    class func makeSessionIDTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
+    class func makeSessionIDTask(
+        session: URLSession = .shared,
+        request: URLRequest
+    ) -> URLSessionDataTask {
         return session.dataTask(with: request) { data, response, error in
             if error != nil {
                 //TODO: Handle error…
@@ -48,7 +51,7 @@ final class UdacityClient {
     class func performSessionIDRequest(username: String, password: String) {
         let request = makeSessionIDRequest(username: username, password: password)
         let task = makeSessionIDTask(request: request)
-        
+
         task.resume()
     }
     
