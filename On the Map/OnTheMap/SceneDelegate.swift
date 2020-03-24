@@ -16,7 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         let rootVC = LoginViewController { [weak self] locations in
             let nvc = UINavigationController(rootViewController: MapViewController(locations: locations))
-            print("SceneDelegate: \(locations)")
             self?.window?.rootViewController = nvc
         }
         window?.rootViewController = rootVC

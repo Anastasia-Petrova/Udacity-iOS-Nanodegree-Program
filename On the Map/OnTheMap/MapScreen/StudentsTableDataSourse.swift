@@ -21,13 +21,12 @@ final class StudentsTableDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("studentsLocations in DataSource: \(studentsLocations.count)")
         return studentsLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StudentsTableCell.identifier, for: indexPath) as! StudentsTableCell
-        cell.studentName.text = studentsLocations[indexPath.row].firstName
+        cell.studentName.text = studentsLocations[indexPath.row].firstName + " " + studentsLocations[indexPath.row].lastName
         cell.studentLink.text = studentsLocations[indexPath.row].link
         return cell
     }

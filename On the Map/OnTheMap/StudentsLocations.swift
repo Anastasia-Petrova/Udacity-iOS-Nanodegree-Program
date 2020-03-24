@@ -21,7 +21,7 @@ struct StudentLocation: Codable {
     let firstName: String
     let lastName: String
     let latitude: Float
-    let longlatitude: Float
+    let longitude: Float
     let location: String
     let link: String
     let objectID: String
@@ -33,7 +33,7 @@ struct StudentLocation: Codable {
         case firstName = "firstName"
         case lastName = "lastName"
         case latitude = "latitude"
-        case longlatitude = "longitude"
+        case longitude = "longitude"
         case location = "mapString"
         case link = "mediaURL"
         case objectID = "objectId"

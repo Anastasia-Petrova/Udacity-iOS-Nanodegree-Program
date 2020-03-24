@@ -38,5 +38,4 @@ final class UdacityClientTests: XCTestCase {
         let task = UdacityClient.makeGetUserInfoTask(request: expectedRequest)
         XCTAssertEqual(task.originalRequest, expectedRequest)
     }
-    
 }

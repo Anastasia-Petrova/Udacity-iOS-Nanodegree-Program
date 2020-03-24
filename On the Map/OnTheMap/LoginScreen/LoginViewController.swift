@@ -132,7 +132,6 @@ final class LoginViewController: UIViewController {
             switch result {
             case .success(let responseObject):
                 self.studentsLocations = responseObject.locations
-                print("studentsLocations in LoginVC: \(self.studentsLocations.count)")
             case.failure(let error):
                 self.studentsLocations = []
                 print(error)
