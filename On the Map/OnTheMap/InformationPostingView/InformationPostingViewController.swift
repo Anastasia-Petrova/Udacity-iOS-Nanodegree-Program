@@ -41,6 +41,13 @@ final class InformationPostingViewController: UIViewController {
         let imageView = UIImageView(image: UIImage(named: "icon_world"))
         imageView.contentMode = .scaleAspectFit
         
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 22, weight: .medium)
+        label.numberOfLines = 2
+        label.text = "Where are you studding today?📚"
+        label.textColor = .systemBlue
+        label.textAlignment = .center
+        
         locationTextField.borderStyle = .roundedRect
         locationTextField.placeholder = "Location"
         locationTextField.isUserInteractionEnabled = true
@@ -76,16 +83,17 @@ final class InformationPostingViewController: UIViewController {
         let stackView = UIStackView(
             arrangedSubviews: [
                 imageView,
+                label,
                 textFieldsStackView
             ]
         )
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         stackView.axis = .vertical
-        stackView.spacing = 60
+        stackView.spacing = 40
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
         ])

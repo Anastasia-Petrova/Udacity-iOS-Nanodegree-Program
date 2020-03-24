@@ -41,9 +41,9 @@ final class MapViewController: UIViewController {
         tableView.delegate = self
         
         setUpMapView()
-        setUpTableView()
         setUpNavigationBar()
         setUpTabBar()
+        setUpTableView()
         tabBar.selectedItem = mapBarItem
         mapView.delegate = self
     }
@@ -81,7 +81,7 @@ final class MapViewController: UIViewController {
         self.view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
@@ -90,31 +90,21 @@ final class MapViewController: UIViewController {
     
     private func setUpNavigationBar() {
         let addItem = UIBarButtonItem(
-            barButtonSystemItem: .add,
+            image: UIImage(named: "icon_pin"),
+            style: .plain,
             target: self,
             action: #selector(presentInfoViewController)
         )
+        
         let refreshItem = UIBarButtonItem(
-            barButtonSystemItem: .refresh,
+            image: UIImage(named: "icon_refresh"),
+            style: .plain,
             target: self,
             action: #selector(handleRefreshAction)
         )
         
-        let logoutButton = UIBarButtonItem(
-            title: "LOGOUT",
-            style: .plain,
-            target: self,
-            action: #selector(handleLogout)
-        )
-        logoutButton.setTitleTextAttributes(
-            [
-                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 15, weight: .semibold),
-                NSAttributedString.Key.foregroundColor : UIColor.systemBlue
-            ],
-            for: .normal
-        )
-        navigationItem.leftBarButtonItem = logoutButton
-        navigationItem.rightBarButtonItems = [addItem, refreshItem]
+        navigationItem.leftBarButtonItem = addItem
+        navigationItem.rightBarButtonItem = refreshItem
     }
     
     private func setUpTabBar() {
@@ -127,7 +117,9 @@ final class MapViewController: UIViewController {
             tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
         mapBarItem.image = UIImage(named: "mapview")
+        mapBarItem.landscapeImagePhone = UIImage(named: "mapview")
         tableBarItem.image = UIImage(named: "listview")
+        tableBarItem.landscapeImagePhone = UIImage(named: "listview")
         tabBar.setItems([mapBarItem, tableBarItem], animated: false)
     }
     
