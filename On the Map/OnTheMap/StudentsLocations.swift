@@ -8,7 +8,15 @@
 
 import Foundation
 
-struct StudentsLocations: Codable {
+struct Locations: Codable {
+    let locations: [StudentLocation]
+    
+    enum CodingKeys: String, CodingKey {
+        case locations = "results"
+    }
+}
+
+struct StudentLocation: Codable {
     let creationDate: String
     let firstName: String
     let lastName: String
