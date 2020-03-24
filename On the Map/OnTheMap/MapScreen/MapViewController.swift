@@ -16,8 +16,10 @@ final class MapViewController: UIViewController {
     let tabBar = UITabBar()
     let mapBarItem = UITabBarItem()
     let tableBarItem = UITabBarItem()
+    let locations: [StudentLocation]
     
     init(locations: [StudentLocation]) {
+        self.locations = locations
         self.dataSource = StudentsTableDataSource(studentsLocations: locations)
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,6 +56,23 @@ final class MapViewController: UIViewController {
             mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
+        makeMapAnnotations(locations: locations)
+    }
+    
+    private func makeMapAnnotations(locations: [StudentLocation]) {
+        var annotations = [MKPointAnnotation]()
+        for location in locations {
+            let coordinate = CLLocationCoordinate2D(
+                latitude: Double(location.latitude),
+                longitude: Double(location.longitude)
+            )
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = location.firstName + " " + location.lastName
+            annotation.subtitle = location.link
+            annotations.append(annotation)
+        }
+        mapView.addAnnotations(annotations)
     }
     
     private func setUpTableView() {
@@ -140,5 +159,23 @@ extension MapViewController: UITabBarDelegate {
 }
 
 extension MapViewController: UITableViewDelegate {
+    
+}
+
+extension MapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinTintColor = .red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        return pinView
+    }
     
 }
