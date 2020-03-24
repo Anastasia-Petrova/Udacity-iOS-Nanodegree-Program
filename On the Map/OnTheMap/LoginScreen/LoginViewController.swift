@@ -12,6 +12,9 @@ final class LoginViewController: UIViewController {
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
     let didLogingCallback: () -> Void
+    var studentsLocations: [StudentLocation] = []
+    
+    static var sessionId = ""
     
     init(callback: @escaping () -> Void) {
         didLogingCallback = callback
@@ -113,9 +116,29 @@ final class LoginViewController: UIViewController {
     }
     
     @objc func handleLogin() {
-        UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "")
-        print("username: \(emailTextField.text ?? ""), password: \(passwordTextField.text ?? "")")
+        UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "") { result in
+            switch result {
+            case .success(let responseObject):
+                LoginViewController.sessionId = responseObject.session.id
+                print("Successful login!!!")
+                self.getStudentsLocations()
+            case.failure(let error):
+                print(error)
+            }
+        }
         didLogingCallback()
+    }
+    
+    func getStudentsLocations() {
+        UdacityClient.getStudentsLocations { result in
+            switch result {
+            case .success(let responseObject):
+                self.studentsLocations = responseObject.locations
+                print("Got locations successfully!!! Locations: \(self.studentsLocations)")
+            case.failure(let error):
+                print(error)
+            }
+        }
     }
 }
 

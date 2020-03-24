@@ -9,8 +9,8 @@
 import Foundation
 
 final class UdacityClient {
-    struct Auth {
-        static var sessionId = ""
+    enum NetworkError: Error {
+        case noData
     }
     
     class func makeSessionIDRequest(username: String, password: String) -> URLRequest {
@@ -24,14 +24,16 @@ final class UdacityClient {
     
     class func makeSessionIDTask(
         session: URLSession = .shared,
-        request: URLRequest
+        request: URLRequest,
+        completion: @escaping (Result<RequestSessionIDResponse, Error>) -> Void
     ) -> URLSessionDataTask {
         return session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                //TODO: Handle error…
+            if let error = error {
+                completion(.failure(error))
                 return
             }
             guard let data = data else {
+                completion(.failure(NetworkError.noData))
                 return
             }
             do {
@@ -39,19 +41,63 @@ final class UdacityClient {
                 let range = (5..<data.count)
                 let newData = data.subdata(in: range)
                 let responseObject = try decoder.decode(RequestSessionIDResponse.self, from: newData)
-                Auth.sessionId = responseObject.session.id
-                print("sessionID: \(responseObject.session.id)")
+                completion(.success(responseObject))
             } catch {
-                //TODO: Handle error…
-                print(error)
+                completion(.failure(error))
             }
         }
     }
     
-    class func performSessionIDRequest(username: String, password: String) {
+    class func performSessionIDRequest(
+        username: String,
+        password: String,
+        completion: @escaping (Result<RequestSessionIDResponse, Error>) -> Void
+    ) {
         let request = makeSessionIDRequest(username: username, password: password)
-        let task = makeSessionIDTask(request: request)
+        let task = makeSessionIDTask(request: request, completion: completion)
 
+        task.resume()
+    }
+    
+    class func makeStudentsLocationsRequest() -> URLRequest {
+        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?limit=100")!)
+    }
+    
+    class func makeStudentsLocationsTask(
+        session: URLSession = .shared,
+        request: URLRequest,
+        completion: @escaping (Result<Locations, Error>) -> Void) -> URLSessionDataTask {
+        return session.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NetworkError.noData))
+                }
+                return
+            }
+            let decoder = JSONDecoder()
+            do {
+                let locations = try decoder.decode(Locations.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(locations))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
+    class func getStudentsLocations(completion: @escaping (Result<Locations, Error>) -> Void) {
+        let request = makeStudentsLocationsRequest()
+        let task = makeStudentsLocationsTask(
+            request: request,
+            completion: completion)
+        
         task.resume()
     }
     
@@ -72,7 +118,7 @@ final class UdacityClient {
     
     class func getUserInfo(key: String) {
         let request = makeGetUserInfoRequest(key: key)
-        let task = makeSessionIDTask(request: request)
+        let task = makeGetUserInfoTask(request: request)
         
         task.resume()
     }
