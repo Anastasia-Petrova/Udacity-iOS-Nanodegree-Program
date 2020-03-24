@@ -32,7 +32,8 @@ final class LoginViewController: UIViewController {
     }
 
     func setUpLiginView() {
-        let imageView = UIImageView(image: UIImage(named:  "logo-u"))
+        let imageView = UIImageView(image: UIImage(named:  "logo-u")?.withRenderingMode(.alwaysTemplate))
+        imageView.tintColor = .systemBlue
         imageView.contentMode = .scaleAspectFit
         
         emailTextField.borderStyle = .roundedRect
@@ -52,12 +53,12 @@ final class LoginViewController: UIViewController {
         loginButton.layer.cornerRadius = 5
         loginButton.layer.borderWidth = 1
         loginButton.layer.borderColor = UIColor.clear.cgColor
-        loginButton.titleLabel?.font = .systemFont(ofSize: 14)
+        loginButton.titleLabel?.font = .systemFont(ofSize: 16)
         loginButton.setTitle("LOG IN", for: .normal)
         loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         let singUpLabel = UILabel()
-        singUpLabel.font = .systemFont(ofSize: 14, weight: .light)
+        singUpLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         singUpLabel.numberOfLines = 1
         singUpLabel.text = "Don't have an account?"
         singUpLabel.textColor = .black
@@ -66,8 +67,8 @@ final class LoginViewController: UIViewController {
         let singUpButton = UIButton()
         singUpButton.backgroundColor = .clear
         singUpButton.setTitle("Sing Up", for: .normal)
-        singUpButton.setTitleColor(.systemBlue, for: .normal)
-        singUpButton.titleLabel?.font = .systemFont(ofSize: 14)
+        singUpButton.setTitleColor(.black, for: .normal)
+        singUpButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         
         let singUpStackView = UIStackView(
             arrangedSubviews: [
@@ -79,9 +80,8 @@ final class LoginViewController: UIViewController {
         )
         singUpStackView.translatesAutoresizingMaskIntoConstraints = false
         singUpStackView.axis = .horizontal
-        singUpStackView.distribution = .equalCentering
+        singUpStackView.distribution = .equalSpacing
         singUpStackView.alignment = .center
-        singUpStackView.spacing = 8
         
         let textFieldsStackView = UIStackView(
             arrangedSubviews: [
