@@ -14,8 +14,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let rootVC = LoginViewController { [weak self] in
-            let nvc = UINavigationController(rootViewController: MapViewController())
+        let rootVC = LoginViewController { [weak self] locations in
+            let nvc = UINavigationController(rootViewController: MapViewController(locations: locations))
+            print("SceneDelegate: \(locations)")
             self?.window?.rootViewController = nvc
         }
         window?.rootViewController = rootVC

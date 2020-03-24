@@ -9,18 +9,26 @@
 import UIKit
 
 final class StudentsTableDataSource: NSObject, UITableViewDataSource {
+    let studentsLocations: [StudentLocation]
+    
+    init(studentsLocations: [StudentLocation]) {
+        self.studentsLocations = studentsLocations
+        super.init()
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        print("studentsLocations in DataSource: \(studentsLocations.count)")
+        return studentsLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StudentsTableCell.identifier, for: indexPath) as! StudentsTableCell
-        cell.studentName.text = "Anastasia Petrova"
-        cell.studentLink.text = "www.udacity.com"
+        cell.studentName.text = studentsLocations[indexPath.row].firstName
+        cell.studentLink.text = studentsLocations[indexPath.row].link
         return cell
     }
 }

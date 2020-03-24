@@ -12,11 +12,20 @@ import MapKit
 final class MapViewController: UIViewController {
     let mapView = MKMapView(frame: .zero)
     let tableView = UITableView()
-    let dataSource = StudentsTableDataSource() 
+    let dataSource: StudentsTableDataSource
     let tabBar = UITabBar()
     let mapBarItem = UITabBarItem()
     let tableBarItem = UITabBarItem()
-
+    
+    init(locations: [StudentLocation]) {
+        self.dataSource = StudentsTableDataSource(studentsLocations: locations)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white

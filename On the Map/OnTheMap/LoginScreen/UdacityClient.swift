@@ -60,7 +60,7 @@ final class UdacityClient {
     }
     
     class func makeStudentsLocationsRequest() -> URLRequest {
-        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?limit=100")!)
+        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?limit=20")!)
     }
     
     class func makeStudentsLocationsTask(

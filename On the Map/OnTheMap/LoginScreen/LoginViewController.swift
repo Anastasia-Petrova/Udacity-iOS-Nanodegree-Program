@@ -11,12 +11,12 @@ import UIKit
 final class LoginViewController: UIViewController {
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
-    let didLogingCallback: () -> Void
+    let didLogingCallback: ([StudentLocation]) -> Void
     var studentsLocations: [StudentLocation] = []
     
     static var sessionId = ""
     
-    init(callback: @escaping () -> Void) {
+    init(callback: @escaping ([StudentLocation]) -> Void) {
         didLogingCallback = callback
         super.init(nibName: nil, bundle: nil)
     }
@@ -120,13 +120,11 @@ final class LoginViewController: UIViewController {
             switch result {
             case .success(let responseObject):
                 LoginViewController.sessionId = responseObject.session.id
-                print("Successful login!!!")
                 self.getStudentsLocations()
             case.failure(let error):
                 print(error)
             }
         }
-        didLogingCallback()
     }
     
     func getStudentsLocations() {
@@ -134,10 +132,12 @@ final class LoginViewController: UIViewController {
             switch result {
             case .success(let responseObject):
                 self.studentsLocations = responseObject.locations
-                print("Got locations successfully!!! Locations: \(self.studentsLocations)")
+                print("studentsLocations in LoginVC: \(self.studentsLocations.count)")
             case.failure(let error):
+                self.studentsLocations = []
                 print(error)
             }
+            self.didLogingCallback(self.studentsLocations)
         }
     }
 }
