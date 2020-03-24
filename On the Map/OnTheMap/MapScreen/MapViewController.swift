@@ -45,6 +45,7 @@ final class MapViewController: UIViewController {
         setUpNavigationBar()
         setUpTabBar()
         tabBar.selectedItem = mapBarItem
+        mapView.delegate = self
     }
     
     private func setUpMapView() {
@@ -165,17 +166,25 @@ extension MapViewController: UITableViewDelegate {
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
-            pinView!.pinTintColor = .red
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        if let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView  {
+            pinView.annotation = annotation
+            return pinView
+        } else {
+            let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView.canShowCallout = true
+            pinView.pinTintColor = .red
+            pinView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            return pinView
         }
-        else {
-            pinView!.annotation = annotation
-        }
-        return pinView
     }
     
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        guard control == view.rightCalloutAccessoryView else {
+            return
+        }
+        let app = UIApplication.shared
+        if let subtitle = view.annotation?.subtitle, let link = subtitle, let url = URL(string: link) {
+            app.open(url, options: [:], completionHandler: nil)
+        }
+    }
 }
