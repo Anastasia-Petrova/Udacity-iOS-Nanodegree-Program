@@ -66,6 +66,7 @@ final class UdacityClient {
     class func makeStudentsLocationsTask(
         session: URLSession = .shared,
         request: URLRequest,
+        completionQueue: DispatchQueue = .main,
         completion: @escaping (Result<Locations, Error>) -> Void) -> URLSessionDataTask {
         return session.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -73,7 +74,7 @@ final class UdacityClient {
                 return
             }
             guard let data = data else {
-                DispatchQueue.main.async {
+                completionQueue.async {
                     completion(.failure(NetworkError.noData))
                 }
                 return
@@ -81,21 +82,25 @@ final class UdacityClient {
             let decoder = JSONDecoder()
             do {
                 let locations = try decoder.decode(Locations.self, from: data)
-                DispatchQueue.main.async {
+                completionQueue.async {
                     completion(.success(locations))
                 }
             } catch {
-                DispatchQueue.main.async {
+                completionQueue.async {
                     completion(.failure(error))
                 }
             }
         }
     }
     
-    class func getStudentsLocations(completion: @escaping (Result<Locations, Error>) -> Void) {
+    class func getStudentsLocations(
+        completionQueue: DispatchQueue = .main,
+        completion: @escaping (Result<Locations, Error>) -> Void
+    ) {
         let request = makeStudentsLocationsRequest()
         let task = makeStudentsLocationsTask(
             request: request,
+            completionQueue: completionQueue,
             completion: completion)
         
         task.resume()
