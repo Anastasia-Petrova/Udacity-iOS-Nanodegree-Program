@@ -13,6 +13,7 @@ final class InformationPostingViewController: UIViewController {
     let locationTextField = UITextField()
     let linkTextField = UITextField()
     let mapView = MKMapView(frame: .zero)
+    let submitButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,7 @@ final class InformationPostingViewController: UIViewController {
         setUpNavigationBar()
         setUpInfoView()
         setUpMapView()
+        setUpSubmitButton()
         mapView.delegate = self
     }
     
@@ -115,6 +117,26 @@ final class InformationPostingViewController: UIViewController {
         mapView.isHidden = true
     }
     
+    private func setUpSubmitButton() {
+        submitButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(submitButton)
+        submitButton.backgroundColor = .systemBlue
+        submitButton.layer.cornerRadius = 5
+        submitButton.layer.borderWidth = 1
+        submitButton.layer.borderColor = UIColor.clear.cgColor
+        submitButton.titleLabel?.font = .systemFont(ofSize: 18)
+        submitButton.setTitle("SUBMIT", for: .normal)
+        submitButton.addTarget(self, action: #selector(submit), for: .touchUpInside)
+        
+        NSLayoutConstraint.activate([
+            submitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
+            submitButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50),
+            submitButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -50)
+        ])
+        
+        submitButton.isHidden = true
+    }
+    
     private func searchLocation() {
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = locationTextField.text
@@ -152,12 +174,18 @@ final class InformationPostingViewController: UIViewController {
     
     @objc func findLocation() {
         mapView.isHidden = false
+        submitButton.isHidden = false
         searchLocation()
     }
     
     @objc func cancel() {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    @objc func submit() {
+        self.dismiss(animated: true, completion: nil)
+    }
+
 }
 
 extension InformationPostingViewController: MKMapViewDelegate {
