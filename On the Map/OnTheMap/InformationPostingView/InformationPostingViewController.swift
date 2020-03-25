@@ -21,6 +21,7 @@ final class InformationPostingViewController: UIViewController {
         setUpNavigationBar()
         setUpInfoView()
         setUpMapView()
+        mapView.delegate = self
     }
     
     private func setUpNavigationBar() {
@@ -114,12 +115,7 @@ final class InformationPostingViewController: UIViewController {
         mapView.isHidden = true
     }
     
-    @objc func findLocation() {
-        mapView.isHidden = false
-        searchLocation()
-    }
-    
-    func searchLocation() {
+    private func searchLocation() {
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = locationTextField.text
         searchRequest.region = mapView.region
@@ -142,7 +138,7 @@ final class InformationPostingViewController: UIViewController {
         annotation.coordinate = coordinate
         annotation.title = placemark.name
         mapView.addAnnotation(annotation)
-        zoomPinAres(placemark)
+        zoomPinArea(placemark)
     }
     
     private func zoomPinArea(_ placemark: MKPlacemark) {
@@ -154,7 +150,27 @@ final class InformationPostingViewController: UIViewController {
         mapView.setRegion(region, animated: true)
     }
     
+    @objc func findLocation() {
+        mapView.isHidden = false
+        searchLocation()
+    }
+    
     @objc func cancel() {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension InformationPostingViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        if let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView  {
+            pinView.annotation = annotation
+            return pinView
+        } else {
+            let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView.canShowCallout = true
+            pinView.pinTintColor = .red
+            return pinView
+        }
     }
 }
