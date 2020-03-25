@@ -16,7 +16,8 @@ final class MapViewController: UIViewController {
     let tabBar = UITabBar()
     let mapBarItem = UITabBarItem()
     let tableBarItem = UITabBarItem()
-    let locations: [StudentLocation]
+    var locations: [StudentLocation]
+    var annotations = [MKPointAnnotation]()
     
     init(locations: [StudentLocation]) {
         self.locations = locations
@@ -61,7 +62,6 @@ final class MapViewController: UIViewController {
     }
     
     private func makeMapAnnotations(locations: [StudentLocation]) {
-        var annotations = [MKPointAnnotation]()
         for location in locations {
             let coordinate = CLLocationCoordinate2D(
                 latitude: Double(location.latitude),
@@ -129,12 +129,28 @@ final class MapViewController: UIViewController {
         self.present(nvc, animated: true)
     }
     
-    @objc func handleRefreshAction() {
+    fileprivate func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
+        guard locations != newLocations else {
+            print("Zero New Locations Were Added!!")
+            return
+        }
         
+        locations = newLocations
+        dataSource.studentsLocations = newLocations
+        tableView.reloadData()
+        mapView.removeAnnotations(self.annotations)
+        makeMapAnnotations(locations: self.locations)
     }
     
-    @objc func handleLogout() {
-        
+    @objc func handleRefreshAction() {
+        UdacityClient.getStudentsLocations(completionQueue: .main) { result in
+            switch result {
+            case .success(let responseObject):
+                self.refreshLocationsIfNeeded(responseObject.locations)
+            case.failure(let error):
+                print(error)
+            }
+        }
     }
 }
 

@@ -9,7 +9,7 @@
 import UIKit
 
 final class StudentsTableDataSource: NSObject, UITableViewDataSource {
-    let studentsLocations: [StudentLocation]
+    var studentsLocations: [StudentLocation]
     
     init(studentsLocations: [StudentLocation]) {
         self.studentsLocations = studentsLocations
