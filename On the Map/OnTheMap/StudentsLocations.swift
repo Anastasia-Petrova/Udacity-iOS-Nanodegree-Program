@@ -8,7 +8,11 @@
 
 import Foundation
 
-struct Locations: Codable {
+struct Locations: Codable, Equatable {
+    static func == (lhs: Locations, rhs: Locations) -> Bool {
+        return lhs.locations == rhs.locations
+    }
+    
     let locations: [StudentLocation]
     
     enum CodingKeys: String, CodingKey {
@@ -16,7 +20,7 @@ struct Locations: Codable {
     }
 }
 
-struct StudentLocation: Codable {
+struct StudentLocation: Codable, Equatable {
     let creationDate: String
     let firstName: String
     let lastName: String
