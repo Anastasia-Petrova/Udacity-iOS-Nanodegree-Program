@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import MapKit
 
 final class InformationPostingViewController: UIViewController {
     let locationTextField = UITextField()
     let linkTextField = UITextField()
+    let mapView = MKMapView(frame: .zero)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +20,7 @@ final class InformationPostingViewController: UIViewController {
         self.view.backgroundColor = .white
         setUpNavigationBar()
         setUpInfoView()
+        setUpMapView()
     }
     
     private func setUpNavigationBar() {
@@ -99,8 +102,56 @@ final class InformationPostingViewController: UIViewController {
         ])
     }
     
+    private func setUpMapView() {
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(mapView)
+        NSLayoutConstraint.activate([
+            mapView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            mapView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+        ])
+        mapView.isHidden = true
+    }
+    
     @objc func findLocation() {
-        
+        mapView.isHidden = false
+        searchLocation()
+    }
+    
+    func searchLocation() {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = locationTextField.text
+        searchRequest.region = mapView.region
+        let search = MKLocalSearch(request: searchRequest)
+        search.start { (response, error) in
+            guard response == response else {
+                print(error!)
+                return
+            }
+            let mapItem = response?.mapItems.first
+            if let placemark = mapItem?.placemark {
+                self.makeMapAnnotations(placemark: placemark)
+            }
+        }
+    }
+    
+    private func makeMapAnnotations(placemark: MKPlacemark) {
+        let coordinate = placemark.coordinate
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = placemark.name
+        mapView.addAnnotation(annotation)
+        zoomPinAres(placemark)
+    }
+    
+    private func zoomPinArea(_ placemark: MKPlacemark) {
+        let span = MKCoordinateSpan(
+            latitudeDelta: 0.5,
+            longitudeDelta: 0.5
+        )
+        let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
+        mapView.setRegion(region, animated: true)
     }
     
     @objc func cancel() {
