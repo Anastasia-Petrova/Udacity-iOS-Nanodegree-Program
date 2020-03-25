@@ -67,8 +67,8 @@ final class LoginViewController: UIViewController {
         let singUpButton = UIButton()
         singUpButton.backgroundColor = .clear
         singUpButton.setTitle("Sing Up", for: .normal)
-        singUpButton.setTitleColor(.black, for: .normal)
-        singUpButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
+        singUpButton.setTitleColor(.systemBlue, for: .normal)
+        singUpButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
         
         let singUpStackView = UIStackView(
             arrangedSubviews: [
@@ -80,8 +80,9 @@ final class LoginViewController: UIViewController {
         )
         singUpStackView.translatesAutoresizingMaskIntoConstraints = false
         singUpStackView.axis = .horizontal
-        singUpStackView.distribution = .equalSpacing
+        singUpStackView.distribution = .equalCentering
         singUpStackView.alignment = .center
+        singUpStackView.spacing = 8
         
         let textFieldsStackView = UIStackView(
             arrangedSubviews: [
@@ -131,7 +132,7 @@ final class LoginViewController: UIViewController {
         UdacityClient.getStudentsLocations { result in
             switch result {
             case .success(let responseObject):
-                self.studentsLocations = responseObject.locations
+                self.studentsLocations = responseObject.locations.reversed()
             case.failure(let error):
                 self.studentsLocations = []
                 print(error)

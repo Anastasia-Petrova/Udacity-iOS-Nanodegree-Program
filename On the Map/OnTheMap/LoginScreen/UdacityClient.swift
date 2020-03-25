@@ -60,7 +60,7 @@ final class UdacityClient {
     }
     
     class func makeStudentsLocationsRequest() -> URLRequest {
-        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?limit=100")!)
+        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?skip=8386&limit=100&order=createdAt")!)
     }
     
     class func makeStudentsLocationsTask(
@@ -125,6 +125,48 @@ final class UdacityClient {
         let request = makeGetUserInfoRequest(key: key)
         let task = makeGetUserInfoTask(request: request)
         
+        task.resume()
+    }
+    struct LocationRequest: Encodable {
+        let uniqueKey: String
+        let firstName: String
+        let lastName: String
+        let mapString: String
+        let mediaURL: String
+        let latitude: Double
+        let longitude: Double
+    }
+    
+    class func makePostUserLocationRequest(location: String, link: String, latitude: Double, longitude: Double) -> URLRequest {
+        var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let locationRequest = LocationRequest(
+            uniqueKey: UUID().uuidString,
+            firstName: "Feodisiy",
+            lastName: "Kopytko",
+            mapString: location,
+            mediaURL: link,
+            latitude: latitude,
+            longitude: longitude
+        )
+        request.httpBody = try? JSONEncoder().encode(locationRequest)
+        return request
+    }
+    
+    class func makePostUserLocationTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask  {
+        return session.dataTask(with: request) { data, response, error in
+            if error != nil { // Handle error…
+                print(error ?? "Posting location failure")
+                return
+            }
+            print(String(data: data!, encoding: .utf8)!)
+        }
+    }
+    
+    class func postUserLocation(location: String, link: String, latitude: Double, longitude: Double) {
+        let request = makePostUserLocationRequest(location: location, link: link, latitude: latitude, longitude: longitude)
+        let task = makePostUserLocationTask(request: request)
         task.resume()
     }
     

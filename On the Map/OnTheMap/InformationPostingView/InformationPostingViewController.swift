@@ -14,6 +14,7 @@ final class InformationPostingViewController: UIViewController {
     let linkTextField = UITextField()
     let mapView = MKMapView(frame: .zero)
     let submitButton = UIButton()
+    var studentLocationInfo: MKPlacemark?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,6 +150,7 @@ final class InformationPostingViewController: UIViewController {
             }
             let mapItem = response?.mapItems.first
             if let placemark = mapItem?.placemark {
+                self.studentLocationInfo = placemark
                 self.makeMapAnnotations(placemark: placemark)
             }
         }
@@ -159,6 +161,10 @@ final class InformationPostingViewController: UIViewController {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title = placemark.name
+        if let region = placemark.administrativeArea,
+            let country = placemark.country {
+            annotation.subtitle = region + ", " + country
+        }
         mapView.addAnnotation(annotation)
         zoomPinArea(placemark)
     }
@@ -183,9 +189,18 @@ final class InformationPostingViewController: UIViewController {
     }
     
     @objc func submit() {
+        guard let location = studentLocationInfo,
+            let name = location.name else {
+                return
+        }
+        UdacityClient.postUserLocation(
+            location: name,
+            link: linkTextField.text ?? "",
+            latitude: location.coordinate.latitude,
+            longitude: location.coordinate.longitude
+        )
         self.dismiss(animated: true, completion: nil)
     }
-
 }
 
 extension InformationPostingViewController: MKMapViewDelegate {
