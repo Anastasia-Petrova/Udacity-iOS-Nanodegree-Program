@@ -127,15 +127,6 @@ final class UdacityClient {
         
         task.resume()
     }
-    struct LocationRequest: Encodable {
-        let uniqueKey: String
-        let firstName: String
-        let lastName: String
-        let mapString: String
-        let mediaURL: String
-        let latitude: Double
-        let longitude: Double
-    }
     
     class func makePostUserLocationRequest(location: String, link: String, latitude: Double, longitude: Double) -> URLRequest {
         var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
