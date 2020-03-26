@@ -9,6 +9,7 @@
 import UIKit
 
 final class LoginViewController: UIViewController {
+    let warningLabel = UILabel()
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
     let didLogingCallback: ([StudentLocation]) -> Void
@@ -35,6 +36,12 @@ final class LoginViewController: UIViewController {
         let imageView = UIImageView(image: UIImage(named:  "logo-u")?.withRenderingMode(.alwaysTemplate))
         imageView.tintColor = .systemBlue
         imageView.contentMode = .scaleAspectFit
+        
+        warningLabel.font = .systemFont(ofSize: 14, weight: .semibold)
+        warningLabel.numberOfLines = 1
+        warningLabel.text = "The email or passord you entered is invalid"
+        warningLabel.textColor = .red
+        warningLabel.textAlignment = .center
         
         emailTextField.borderStyle = .roundedRect
         emailTextField.placeholder = "Email"
@@ -86,6 +93,7 @@ final class LoginViewController: UIViewController {
         
         let textFieldsStackView = UIStackView(
             arrangedSubviews: [
+                warningLabel,
                 emailTextField,
                 passwordTextField,
                 loginButton,
@@ -106,14 +114,15 @@ final class LoginViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         stackView.axis = .vertical
-        stackView.spacing = 60
+        stackView.spacing = 30
         
         NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(equalToConstant: 70),
+            imageView.heightAnchor.constraint(equalToConstant: 80),
             stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60),
             stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
             stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
         ])
+        warningLabel.alpha = 0
     }
     
     @objc func handleLogin() {
@@ -122,8 +131,14 @@ final class LoginViewController: UIViewController {
             case .success(let responseObject):
                 LoginViewController.sessionId = responseObject.session.id
                 self.getStudentsLocations()
-            case.failure(let error):
-                print(error)
+            case .failure:
+                DispatchQueue.main.async {
+                    UIView.animate(
+                        withDuration: 0.2,
+                        animations: {
+                            self.warningLabel.alpha = 1
+                    })
+                }
             }
         }
     }
