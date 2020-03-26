@@ -13,8 +13,34 @@ final class UdacityClient {
         case noData
     }
     
+    enum Endpoints {
+        static let base = "https://onthemap-api.udacity.com/v1"
+        
+        case getSessionID
+        case getStudentsLocations
+        case getUserInfo(String)
+        case postUserLocation
+        
+        var stringValue: String {
+            switch self {
+            case .getSessionID:
+                return Endpoints.base
+                    + "/session"
+            case .getStudentsLocations:
+                return Endpoints.base
+                    + "/StudentLocation?skip=8386&limit=100&order=createdAt"
+            case .getUserInfo (let key):
+                return Endpoints.base
+                    + "/users/\(key)"
+            case .postUserLocation:
+                return Endpoints.base
+                    + "/StudentLocation"
+            }
+        }
+    }
+    
     class func makeSessionIDRequest(username: String, password: String) -> URLRequest {
-        var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
+        var request = URLRequest(url: URL(string: Endpoints.getSessionID.stringValue)!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -60,7 +86,7 @@ final class UdacityClient {
     }
     
     class func makeStudentsLocationsRequest() -> URLRequest {
-        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?skip=8386&limit=100&order=createdAt")!)
+        return URLRequest(url: URL(string: Endpoints.getStudentsLocations.stringValue)!)
     }
     
     class func makeStudentsLocationsTask(
@@ -107,7 +133,7 @@ final class UdacityClient {
     }
     
     class func makeGetUserInfoRequest(key: String) -> URLRequest {
-        return URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/users/\(key)")!)
+        return URLRequest(url: URL(string: Endpoints.getUserInfo(key).stringValue)!)
     }
     
     class func makeGetUserInfoTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
@@ -129,7 +155,7 @@ final class UdacityClient {
     }
     
     class func makePostUserLocationRequest(location: String, link: String, latitude: Double, longitude: Double) -> URLRequest {
-        var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
+        var request = URLRequest(url: URL(string: Endpoints.postUserLocation.stringValue)!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let locationRequest = LocationRequest(
@@ -162,7 +188,7 @@ final class UdacityClient {
     }
     
     class func makeLogoutRequest() -> URLRequest {
-        var request = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
+        var request = URLRequest(url: URL(string: Endpoints.getSessionID.stringValue)!)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
         let sharedCookieStorage = HTTPCookieStorage.shared
@@ -189,7 +215,6 @@ final class UdacityClient {
     }
     
     class func logout() {
-        //TODO: Extract Request and Task creation into separate function and test them
         let request = makeLogoutRequest()
         let task = makeLogoutTask(request: request)
         task.resume()
