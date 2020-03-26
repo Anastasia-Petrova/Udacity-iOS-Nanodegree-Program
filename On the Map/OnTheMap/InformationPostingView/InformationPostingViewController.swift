@@ -138,20 +138,26 @@ final class InformationPostingViewController: UIViewController {
         submitButton.isHidden = true
     }
     
+    private func presentMapView() {
+        mapView.isHidden = false
+        submitButton.isHidden = false
+    }
+    
     private func searchLocation() {
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = locationTextField.text
         searchRequest.region = mapView.region
         let search = MKLocalSearch(request: searchRequest)
         search.start { (response, error) in
-            guard response == response else {
-                print(error!)
+            guard let response = response else {
+                self.presentAlert()
                 return
             }
-            let mapItem = response?.mapItems.first
+            let mapItem = response.mapItems.first
             if let placemark = mapItem?.placemark {
                 self.studentLocationInfo = placemark
                 self.makeMapAnnotations(placemark: placemark)
+                self.presentMapView()
             }
         }
     }
@@ -178,9 +184,23 @@ final class InformationPostingViewController: UIViewController {
         mapView.setRegion(region, animated: true)
     }
     
+    private func presentAlert() {
+        let alert = UIAlertController(
+            title: "Location Not Found!",
+            message: "Looks like your location was not found. Try another one.",
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: "OK",
+                style: .default,
+                handler: nil
+            )
+        )
+        present(alert, animated: true, completion: nil)
+    }
+    
     @objc func findLocation() {
-        mapView.isHidden = false
-        submitButton.isHidden = false
         searchLocation()
     }
     
