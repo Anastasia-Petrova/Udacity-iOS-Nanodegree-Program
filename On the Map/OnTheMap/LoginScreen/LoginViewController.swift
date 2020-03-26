@@ -12,6 +12,7 @@ final class LoginViewController: UIViewController {
     let warningLabel = UILabel()
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
+    let loginButton = UIButton()
     let didLogingCallback: ([StudentLocation]) -> Void
     var studentsLocations: [StudentLocation] = []
     
@@ -30,6 +31,8 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         setUpLiginView()
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
 
     func setUpLiginView() {
@@ -55,7 +58,6 @@ final class LoginViewController: UIViewController {
         passwordTextField.adjustsFontSizeToFitWidth = true
         passwordTextField.text = "qazwsxedc123123"
         
-        let loginButton = UIButton()
         loginButton.backgroundColor = .systemBlue
         loginButton.layer.cornerRadius = 5
         loginButton.layer.borderWidth = 1
@@ -123,6 +125,12 @@ final class LoginViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
         ])
         warningLabel.alpha = 0
+        setFindLocationButtonEnabled(false)
+    }
+    
+    private func setFindLocationButtonEnabled(_ isEnabled: Bool) {
+        loginButton.isEnabled = isEnabled
+        loginButton.backgroundColor = isEnabled ? .systemBlue : .systemGray
     }
     
     @objc func handleLogin() {
@@ -154,6 +162,29 @@ final class LoginViewController: UIViewController {
             }
             self.didLogingCallback(self.studentsLocations)
         }
+    }
+    
+    func validateInput(email: String, password: String) -> Bool {
+        return !email.isEmpty && !password.isEmpty
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let replacementRange = Range(range, in: currentText) else {
+            return false
+        }
+        let updatedText = currentText.replacingCharacters(in: replacementRange, with: string)
+        
+        let isValid: Bool
+        if textField == emailTextField {
+            isValid = validateInput(email: updatedText, password: passwordTextField.text ?? "")
+        } else {
+            isValid = validateInput(email: emailTextField.text ?? "", password: updatedText)
+        }
+        setFindLocationButtonEnabled(isValid)
+        return true
     }
 }
 
