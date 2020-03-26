@@ -129,6 +129,11 @@ final class MapViewController: UIViewController {
         self.present(nvc, animated: true)
     }
     
+    fileprivate func open(url: URL) {
+        let app = UIApplication.shared
+        app.open(url: url, options: [:], completionHandler: nil)
+    }
+    
     fileprivate func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
         guard locations != newLocations else {
             print("Zero New Locations Were Added!!")
@@ -168,7 +173,13 @@ extension MapViewController: UITabBarDelegate {
 }
 
 extension MapViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = dataSource.tableView(tableView, cellForRowAt: indexPath) as? StudentsTableCell
+        if let link = cell?.studentLink.text, let url = URL(string: link) {
+            open(url: url)
+            tableView.deselectRow(at: indexPath, animated: false)
+        }
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
@@ -187,12 +198,13 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        guard control == view.rightCalloutAccessoryView else {
+        guard control == view.rightCalloutAccessoryView,
+            let subtitle = view.annotation?.subtitle,
+            let link = subtitle,
+            let url = URL(string: link) else {
             return
         }
-        let app = UIApplication.shared
-        if let subtitle = view.annotation?.subtitle, let link = subtitle, let url = URL(string: link) {
-            app.open(url, options: [:], completionHandler: nil)
-        }
+        
+        open(url)
     }
 }
