@@ -12,6 +12,7 @@ import MapKit
 final class InformationPostingViewController: UIViewController {
     let locationTextField = UITextField()
     let linkTextField = UITextField()
+    let findLocationButton = UIButton()
     let mapView = MKMapView(frame: .zero)
     let submitButton = UIButton()
     var studentLocationInfo: MKPlacemark?
@@ -25,6 +26,7 @@ final class InformationPostingViewController: UIViewController {
         setUpMapView()
         setUpSubmitButton()
         mapView.delegate = self
+        locationTextField.delegate = self
     }
     
     private func setUpNavigationBar() {
@@ -65,7 +67,6 @@ final class InformationPostingViewController: UIViewController {
         linkTextField.isUserInteractionEnabled = true
         linkTextField.adjustsFontSizeToFitWidth = true
         
-        let findLocationButton = UIButton()
         findLocationButton.backgroundColor = .systemBlue
         findLocationButton.layer.cornerRadius = 5
         findLocationButton.layer.borderWidth = 1
@@ -104,6 +105,12 @@ final class InformationPostingViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
         ])
+        setFindLocationButtonEnabled(false)
+    }
+    
+    private func setFindLocationButtonEnabled(_ isEnabled: Bool) {
+        findLocationButton.isEnabled = isEnabled
+        findLocationButton.backgroundColor = isEnabled ? .systemBlue : .systemGray
     }
     
     private func setUpMapView() {
@@ -235,5 +242,17 @@ extension InformationPostingViewController: MKMapViewDelegate {
             pinView.pinTintColor = .red
             return pinView
         }
+    }
+}
+
+extension InformationPostingViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let replacementRange = Range(range, in: currentText) else {
+            return false
+        }
+        let updatedText = currentText.replacingCharacters(in: replacementRange, with: string)
+        setFindLocationButtonEnabled(!updatedText.isEmpty)
+        return true
     }
 }
