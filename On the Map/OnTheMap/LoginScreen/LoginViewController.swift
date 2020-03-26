@@ -78,6 +78,7 @@ final class LoginViewController: UIViewController {
         singUpButton.setTitle("Sing Up", for: .normal)
         singUpButton.setTitleColor(.systemBlue, for: .normal)
         singUpButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        singUpButton.addTarget(self, action: #selector(handleSingUp), for: .touchUpInside)
         
         let singUpStackView = UIStackView(
             arrangedSubviews: [
@@ -133,6 +134,28 @@ final class LoginViewController: UIViewController {
         loginButton.backgroundColor = isEnabled ? .systemBlue : .systemGray
     }
     
+    private func getStudentsLocations() {
+        UdacityClient.getStudentsLocations { result in
+            switch result {
+            case .success(let responseObject):
+                self.studentsLocations = responseObject.locations.reversed()
+            case.failure(let error):
+                self.studentsLocations = []
+                print(error)
+            }
+            self.didLogingCallback(self.studentsLocations)
+        }
+    }
+    
+    private func validateInput(email: String, password: String) -> Bool {
+        return !email.isEmpty && !password.isEmpty
+    }
+    
+    private func open(url: URL) {
+        let app = UIApplication.shared
+        app.open(url, options: [:], completionHandler: nil)
+    }
+    
     @objc func handleLogin() {
         UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "") { result in
             switch result {
@@ -151,21 +174,9 @@ final class LoginViewController: UIViewController {
         }
     }
     
-    func getStudentsLocations() {
-        UdacityClient.getStudentsLocations { result in
-            switch result {
-            case .success(let responseObject):
-                self.studentsLocations = responseObject.locations.reversed()
-            case.failure(let error):
-                self.studentsLocations = []
-                print(error)
-            }
-            self.didLogingCallback(self.studentsLocations)
-        }
-    }
-    
-    func validateInput(email: String, password: String) -> Bool {
-        return !email.isEmpty && !password.isEmpty
+    @objc func handleSingUp() {
+        guard let url = URL(string: "https://auth.udacity.com/sign-up") else { return }
+        open(url: url)
     }
 }
 

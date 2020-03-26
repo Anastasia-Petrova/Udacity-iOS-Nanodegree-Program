@@ -129,12 +129,12 @@ final class MapViewController: UIViewController {
         self.present(nvc, animated: true)
     }
     
-    fileprivate func open(url: URL) {
+    private func open(url: URL) {
         let app = UIApplication.shared
         app.open(url, options: [:], completionHandler: nil)
     }
     
-    fileprivate func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
+    private func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
         guard locations != newLocations else {
             print("Zero New Locations Were Added!!")
             return
