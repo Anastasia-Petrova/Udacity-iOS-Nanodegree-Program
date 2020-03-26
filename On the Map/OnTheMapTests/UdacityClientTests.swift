@@ -23,7 +23,23 @@ final class UdacityClientTests: XCTestCase {
     
     func test_make_sessionID_task() {
         let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
-        let task = UdacityClient.makeSessionIDTask(request: expectedRequest)
+        let task = UdacityClient.makeSessionIDTask(request: expectedRequest) { result in
+            
+        }
+        XCTAssertEqual(task.originalRequest, expectedRequest)
+    }
+    
+    func test_make_students_locations_request() {
+        let request = UdacityClient.makeStudentsLocationsRequest()
+        XCTAssertEqual(request.url, URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?skip=8386&limit=100&order=createdAt"))
+    }
+    
+    func test_make_students_locations_task() {
+        let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?skip=8386&limit=100&order=createdAt")!)
+        let task = UdacityClient.makeStudentsLocationsTask(
+        request: expectedRequest) { result in
+            
+        }
         XCTAssertEqual(task.originalRequest, expectedRequest)
     }
     
