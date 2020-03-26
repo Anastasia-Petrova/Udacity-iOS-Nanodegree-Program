@@ -138,11 +138,11 @@ final class UdacityClient {
     
     class func makeGetUserInfoTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
         return session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error...
+            if error != nil {
                 return
             }
             let range = 5..<data!.count
-            let newData = data?.subdata(in: range) /* subset response data! */
+            let newData = data?.subdata(in: range)
             print(String(data: newData!, encoding: .utf8)!)
         }
     }
@@ -173,7 +173,7 @@ final class UdacityClient {
     
     class func makePostUserLocationTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask  {
         return session.dataTask(with: request) { data, response, error in
-            if error != nil { // Handle error…
+            if error != nil {
                 print(error ?? "Posting location failure")
                 return
             }
@@ -182,7 +182,12 @@ final class UdacityClient {
     }
     
     class func postUserLocation(location: String, link: String, latitude: Double, longitude: Double) {
-        let request = makePostUserLocationRequest(location: location, link: link, latitude: latitude, longitude: longitude)
+        let request = makePostUserLocationRequest(
+            location: location,
+            link: link,
+            latitude: latitude,
+            longitude: longitude
+        )
         let task = makePostUserLocationTask(request: request)
         task.resume()
     }
@@ -204,11 +209,11 @@ final class UdacityClient {
     class func makeLogoutTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
-          if error != nil { // Handle error…
+          if error != nil {
               return
           }
           let range = 5..<data!.count
-          let newData = data?.subdata(in: range) /* subset response data! */
+          let newData = data?.subdata(in: range)
           print(String(data: newData!, encoding: .utf8)!)
         }
         return task

@@ -131,7 +131,7 @@ final class MapViewController: UIViewController {
     
     fileprivate func open(url: URL) {
         let app = UIApplication.shared
-        app.open(url: url, options: [:], completionHandler: nil)
+        app.open(url, options: [:], completionHandler: nil)
     }
     
     fileprivate func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
@@ -204,7 +204,6 @@ extension MapViewController: MKMapViewDelegate {
             let url = URL(string: link) else {
             return
         }
-        
-        open(url)
+        open(url: url)
     }
 }
