@@ -21,6 +21,11 @@
 		6DA8F24B242933350041C340 /* UdacityClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA8F24A242933350041C340 /* UdacityClientTests.swift */; };
 		6DA8F25324294AE40041C340 /* StudentsLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA8F25224294AE40041C340 /* StudentsLocations.swift */; };
 		6DA8F255242D03A90041C340 /* LocationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA8F254242D03A90041C340 /* LocationRequest.swift */; };
+		6DD7F780242E255400DD8320 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6DD7F77D242E252300DD8320 /* GoogleSignIn.bundle */; };
+		6DD7F782242E259500DD8320 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DD7F781242E259500DD8320 /* LocalAuthentication.framework */; };
+		6DD7F784242E25AE00DD8320 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DD7F783242E25AE00DD8320 /* SafariServices.framework */; };
+		6DD7F786242E25B800DD8320 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DD7F785242E25B800DD8320 /* AuthenticationServices.framework */; };
+		6DD7F788242E25C000DD8320 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DD7F787242E25C000DD8320 /* SystemConfiguration.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +57,11 @@
 		6DA8F24C242933350041C340 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DA8F25224294AE40041C340 /* StudentsLocations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentsLocations.swift; sourceTree = "<group>"; };
 		6DA8F254242D03A90041C340 /* LocationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRequest.swift; sourceTree = "<group>"; };
+		6DD7F77D242E252300DD8320 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
+		6DD7F781242E259500DD8320 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		6DD7F783242E25AE00DD8320 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		6DD7F785242E25B800DD8320 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		6DD7F787242E25C000DD8320 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +69,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DD7F786242E25B800DD8320 /* AuthenticationServices.framework in Frameworks */,
+				6DD7F784242E25AE00DD8320 /* SafariServices.framework in Frameworks */,
+				6DD7F788242E25C000DD8320 /* SystemConfiguration.framework in Frameworks */,
+				6DD7F782242E259500DD8320 /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +119,7 @@
 			children = (
 				6D666503241A538A0017CDA7 /* OnTheMap */,
 				6DA8F249242933350041C340 /* OnTheMapTests */,
+				6DD7F77F242E253900DD8320 /* Frameworks */,
 				6D666502241A538A0017CDA7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -142,6 +157,18 @@
 				6DA8F24C242933350041C340 /* Info.plist */,
 			);
 			path = OnTheMapTests;
+			sourceTree = "<group>";
+		};
+		6DD7F77F242E253900DD8320 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6DD7F787242E25C000DD8320 /* SystemConfiguration.framework */,
+				6DD7F785242E25B800DD8320 /* AuthenticationServices.framework */,
+				6DD7F783242E25AE00DD8320 /* SafariServices.framework */,
+				6DD7F781242E259500DD8320 /* LocalAuthentication.framework */,
+				6DD7F77D242E252300DD8320 /* GoogleSignIn.bundle */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,6 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DD7F780242E255400DD8320 /* GoogleSignIn.bundle in Resources */,
 				6D666511241A53900017CDA7 /* LaunchScreen.storyboard in Resources */,
 				6D66650E241A53900017CDA7 /* Assets.xcassets in Resources */,
 			);
@@ -408,12 +436,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LFG8A6E922;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = petrova.OnTheMap;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.OnTheMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -426,12 +460,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LFG8A6E922;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
 				INFOPLIST_FILE = OnTheMap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = petrova.OnTheMap;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.OnTheMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
