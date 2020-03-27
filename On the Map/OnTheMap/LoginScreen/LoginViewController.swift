@@ -10,6 +10,7 @@ import UIKit
 
 final class LoginViewController: UIViewController {
     let warningLabel = UILabel()
+    let activityIndicator = UIActivityIndicatorView()
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
     let loginButton = UIButton()
@@ -41,10 +42,14 @@ final class LoginViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         
         warningLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        warningLabel.numberOfLines = 1
+        warningLabel.numberOfLines = 0
         warningLabel.text = "The email or passord you entered is invalid"
         warningLabel.textColor = .red
         warningLabel.textAlignment = .center
+        
+        activityIndicator.color = .systemBlue
+        activityIndicator.hidesWhenStopped = false
+        activityIndicator.alpha = 0
         
         emailTextField.borderStyle = .roundedRect
         emailTextField.placeholder = "Email"
@@ -96,6 +101,7 @@ final class LoginViewController: UIViewController {
         
         let textFieldsStackView = UIStackView(
             arrangedSubviews: [
+                activityIndicator,
                 warningLabel,
                 emailTextField,
                 passwordTextField,
@@ -117,11 +123,11 @@ final class LoginViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         stackView.axis = .vertical
-        stackView.spacing = 30
+        stackView.spacing = 15
         
         NSLayoutConstraint.activate([
-            imageView.heightAnchor.constraint(equalToConstant: 80),
-            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            imageView.heightAnchor.constraint(equalToConstant: 90),
+            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 80),
             stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
             stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
         ])
@@ -156,7 +162,17 @@ final class LoginViewController: UIViewController {
         app.open(url, options: [:], completionHandler: nil)
     }
     
+    private func setActivityIndicatorOn(_ isOn: Bool) {
+        activityIndicator.alpha = isOn ? 1 : 0
+        if isOn {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
     @objc func handleLogin() {
+        setActivityIndicatorOn(true)
         UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "") { result in
             switch result {
             case .success(let responseObject):
@@ -167,6 +183,7 @@ final class LoginViewController: UIViewController {
                     UIView.animate(
                         withDuration: 0.2,
                         animations: {
+                            self.setActivityIndicatorOn(false)
                             self.warningLabel.alpha = 1
                     })
                 }
