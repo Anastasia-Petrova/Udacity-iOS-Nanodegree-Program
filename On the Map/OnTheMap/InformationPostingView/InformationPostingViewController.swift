@@ -16,7 +16,17 @@ final class InformationPostingViewController: UIViewController {
     let mapView = MKMapView(frame: .zero)
     let submitButton = UIButton()
     var studentLocationInfo: MKPlacemark?
-
+    let didPostLocationCallback: () -> Void
+    
+    init(callback: @escaping () -> Void) {
+        didPostLocationCallback = callback
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Add Location"
@@ -157,7 +167,7 @@ final class InformationPostingViewController: UIViewController {
         let search = MKLocalSearch(request: searchRequest)
         search.start { (response, error) in
             guard let response = response else {
-                self.presentAlert()
+                self.presentAlert(title: "Location Not Found!", message: "Looks like your location was not found. Try another one.")
                 return
             }
             let mapItem = response.mapItems.first
@@ -191,10 +201,10 @@ final class InformationPostingViewController: UIViewController {
         mapView.setRegion(region, animated: true)
     }
     
-    private func presentAlert() {
+    private func presentAlert(title: String, message: String) {
         let alert = UIAlertController(
-            title: "Location Not Found!",
-            message: "Looks like your location was not found. Try another one.",
+            title: title,
+            message: message,
             preferredStyle: .alert
         )
         alert.addAction(
@@ -225,7 +235,14 @@ final class InformationPostingViewController: UIViewController {
             link: linkTextField.text ?? "",
             latitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude
-        )
+        ) { error in
+            switch error {
+            case .some:
+                self.presentAlert(title: "Error", message: "Your location was not submitted")
+            case .none:
+                self.didPostLocationCallback()
+            }
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -253,6 +270,11 @@ extension InformationPostingViewController: UITextFieldDelegate {
         }
         let updatedText = currentText.replacingCharacters(in: replacementRange, with: string)
         setFindLocationButtonEnabled(!updatedText.isEmpty)
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+      textField.resignFirstResponder()
         return true
     }
 }

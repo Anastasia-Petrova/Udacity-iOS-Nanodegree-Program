@@ -124,7 +124,9 @@ final class MapViewController: UIViewController {
     }
     
     @objc func presentInfoViewController() {
-        let vc = InformationPostingViewController()
+        let vc = InformationPostingViewController { [weak self] in
+            self?.refreshLocations()
+        }
         let nvc = UINavigationController(rootViewController: vc)
         self.present(nvc, animated: true)
     }
@@ -136,7 +138,6 @@ final class MapViewController: UIViewController {
     
     private func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
         guard locations != newLocations else {
-            print("Zero New Locations Were Added!!")
             return
         }
         
@@ -147,7 +148,7 @@ final class MapViewController: UIViewController {
         makeMapAnnotations(locations: self.locations)
     }
     
-    @objc func handleRefreshAction() {
+    private func refreshLocations() {
         UdacityClient.getStudentsLocations(completionQueue: .main) { result in
             switch result {
             case .success(let responseObject):
@@ -156,6 +157,10 @@ final class MapViewController: UIViewController {
                 print(error)
             }
         }
+    }
+    
+    @objc func handleRefreshAction() {
+        refreshLocations()
     }
 }
 

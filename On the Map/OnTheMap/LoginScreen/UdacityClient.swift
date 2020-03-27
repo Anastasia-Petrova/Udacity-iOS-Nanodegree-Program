@@ -171,24 +171,32 @@ final class UdacityClient {
         return request
     }
     
-    class func makePostUserLocationTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask  {
+    class func makePostUserLocationTask(
+        session: URLSession = .shared,
+        request: URLRequest,
+        completionQueue: DispatchQueue,
+        completion: @escaping (Error?) -> Void) -> URLSessionDataTask  {
         return session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print(error ?? "Posting location failure")
-                return
-            }
+            completion(error)
             print(String(data: data!, encoding: .utf8)!)
         }
     }
     
-    class func postUserLocation(location: String, link: String, latitude: Double, longitude: Double) {
+    class func postUserLocation(
+        location: String,
+        link: String,
+        latitude: Double,
+        longitude: Double,
+        completionQueue: DispatchQueue = .main,
+        completion: @escaping (Error?) -> Void
+    ) {
         let request = makePostUserLocationRequest(
             location: location,
             link: link,
             latitude: latitude,
             longitude: longitude
         )
-        let task = makePostUserLocationTask(request: request)
+        let task = makePostUserLocationTask(request: request, completionQueue: completionQueue, completion: completion)
         task.resume()
     }
     
