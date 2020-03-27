@@ -199,6 +199,7 @@ final class LoginViewController: UIViewController {
 
 extension LoginViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        warningLabel.alpha = 0
         let currentText = textField.text ?? ""
         guard let replacementRange = Range(range, in: currentText) else {
             return false
