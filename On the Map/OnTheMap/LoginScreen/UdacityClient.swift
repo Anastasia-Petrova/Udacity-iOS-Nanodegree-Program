@@ -9,8 +9,16 @@
 import Foundation
 
 final class UdacityClient {
-    enum NetworkError: Error {
+    enum NetworkError: LocalizedError {
         case noData
+        case invalidCredentials
+        
+        var errorDescription: String? {
+            switch self {
+            case .noData: return "Something went wrong. Try again later."
+            case .invalidCredentials: return "The email or password you entered is invalid"
+            }
+        }
     }
     
     enum Endpoints {
@@ -65,7 +73,7 @@ final class UdacityClient {
                 let responseObject = try decoder.decode(RequestSessionIDResponse.self, from: newData)
                 completion(.success(responseObject))
             } catch {
-                completion(.failure(error))
+                completion(.failure(NetworkError.invalidCredentials))
             }
         }
     }

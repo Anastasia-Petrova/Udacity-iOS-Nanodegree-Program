@@ -175,12 +175,20 @@ final class LoginViewController: UIViewController {
             switch result {
             case .success:
                 self.getStudentsLocations()
-            case .failure:
+            case .failure(let error):
+                let text: String?
+                switch error {
+                case let e as LocalizedError:
+                    text = e.errorDescription
+                case let e:
+                    text = e.localizedDescription
+                }
                 DispatchQueue.main.async {
                     UIView.animate(
                         withDuration: 0.2,
                         animations: {
                             self.setActivityIndicatorOn(false)
+                            self.warningLabel.text = text
                             self.warningLabel.alpha = 1
                     })
                 }

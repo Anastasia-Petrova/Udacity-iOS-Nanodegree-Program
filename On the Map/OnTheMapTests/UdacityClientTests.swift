@@ -9,6 +9,7 @@
 import XCTest
 @testable import OnTheMap
 
+//TODO: test rest of network functions
 final class UdacityClientTests: XCTestCase {
 
     func test_make_sessionID_request() {
@@ -40,18 +41,6 @@ final class UdacityClientTests: XCTestCase {
         request: expectedRequest) { result in
             
         }
-        XCTAssertEqual(task.originalRequest, expectedRequest)
-    }
-    
-    func test_make_get_user_info_request() {
-        let key = "12345"
-        let request = UdacityClient.makeGetUserInfoRequest(key: key)
-        XCTAssertEqual(request.url, URL(string: "https://onthemap-api.udacity.com/v1/users/\(key)"))
-    }
-    
-    func test_make_get_user_info_task() {
-        let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
-        let task = UdacityClient.makeGetUserInfoTask(request: expectedRequest)
         XCTAssertEqual(task.originalRequest, expectedRequest)
     }
 }
