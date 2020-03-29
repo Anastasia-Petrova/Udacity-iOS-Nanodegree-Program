@@ -15,9 +15,6 @@ final class LoginViewController: UIViewController {
     let passwordTextField = UITextField()
     let loginButton = UIButton()
     let didLogingCallback: ([StudentLocation]) -> Void
-    var studentsLocations: [StudentLocation] = []
-    
-    static var sessionId = ""
     
     init(callback: @escaping ([StudentLocation]) -> Void) {
         didLogingCallback = callback
@@ -142,14 +139,15 @@ final class LoginViewController: UIViewController {
     
     private func getStudentsLocations() {
         UdacityClient.getStudentsLocations { result in
+            var studentsLocations: [StudentLocation]
             switch result {
             case .success(let responseObject):
-                self.studentsLocations = responseObject.locations.reversed()
+                studentsLocations = responseObject.locations.reversed()
             case.failure(let error):
-                self.studentsLocations = []
+                studentsLocations = []
                 print(error)
             }
-            self.didLogingCallback(self.studentsLocations)
+            self.didLogingCallback(studentsLocations)
         }
     }
     
@@ -175,8 +173,7 @@ final class LoginViewController: UIViewController {
         setActivityIndicatorOn(true)
         UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "") { result in
             switch result {
-            case .success(let responseObject):
-                LoginViewController.sessionId = responseObject.session.id
+            case .success:
                 self.getStudentsLocations()
             case .failure:
                 DispatchQueue.main.async {

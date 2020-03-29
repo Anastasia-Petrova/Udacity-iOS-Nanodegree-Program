@@ -18,7 +18,6 @@ final class UdacityClient {
         
         case getSessionID
         case getStudentsLocations
-        case getUserInfo(String)
         case postUserLocation
         
         var stringValue: String {
@@ -29,9 +28,6 @@ final class UdacityClient {
             case .getStudentsLocations:
                 return Endpoints.base
                     + "/StudentLocation?skip=8386&limit=100&order=createdAt"
-            case .getUserInfo (let key):
-                return Endpoints.base
-                    + "/users/\(key)"
             case .postUserLocation:
                 return Endpoints.base
                     + "/StudentLocation"
@@ -132,28 +128,6 @@ final class UdacityClient {
         task.resume()
     }
     
-    class func makeGetUserInfoRequest(key: String) -> URLRequest {
-        return URLRequest(url: URL(string: Endpoints.getUserInfo(key).stringValue)!)
-    }
-    
-    class func makeGetUserInfoTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
-        return session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                return
-            }
-            let range = 5..<data!.count
-            let newData = data?.subdata(in: range)
-            print(String(data: newData!, encoding: .utf8)!)
-        }
-    }
-    
-    class func getUserInfo(key: String) {
-        let request = makeGetUserInfoRequest(key: key)
-        let task = makeGetUserInfoTask(request: request)
-        
-        task.resume()
-    }
-    
     class func makePostUserLocationRequest(location: String, link: String, latitude: Double, longitude: Double) -> URLRequest {
         var request = URLRequest(url: URL(string: Endpoints.postUserLocation.stringValue)!)
         request.httpMethod = "POST"
@@ -197,39 +171,6 @@ final class UdacityClient {
             longitude: longitude
         )
         let task = makePostUserLocationTask(request: request, completionQueue: completionQueue, completion: completion)
-        task.resume()
-    }
-    
-    class func makeLogoutRequest() -> URLRequest {
-        var request = URLRequest(url: URL(string: Endpoints.getSessionID.stringValue)!)
-        request.httpMethod = "DELETE"
-        var xsrfCookie: HTTPCookie? = nil
-        let sharedCookieStorage = HTTPCookieStorage.shared
-        for cookie in sharedCookieStorage.cookies! {
-          if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-        }
-        if let xsrfCookie = xsrfCookie {
-          request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-        }
-        return request
-    }
-    
-    class func makeLogoutTask(session: URLSession = .shared, request: URLRequest) -> URLSessionDataTask {
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-          if error != nil {
-              return
-          }
-          let range = 5..<data!.count
-          let newData = data?.subdata(in: range)
-          print(String(data: newData!, encoding: .utf8)!)
-        }
-        return task
-    }
-    
-    class func logout() {
-        let request = makeLogoutRequest()
-        let task = makeLogoutTask(request: request)
         task.resume()
     }
 }
