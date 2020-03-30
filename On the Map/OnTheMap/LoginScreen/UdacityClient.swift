@@ -142,8 +142,8 @@ final class UdacityClient {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let locationRequest = LocationRequest(
             uniqueKey: UUID().uuidString,
-            firstName: "Feodisiy",
-            lastName: "Kopytko",
+            firstName: "Anastasia",
+            lastName: "Petrova",
             mapString: location,
             mediaURL: link,
             latitude: latitude,

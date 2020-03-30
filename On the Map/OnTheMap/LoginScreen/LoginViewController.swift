@@ -52,13 +52,11 @@ final class LoginViewController: UIViewController {
         emailTextField.placeholder = "Email"
         emailTextField.isUserInteractionEnabled = true
         emailTextField.adjustsFontSizeToFitWidth = true
-        emailTextField.text = "agency.cupid@gmail.com"
         
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.placeholder = "Password"
         passwordTextField.isUserInteractionEnabled = true
         passwordTextField.adjustsFontSizeToFitWidth = true
-        passwordTextField.text = "qazwsxedc123123"
         
         loginButton.backgroundColor = .systemBlue
         loginButton.layer.cornerRadius = 5
@@ -143,7 +141,7 @@ final class LoginViewController: UIViewController {
             switch result {
             case .success(let responseObject):
                 studentsLocations = responseObject.locations.reversed()
-            case.failure(let error):
+            case.failure:
                 studentsLocations = []
             }
             self.didLogingCallback(studentsLocations)
