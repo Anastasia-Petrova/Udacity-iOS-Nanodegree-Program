@@ -145,7 +145,6 @@ final class LoginViewController: UIViewController {
                 studentsLocations = responseObject.locations.reversed()
             case.failure(let error):
                 studentsLocations = []
-                print(error)
             }
             self.didLogingCallback(studentsLocations)
         }

@@ -153,8 +153,7 @@ final class MapViewController: UIViewController {
             switch result {
             case .success(let responseObject):
                 self.refreshLocationsIfNeeded(responseObject.locations)
-            case.failure(let error):
-                print(error)
+            case .failure: break
             }
         }
     }
