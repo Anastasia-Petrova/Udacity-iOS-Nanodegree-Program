@@ -19,7 +19,6 @@ final class UdacityClientTests: XCTestCase {
         XCTAssertEqual(sessionIdRequest.value(forHTTPHeaderField: "Accept"), "application/json")
         XCTAssertEqual(sessionIdRequest.value(forHTTPHeaderField: "Content-Type"), "application/json")
         XCTAssertEqual(sessionIdRequest.httpBody, "{\"udacity\": {\"username\": \"Alex\", \"password\": \"12345\"}}".data(using: .utf8))
-
     }
     
     func test_make_sessionID_task() {
@@ -41,6 +40,28 @@ final class UdacityClientTests: XCTestCase {
         request: expectedRequest) { result in
             
         }
+        XCTAssertEqual(task.originalRequest, expectedRequest)
+    }
+    
+    func test_make_post_user_location_request() {
+        let postLocationRequest = UdacityClient.makePostUserLocationRequest(
+            location: "Kiev",
+            link: "",
+            latitude: 1.0,
+            longitude: 1.0
+        )
+        
+        XCTAssertEqual(postLocationRequest.url, URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation"))
+        XCTAssertEqual(postLocationRequest.httpMethod, "POST")
+        XCTAssertEqual(postLocationRequest.value(forHTTPHeaderField: "Content-Type"), "application/json")
+    }
+    
+    func test_make_post_user_location_task() {
+        let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
+        let task = UdacityClient.makePostUserLocationTask(
+            request: expectedRequest) { result in
+                
+            }
         XCTAssertEqual(task.originalRequest, expectedRequest)
     }
 }
