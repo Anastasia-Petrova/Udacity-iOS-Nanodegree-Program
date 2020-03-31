@@ -14,9 +14,11 @@ final class LoginViewController: UIViewController {
     let emailTextField = UITextField()
     let passwordTextField = UITextField()
     let loginButton = UIButton()
-    let didLogingCallback: ([StudentLocation]) -> Void
+    let didLogingCallback: (String, [StudentLocation]) -> Void
     
-    init(callback: @escaping ([StudentLocation]) -> Void) {
+    static var accountKey = ""
+
+    init(callback: @escaping (String, [StudentLocation]) -> Void) {
         didLogingCallback = callback
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,7 +29,7 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         setUpLiginView()
         emailTextField.delegate = self
         passwordTextField.delegate = self
@@ -52,11 +54,13 @@ final class LoginViewController: UIViewController {
         emailTextField.placeholder = "Email"
         emailTextField.isUserInteractionEnabled = true
         emailTextField.adjustsFontSizeToFitWidth = true
+        emailTextField.text = "agency.cupid@gmail.com"
         
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.placeholder = "Password"
         passwordTextField.isUserInteractionEnabled = true
         passwordTextField.adjustsFontSizeToFitWidth = true
+        passwordTextField.text = "qwerty123123"
         
         loginButton.backgroundColor = .systemBlue
         loginButton.layer.cornerRadius = 5
@@ -122,9 +126,9 @@ final class LoginViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             imageView.heightAnchor.constraint(equalToConstant: 90),
-            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            stackView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
-            stackView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50)
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50)
         ])
         warningLabel.alpha = 0
         setFindLocationButtonEnabled(false)
@@ -144,7 +148,7 @@ final class LoginViewController: UIViewController {
             case.failure:
                 studentsLocations = []
             }
-            self.didLogingCallback(studentsLocations)
+            self.didLogingCallback(LoginViewController.accountKey, studentsLocations)
         }
     }
     
@@ -170,7 +174,8 @@ final class LoginViewController: UIViewController {
         setActivityIndicatorOn(true)
         UdacityClient.performSessionIDRequest(username: emailTextField.text ?? "", password: passwordTextField.text ?? "") { result in
             switch result {
-            case .success:
+            case .success(let responseObject):
+                LoginViewController.accountKey = responseObject.account.key
                 self.getStudentsLocations()
             case .failure(let error):
                 let text: String?
