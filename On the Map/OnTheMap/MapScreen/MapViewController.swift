@@ -18,9 +18,13 @@ final class MapViewController: UIViewController {
     let tableBarItem = UITabBarItem()
     var locations: [StudentLocation]
     var annotations = [MKPointAnnotation]()
+    let accountKey: String
+    let didLogoutCallback: () -> Void
     
-    init(locations: [StudentLocation]) {
+    init(accountKey: String, locations: [StudentLocation], callback: @escaping () -> Void) {
+        self.accountKey = accountKey
         self.locations = locations
+        didLogoutCallback = callback
         self.dataSource = StudentsTableDataSource(studentsLocations: locations)
         super.init(nibName: nil, bundle: nil)
     }
@@ -31,8 +35,8 @@ final class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
-        self.title = "On the Map"
+        view.backgroundColor = .white
+        title = "On the Map"
         
         tableView.register(
             StudentsTableCell.self,
@@ -51,12 +55,12 @@ final class MapViewController: UIViewController {
     
     private func setUpMapView() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(mapView)
+        view.addSubview(mapView)
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            mapView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         makeMapAnnotations(locations: locations)
     }
@@ -78,17 +82,28 @@ final class MapViewController: UIViewController {
     
     private func setUpTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(tableView)
+        view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: tabBar.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         tableView.isHidden = true
     }
     
     private func setUpNavigationBar() {
+        let logoutItem = UIBarButtonItem(
+            title: "LOGOUT",
+            style: .plain,
+            target: self,
+            action: #selector(logoutAction)
+        )
+        logoutItem.setTitleTextAttributes([
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 18),
+            NSAttributedString.Key.foregroundColor: UIColor.systemBlue],
+        for: .normal)
+            
         let addItem = UIBarButtonItem(
             image: UIImage(named: "icon_pin"),
             style: .plain,
@@ -103,32 +118,24 @@ final class MapViewController: UIViewController {
             action: #selector(handleRefreshAction)
         )
         
-        navigationItem.leftBarButtonItem = addItem
-        navigationItem.rightBarButtonItem = refreshItem
+        navigationItem.leftBarButtonItem = logoutItem
+        navigationItem.rightBarButtonItems = [addItem, refreshItem]
     }
     
     private func setUpTabBar() {
         tabBar.delegate = self
         tabBar.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(tabBar)
+        view.addSubview(tabBar)
         NSLayoutConstraint.activate([
-            tabBar.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            tabBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            tabBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            tabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         mapBarItem.image = UIImage(named: "mapview")
         mapBarItem.landscapeImagePhone = UIImage(named: "mapview")
         tableBarItem.image = UIImage(named: "listview")
         tableBarItem.landscapeImagePhone = UIImage(named: "listview")
         tabBar.setItems([mapBarItem, tableBarItem], animated: false)
-    }
-    
-    @objc func presentInfoViewController() {
-        let vc = InformationPostingViewController { [weak self] in
-            self?.refreshLocations()
-        }
-        let nvc = UINavigationController(rootViewController: vc)
-        self.present(nvc, animated: true)
     }
     
     private func open(url: URL) {
@@ -158,8 +165,21 @@ final class MapViewController: UIViewController {
         }
     }
     
+    @objc func presentInfoViewController() {
+        let vc = InformationPostingViewController(accountKey: accountKey) { [weak self] in
+            self?.refreshLocations()
+        }
+        let nvc = UINavigationController(rootViewController: vc)
+        present(nvc, animated: true)
+    }
+    
     @objc func handleRefreshAction() {
         refreshLocations()
+    }
+    
+    @objc func logoutAction() {
+        UdacityClient.logout()
+        didLogoutCallback()
     }
 }
 
