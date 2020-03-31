@@ -8,11 +8,15 @@
 
 import UIKit
 
+struct StudentsData {
+    var locations: [StudentLocation]
+}
+
 final class StudentsTableDataSource: NSObject, UITableViewDataSource {
-    var studentsLocations: [StudentLocation]
+    var studentsData: StudentsData
     
-    init(studentsLocations: [StudentLocation]) {
-        self.studentsLocations = studentsLocations
+    init(studentsData: StudentsData) {
+        self.studentsData = studentsData
         super.init()
     }
     
@@ -21,13 +25,14 @@ final class StudentsTableDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentsLocations.count
+        return studentsData.locations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StudentsTableCell.identifier, for: indexPath) as! StudentsTableCell
-        cell.studentName.text = studentsLocations[indexPath.row].firstName + " " + studentsLocations[indexPath.row].lastName
-        cell.studentLink.text = studentsLocations[indexPath.row].link
+        let location = studentsData.locations[indexPath.row]
+        cell.studentName.text = location.firstName + " " + location.lastName
+        cell.studentLink.text = location.link
         return cell
     }
 }

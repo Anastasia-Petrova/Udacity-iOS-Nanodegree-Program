@@ -36,7 +36,7 @@ final class UdacityClient {
                     + "/session"
             case .getStudentsLocations:
                 return Endpoints.base
-                    + "/StudentLocation?skip=8386&limit=100&order=createdAt"
+                    + "/StudentLocation?skip=8386&limit=100&order=-updatedAt"
             case .getUserInfo(let key):
                 return Endpoints.base + "/users/\(key)"
             case .postUserLocation:

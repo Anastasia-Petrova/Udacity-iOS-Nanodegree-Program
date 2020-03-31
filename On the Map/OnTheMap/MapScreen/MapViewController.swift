@@ -16,16 +16,16 @@ final class MapViewController: UIViewController {
     let tabBar = UITabBar()
     let mapBarItem = UITabBarItem()
     let tableBarItem = UITabBarItem()
-    var locations: [StudentLocation]
+    var studentsData: StudentsData
     var annotations = [MKPointAnnotation]()
     let accountKey: String
     let didLogoutCallback: () -> Void
     
     init(accountKey: String, locations: [StudentLocation], callback: @escaping () -> Void) {
         self.accountKey = accountKey
-        self.locations = locations
+        studentsData = StudentsData(locations: locations)
         didLogoutCallback = callback
-        self.dataSource = StudentsTableDataSource(studentsLocations: locations)
+        dataSource = StudentsTableDataSource(studentsData: studentsData)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -62,7 +62,7 @@ final class MapViewController: UIViewController {
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-        makeMapAnnotations(locations: locations)
+        makeMapAnnotations(locations: studentsData.locations)
     }
     
     private func makeMapAnnotations(locations: [StudentLocation]) {
@@ -144,15 +144,14 @@ final class MapViewController: UIViewController {
     }
     
     private func refreshLocationsIfNeeded(_ newLocations: [StudentLocation]) {
-        guard locations != newLocations else {
+        guard studentsData.locations != newLocations else {
             return
         }
-        
-        locations = newLocations
-        dataSource.studentsLocations = newLocations
+        studentsData = StudentsData(locations: newLocations)
+        dataSource.studentsData = studentsData
         tableView.reloadData()
-        mapView.removeAnnotations(self.annotations)
-        makeMapAnnotations(locations: self.locations)
+        mapView.removeAnnotations(annotations)
+        makeMapAnnotations(locations: studentsData.locations)
     }
     
     private func refreshLocations() {

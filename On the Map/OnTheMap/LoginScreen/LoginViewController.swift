@@ -144,7 +144,7 @@ final class LoginViewController: UIViewController {
             var studentsLocations: [StudentLocation]
             switch result {
             case .success(let responseObject):
-                studentsLocations = responseObject.locations.reversed()
+                studentsLocations = responseObject.locations
             case.failure:
                 studentsLocations = []
             }
