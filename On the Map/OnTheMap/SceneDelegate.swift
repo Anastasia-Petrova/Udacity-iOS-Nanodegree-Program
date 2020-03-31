@@ -14,12 +14,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let rootVC = LoginViewController { [weak self] locations in
-            let nvc = UINavigationController(rootViewController: MapViewController(locations: locations))
-            self?.window?.rootViewController = nvc
+        presentLoginVC()
+        window?.makeKeyAndVisible()
+    }
+    
+    func presentLoginVC() {
+        let rootVC = LoginViewController { [weak self] accountKey, locations in
+            self?.presentMapVC(accountKey: accountKey, locations: locations)
         }
         window?.rootViewController = rootVC
-        window?.makeKeyAndVisible()
+    }
+    
+    func presentMapVC(accountKey: String, locations: [StudentLocation]) {
+        let vc = MapViewController(accountKey: accountKey, locations: locations) { [weak self] in
+            self?.presentLoginVC()
+        }
+        let nvc = UINavigationController(rootViewController: vc)
+        window?.rootViewController = nvc
     }
 }
 
