@@ -54,13 +54,11 @@ final class LoginViewController: UIViewController {
         emailTextField.placeholder = "Email"
         emailTextField.isUserInteractionEnabled = true
         emailTextField.adjustsFontSizeToFitWidth = true
-        emailTextField.text = "agency.cupid@gmail.com"
         
         passwordTextField.borderStyle = .roundedRect
         passwordTextField.placeholder = "Password"
         passwordTextField.isUserInteractionEnabled = true
         passwordTextField.adjustsFontSizeToFitWidth = true
-        passwordTextField.text = "qwerty123123"
         
         loginButton.backgroundColor = .systemBlue
         loginButton.layer.cornerRadius = 5
