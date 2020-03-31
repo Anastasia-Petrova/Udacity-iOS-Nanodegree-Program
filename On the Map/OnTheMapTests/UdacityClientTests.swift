@@ -31,7 +31,7 @@ final class UdacityClientTests: XCTestCase {
     
     func test_make_students_locations_request() {
         let request = UdacityClient.makeStudentsLocationsRequest()
-        XCTAssertEqual(request.url, URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?skip=8386&limit=100&order=createdAt"))
+        XCTAssertEqual(request.url, URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation?skip=8386&limit=100&order=-updatedAt"))
     }
     
     func test_make_students_locations_task() {
@@ -45,6 +45,8 @@ final class UdacityClientTests: XCTestCase {
     
     func test_make_post_user_location_request() {
         let postLocationRequest = UdacityClient.makePostUserLocationRequest(
+            firstName: "Ann",
+            lastName: "Ann",
             location: "Kiev",
             link: "",
             latitude: 1.0,
@@ -60,6 +62,34 @@ final class UdacityClientTests: XCTestCase {
         let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/StudentLocation")!)
         let task = UdacityClient.makePostUserLocationTask(
             request: expectedRequest) { result in
+                
+            }
+        XCTAssertEqual(task.originalRequest, expectedRequest)
+    }
+    
+    func test_get_user_info_request() {
+        let getUserInfoRequest = UdacityClient.getUserInfoRequest(accountKey: "123456789")
+        XCTAssertEqual(getUserInfoRequest.url, URL(string: "https://onthemap-api.udacity.com/v1/users/123456789"))
+    }
+    
+    func test_get_user_info_task() {
+        let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/users/123456789")!)
+        let task = UdacityClient.getUserInfoTask(
+            request: expectedRequest){ result in
+                
+            }
+        XCTAssertEqual(task.originalRequest, expectedRequest)
+    }
+    
+    func test_make_logaout_request() {
+        let getUserInfoRequest = UdacityClient.makeLogaoutRequest()
+        XCTAssertEqual(getUserInfoRequest.url, URL(string: "https://onthemap-api.udacity.com/v1/session"))
+        XCTAssertEqual(getUserInfoRequest.httpMethod, "DELETE")
+    }
+    
+    func test_make_logaout_task() {
+        let expectedRequest = URLRequest(url: URL(string: "https://onthemap-api.udacity.com/v1/session")!)
+        let task = UdacityClient.makeLogoutTask( request: expectedRequest) { result in
                 
             }
         XCTAssertEqual(task.originalRequest, expectedRequest)
