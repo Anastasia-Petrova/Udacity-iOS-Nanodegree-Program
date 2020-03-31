@@ -15,10 +15,13 @@ final class InformationPostingViewController: UIViewController {
     let findLocationButton = UIButton()
     let mapView = MKMapView(frame: .zero)
     let submitButton = UIButton()
+    let activityIndicator = UIActivityIndicatorView()
+    let accountKey: String
     var studentLocationInfo: MKPlacemark?
     let didPostLocationCallback: () -> Void
     
-    init(callback: @escaping () -> Void) {
+    init(accountKey: String, callback: @escaping () -> Void) {
+        self.accountKey = accountKey
         didPostLocationCallback = callback
         super.init(nibName: nil, bundle: nil)
     }
@@ -29,8 +32,8 @@ final class InformationPostingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Add Location"
-        self.view.backgroundColor = .white
+        title = "Add Location"
+        view.backgroundColor = .white
         setUpNavigationBar()
         setUpInfoView()
         setUpMapView()
@@ -85,6 +88,10 @@ final class InformationPostingViewController: UIViewController {
         findLocationButton.setTitle("FIND LOCATION", for: .normal)
         findLocationButton.addTarget(self, action: #selector(findLocation), for: .touchUpInside)
         
+        activityIndicator.color = .systemBlue
+        activityIndicator.hidesWhenStopped = false
+        activityIndicator.alpha = 0
+        
         let textFieldsStackView = UIStackView(
             arrangedSubviews: [
                 locationTextField,
@@ -102,7 +109,8 @@ final class InformationPostingViewController: UIViewController {
             arrangedSubviews: [
                 imageView,
                 label,
-                textFieldsStackView
+                textFieldsStackView,
+                activityIndicator
             ]
         )
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -125,12 +133,12 @@ final class InformationPostingViewController: UIViewController {
     
     private func setUpMapView() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(mapView)
+        view.addSubview(mapView)
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            mapView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            mapView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         mapView.isHidden = true
     }
@@ -147,9 +155,9 @@ final class InformationPostingViewController: UIViewController {
         submitButton.addTarget(self, action: #selector(submit), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            submitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 50),
-            submitButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -50),
-            submitButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -50)
+            submitButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
+            submitButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+            submitButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50)
         ])
         
         submitButton.isHidden = true
@@ -161,11 +169,13 @@ final class InformationPostingViewController: UIViewController {
     }
     
     private func searchLocation() {
+        setActivityIndicatorOn(true)
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = locationTextField.text
         searchRequest.region = mapView.region
         let search = MKLocalSearch(request: searchRequest)
         search.start { (response, error) in
+            self.setActivityIndicatorOn(false)
             guard let response = response else {
                 self.presentAlert(title: "Location Not Found!", message: "Looks like your location was not found. Try another one.")
                 return
@@ -217,22 +227,29 @@ final class InformationPostingViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func setActivityIndicatorOn(_ isOn: Bool) {
+        activityIndicator.alpha = isOn ? 1 : 0
+        if isOn {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
     @objc func findLocation() {
         searchLocation()
     }
     
     @objc func cancel() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
-    @objc func submit() {
-        guard let location = studentLocationInfo,
-            let name = location.name else {
-                return
-        }
+    private func postLocation(firstName: String, lastName: String, name: String, link: String, location: MKPlacemark) {
         UdacityClient.postUserLocation(
+            firstName: firstName,
+            lastName: lastName,
             location: name,
-            link: linkTextField.text ?? "",
+            link: link,
             latitude: location.coordinate.latitude,
             longitude: location.coordinate.longitude
         ) { error in
@@ -241,9 +258,53 @@ final class InformationPostingViewController: UIViewController {
                 self.presentAlert(title: "Error", message: "Your location was not submitted")
             case .none:
                 self.didPostLocationCallback()
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
         }
-        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func submit() {
+        guard let location = studentLocationInfo,
+            let name = location.name else {
+                return
+        }
+        var firstName = ""
+        var lastName = ""
+        
+        UdacityClient.getUserInfo(accountKey: accountKey) { result in
+            switch result {
+            case .success(let responseObject):
+                firstName = responseObject.firstName
+                lastName = responseObject.lastName
+                DispatchQueue.main.async {
+                    let link = self.linkTextField.text ?? ""
+                    self.postLocation(
+                        firstName: firstName,
+                        lastName: lastName,
+                        name: name,
+                        link: link,
+                        location: location
+                    )
+                }
+            case .failure(let error):
+                let text: String?
+                switch error {
+                case let e as LocalizedError:
+                    text = e.errorDescription
+                case let e:
+                    text = e.localizedDescription
+                }
+                DispatchQueue.main.async {
+                    UIView.animate(
+                        withDuration: 0.2,
+                        animations: {
+                            self.presentAlert(title: text ?? "Error!", message: "")
+                    })
+                }
+            }
+        }
     }
 }
 
