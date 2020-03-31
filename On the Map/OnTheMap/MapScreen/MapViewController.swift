@@ -160,9 +160,26 @@ final class MapViewController: UIViewController {
             switch result {
             case .success(let responseObject):
                 self.refreshLocationsIfNeeded(responseObject.locations)
-            case .failure: break
+            case .failure:
+                self.presentAlert(title: "Error", message: "Something went wrong. Try again later.")
             }
         }
+    }
+    
+    private func presentAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: "OK",
+                style: .default,
+                handler: nil
+            )
+        )
+        present(alert, animated: true, completion: nil)
     }
     
     @objc func presentInfoViewController() {
@@ -178,7 +195,11 @@ final class MapViewController: UIViewController {
     }
     
     @objc func logoutAction() {
-        UdacityClient.logout()
+        UdacityClient.logout { error in
+            if let error = error {
+                self.presentAlert(title: "Error", message: "\(error.localizedDescription)")
+            }
+        }
         didLogoutCallback()
     }
 }
