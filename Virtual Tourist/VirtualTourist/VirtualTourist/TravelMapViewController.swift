@@ -18,6 +18,7 @@ class TravelMapViewController : UIViewController {
         super.viewDidLoad()
         setUpMapView()
         setUpLongPressGestureRecognizer()
+        mapView.delegate = self
     }
     
     private func setUpMapView() {
@@ -38,7 +39,24 @@ class TravelMapViewController : UIViewController {
     }
     
     @objc func handleLongPressGesture() {
-        
+        let location = longPressRecognizer.location(in: mapView)
+        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        mapView.addAnnotation(annotation)
     }
 }
 
+extension TravelMapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        if let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView  {
+            pinView.annotation = annotation
+            return pinView
+        } else {
+            let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView.pinTintColor = .red
+            return pinView
+        }
+    }
+}
