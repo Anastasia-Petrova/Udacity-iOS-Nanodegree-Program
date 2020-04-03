@@ -11,10 +11,13 @@ import MapKit
 
 class TravelMapViewController : UIViewController {
     let mapView = MKMapView(frame: .zero)
+    
+    lazy var longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture))
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpMapView()
+        setUpLongPressGestureRecognizer()
     }
     
     private func setUpMapView() {
@@ -26,6 +29,16 @@ class TravelMapViewController : UIViewController {
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    
+    private func setUpLongPressGestureRecognizer() {
+        longPressRecognizer.minimumPressDuration = 1.0
+        longPressRecognizer.delaysTouchesBegan = true
+        mapView.addGestureRecognizer(longPressRecognizer)
+    }
+    
+    @objc func handleLongPressGesture() {
+        
     }
 }
 
