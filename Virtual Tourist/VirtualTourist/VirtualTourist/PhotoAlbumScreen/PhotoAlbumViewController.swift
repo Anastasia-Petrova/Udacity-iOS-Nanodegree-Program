@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class PhotoAlbumViewController: UIViewController {
+final class PhotoAlbumViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
     let dataSource: AlbumCollectionDataSource
     

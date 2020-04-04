@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
+final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     let coordinate:  CLLocationCoordinate2D
     
     init(coordinate:  CLLocationCoordinate2D) {

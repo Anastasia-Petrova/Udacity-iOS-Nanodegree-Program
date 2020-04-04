@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotosCollectionCell: UICollectionViewCell {
+final class PhotosCollectionCell: UICollectionViewCell {
     static let identifier = "PhotosCollectionCell"
     
     let photoImageView = UIImageView()

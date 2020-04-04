@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class TravelMapViewController : UIViewController {
+final class TravelMapViewController : UIViewController {
     let mapView = MKMapView(frame: .zero)
     var coordinate = CLLocationCoordinate2D()
     

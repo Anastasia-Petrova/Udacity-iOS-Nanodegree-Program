@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapCollectionHeader: UICollectionViewCell {
+final class MapCollectionHeader: UICollectionViewCell {
     static let identifier = "MapCollectionHeader"
     
     let mapView = MKMapView(frame: .zero)

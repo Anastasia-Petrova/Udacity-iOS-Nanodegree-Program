@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlbumCollectionLayout: UICollectionViewFlowLayout {
+final class AlbumCollectionLayout: UICollectionViewFlowLayout {
     static let spacing: CGFloat = 4.0
     
     override init() {
