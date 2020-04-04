@@ -35,6 +35,7 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.dataSource = dataSource
         collectionView.delegate = self
         setUpCollectionView()
+        setUpAddCollectionButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -54,6 +55,26 @@ class PhotoAlbumViewController: UIViewController {
         ])
         
         collectionView.backgroundColor = .white
+    }
+    
+    private func setUpAddCollectionButton() {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        NSLayoutConstraint.activate ([
+            button.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
+        button.backgroundColor = .white
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.setTitle("New Collection", for: .normal)
+        button.addTarget(self, action: #selector(addNewCollection), for: .touchUpInside)
+    }
+    
+    @objc func addNewCollection() {
+        
     }
 }
 
