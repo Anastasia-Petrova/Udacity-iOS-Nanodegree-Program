@@ -68,7 +68,6 @@
 				6D36EA752437BD9600EC7B3D /* AppDelegate.swift */,
 				6D36EA772437BD9600EC7B3D /* SceneDelegate.swift */,
 				6D36EA792437BD9600EC7B3D /* TravelMapViewController.swift */,
-				6DB6B2C12437CEB200565C78 /* PhotoAlbumViewController.swift */,
 				6D36EA7E2437BD9B00EC7B3D /* Assets.xcassets */,
 				6D36EA802437BD9B00EC7B3D /* LaunchScreen.storyboard */,
 				6D36EA832437BD9B00EC7B3D /* Info.plist */,
@@ -82,6 +81,7 @@
 				6DB6B2C424388BC900565C78 /* AlbumCollectionDataSource.swift */,
 				6DB6B2C824388E7E00565C78 /* AlbumCollectionLayout.swift */,
 				6DB6B2C624388C7A00565C78 /* MapCollectionHeader.swift */,
+				6DB6B2C12437CEB200565C78 /* PhotoAlbumViewController.swift */,
 				6DB6B2CA243896CC00565C78 /* PhotosCollectionCell.swift */,
 			);
 			path = PhotoAlbumScreen;
