@@ -14,6 +14,7 @@
 		6D36EA822437BD9B00EC7B3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D36EA802437BD9B00EC7B3D /* LaunchScreen.storyboard */; };
 		6DB6B2C22437CEB200565C78 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6B2C12437CEB200565C78 /* PhotoAlbumViewController.swift */; };
 		6DB6B2C524388BC900565C78 /* AlbumCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6B2C424388BC900565C78 /* AlbumCollectionDataSource.swift */; };
+		6DB6B2C724388C7A00565C78 /* MapCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6B2C624388C7A00565C78 /* MapCollectionHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		6D36EA832437BD9B00EC7B3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DB6B2C12437CEB200565C78 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		6DB6B2C424388BC900565C78 /* AlbumCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionDataSource.swift; sourceTree = "<group>"; };
+		6DB6B2C624388C7A00565C78 /* MapCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCollectionHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 		6D36EA742437BD9600EC7B3D /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				6DB6B2C324388B5400565C78 /* PhotoAlbumScreen */,
 				6D36EA752437BD9600EC7B3D /* AppDelegate.swift */,
 				6D36EA772437BD9600EC7B3D /* SceneDelegate.swift */,
 				6D36EA792437BD9600EC7B3D /* TravelMapViewController.swift */,
@@ -73,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				6DB6B2C424388BC900565C78 /* AlbumCollectionDataSource.swift */,
+				6DB6B2C624388C7A00565C78 /* MapCollectionHeader.swift */,
 			);
 			path = PhotoAlbumScreen;
 			sourceTree = "<group>";
@@ -150,6 +154,7 @@
 				6D36EA7A2437BD9600EC7B3D /* TravelMapViewController.swift in Sources */,
 				6D36EA762437BD9600EC7B3D /* AppDelegate.swift in Sources */,
 				6D36EA782437BD9600EC7B3D /* SceneDelegate.swift in Sources */,
+				6DB6B2C724388C7A00565C78 /* MapCollectionHeader.swift in Sources */,
 				6DB6B2C22437CEB200565C78 /* PhotoAlbumViewController.swift in Sources */,
 				6DB6B2C524388BC900565C78 /* AlbumCollectionDataSource.swift in Sources */,
 			);
