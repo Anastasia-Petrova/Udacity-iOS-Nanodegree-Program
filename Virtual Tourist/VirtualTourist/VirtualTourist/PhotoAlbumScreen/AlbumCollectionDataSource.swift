@@ -7,16 +7,29 @@
 //
 
 import UIKit
+import MapKit
 
 class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
+    let coordinate:  CLLocationCoordinate2D
+    
+    init(coordinate:  CLLocationCoordinate2D) {
+        self.coordinate = coordinate
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 12
+        return 15
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "MapCollectionHeader", for: indexPath)
+               if let mapHeaderView = headerView as? MapCollectionHeader {
+                let mapView = mapHeaderView.mapView
+                mapView.delegate = self
+                mapView.addAnnotation(setUpMapAnnotations(at: coordinate))
+                mapView.setRegion(setUpZoomArea(coordinate), animated: true)
+               }
                return headerView
 
         default:  fatalError("Unexpected element kind")
@@ -28,4 +41,33 @@ class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
         cell.photoImageView.image = UIImage(named: "launchScreen")
         return cell
     }
+}
+
+extension AlbumCollectionDataSource: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        if let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView  {
+            pinView.annotation = annotation
+            return pinView
+        } else {
+            let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView.pinTintColor = .red
+            return pinView
+        }
+    }
+     
+    private func setUpMapAnnotations(at
+        coordinate: CLLocationCoordinate2D) ->  MKPointAnnotation {
+         let annotation = MKPointAnnotation()
+         annotation.coordinate = coordinate
+         return annotation
+     }
+     
+     private func setUpZoomArea(_ coordinate: CLLocationCoordinate2D) ->  MKCoordinateRegion {
+         let span = MKCoordinateSpan(
+             latitudeDelta: 0.5,
+             longitudeDelta: 0.5
+         )
+         return MKCoordinateRegion(center: coordinate, span: span)
+     }
 }
