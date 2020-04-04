@@ -7,11 +7,21 @@
 //
 
 import UIKit
+import MapKit
 
 class PhotoAlbumViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
-    let dataSource = AlbumCollectionDataSource()
-
+    let dataSource: AlbumCollectionDataSource
+    
+    init(coordinate:  CLLocationCoordinate2D) {
+        self.dataSource = AlbumCollectionDataSource(coordinate: coordinate)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = false

@@ -11,6 +11,7 @@ import MapKit
 
 class TravelMapViewController : UIViewController {
     let mapView = MKMapView(frame: .zero)
+    var coordinate = CLLocationCoordinate2D()
     
     lazy var longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture))
 
@@ -45,7 +46,7 @@ class TravelMapViewController : UIViewController {
     
     @objc func handleLongPressGesture() {
         let location = longPressRecognizer.location(in: mapView)
-        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         mapView.addAnnotation(annotation)
@@ -66,6 +67,6 @@ extension TravelMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        navigationController?.pushViewController(PhotoAlbumViewController(), animated: true)
+        navigationController?.pushViewController(PhotoAlbumViewController(coordinate: coordinate), animated: true)
     }
 }
