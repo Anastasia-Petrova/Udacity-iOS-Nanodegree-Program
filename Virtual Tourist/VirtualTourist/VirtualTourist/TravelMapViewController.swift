@@ -21,6 +21,11 @@ class TravelMapViewController : UIViewController {
         mapView.delegate = self
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     private func setUpMapView() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
@@ -58,5 +63,9 @@ extension TravelMapViewController: MKMapViewDelegate {
             pinView.pinTintColor = .red
             return pinView
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        navigationController?.pushViewController(PhotoAlbumViewController(), animated: true)
     }
 }
