@@ -13,13 +13,20 @@ final class FlickrPhoto: Equatable {
     static func ==(lhs: FlickrPhoto, rhs: FlickrPhoto) -> Bool {
         return lhs.id == rhs.id
     }
+    var didLoadImage: ((String) -> Void)?
     
-    var image: UIImage?
+    var image: UIImage? {
+        didSet {
+            if image != nil {
+                didLoadImage?(id)
+            }
+        }
+    }
+    
     let farm: Int
     let server: String
     let id: String
     let secret: String
-    
     
     init (farm: Int, server: String,  id: String, secret: String) {
         self.farm = farm
@@ -41,10 +48,10 @@ final class FlickrPhoto: Equatable {
         case taskError
     }
     
-    func loadImage(_ completion: @escaping (Result<FlickrPhoto, Error>) -> Void) {
+    func loadImage(_ completion: @escaping (Error?) -> Void) {
         guard let loadURL = flickrImageURL() else {
             DispatchQueue.main.async {
-                completion(Result.failure(Error.invalidURL))
+                completion(Error.invalidURL)
             }
             return
         }
@@ -54,14 +61,14 @@ final class FlickrPhoto: Equatable {
         let task = URLSession.shared.dataTask(with: loadRequest) { (data, response, error) in
             if error != nil {
                 DispatchQueue.main.async {
-                    completion(Result.failure(Error.taskError))
+                    completion(Error.taskError)
                 }
                 return
             }
             
             guard let data = data else {
                 DispatchQueue.main.async {
-                    completion(Result.failure(Error.noData))
+                    completion(Error.noData)
                 }
                 return
             }
@@ -69,7 +76,7 @@ final class FlickrPhoto: Equatable {
             let returnedImage = UIImage(data: data)
             self.image = returnedImage
             DispatchQueue.main.async {
-                completion(Result.success(self))
+                completion(nil)
             }
         }
         task.resume()

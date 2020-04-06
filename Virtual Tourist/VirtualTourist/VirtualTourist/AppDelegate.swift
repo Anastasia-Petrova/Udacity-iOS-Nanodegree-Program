@@ -7,14 +7,24 @@
 //
 
 import UIKit
+import EasyCoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let dataController = DataController(modelName: "VirtualTourist")
-
+    let controller = CoreDataController<Pin, PinViewModel>(entityName: "Pin")
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         dataController.load()
+        controller.fetch()
+        let pin = Pin(context: CoreDataStack.instance.context)
+        pin.longitude = 30.0
+        pin.latitude = 22.0
+        pin.page = 1
+        controller.add(model: pin)
+        let item = controller.getItem(at: IndexPath(item: 0, section: 0))
+        
         return true
     }
 
@@ -23,3 +33,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+struct PinViewModel: CoreDataMappable {
+    let latitude: Double
+    let longitude: Double
+    let page: Int16
+    
+    init(model: Pin) {
+        latitude = model.latitude
+        longitude = model.longitude
+        page = model.page
+    }
+}

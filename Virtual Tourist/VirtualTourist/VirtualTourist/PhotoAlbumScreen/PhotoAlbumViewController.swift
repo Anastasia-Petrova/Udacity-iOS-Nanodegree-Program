@@ -13,13 +13,11 @@ final class PhotoAlbumViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
     let dataSource: AlbumCollectionDataSource
     let coordinate:  CLLocationCoordinate2D
-    let photos: [FlickrPhoto]
     var page = 1
     
     init(coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
         self.coordinate = coordinate
-        self.photos = photos
-        self.dataSource = AlbumCollectionDataSource(coordinate: coordinate, photos: photos)
+        self.dataSource = AlbumCollectionDataSource(collectionView: collectionView, coordinate: coordinate, photos: photos)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,6 +39,7 @@ final class PhotoAlbumViewController: UIViewController {
         collectionView.delegate = self
         setUpCollectionView()
         setUpAddCollectionButton()
+        dataSource.startImageDownload()
     }
     
     override func viewDidLayoutSubviews() {

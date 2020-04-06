@@ -10,13 +10,28 @@ import UIKit
 import MapKit
 
 final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
+    weak var collectionView: UICollectionView?
+    
     let coordinate:  CLLocationCoordinate2D
     var photos: [FlickrPhoto]
+    
     var images: [UIImage] { photos.compactMap { $0.image }}
     
-    init(coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
+    init(collectionView: UICollectionView, coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
+        self.collectionView = collectionView
         self.coordinate = coordinate
         self.photos = photos
+    }
+    
+    func startImageDownload() {
+        photos.forEach {
+            $0.didLoadImage = { [weak self] _ in
+                DispatchQueue.main.async {
+                    self?.collectionView?.reloadData()
+                }
+            }
+            $0.loadImage { _ in }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -73,4 +88,5 @@ extension AlbumCollectionDataSource: MKMapViewDelegate {
          )
          return MKCoordinateRegion(center: coordinate, span: span)
      }
+    
 }
