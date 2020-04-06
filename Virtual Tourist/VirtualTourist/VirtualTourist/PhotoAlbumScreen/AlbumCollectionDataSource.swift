@@ -11,12 +11,12 @@ import MapKit
 
 final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     let coordinate:  CLLocationCoordinate2D
-//    var photos: [FlickrPhoto]
-    var images: [UIImage] //{ photos.compactMap { $0.image }}
+    var photos: [FlickrPhoto]
+    var images: [UIImage] { photos.compactMap { $0.image }}
     
-    init(coordinate:  CLLocationCoordinate2D, images: [UIImage]) {
+    init(coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
         self.coordinate = coordinate
-        self.images = images
+        self.photos = photos
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

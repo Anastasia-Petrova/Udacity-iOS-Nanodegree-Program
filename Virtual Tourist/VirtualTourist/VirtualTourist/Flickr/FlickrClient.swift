@@ -15,16 +15,17 @@ final class FlickrClient {
     enum Endpoints {
         static let base = "https://api.flickr.com/services/rest/?method="
         
-        case getPhotosForLocation(String, String)
+        case getPhotosForLocation(lat: String, lon: String, page: Int)
         
         var stringValue: String {
             switch self {
-            case .getPhotosForLocation(let latitude, let longitude):
+            case .getPhotosForLocation(let latitude, let longitude, let page):
                 return Endpoints.base
                     + "flickr.photos.search"
                     + "&api_key=\(FlickrClient.flickrKey)"
                     + "&lat=\(latitude)&lon=\(longitude)"
-                    + "&per_page=15&format=json&nojsoncallback=1"
+                    + "&page=\(page)&per_page=15"
+                    + "&format=json&nojsoncallback=1"
             }
         }
     }
@@ -38,9 +39,10 @@ final class FlickrClient {
     class func getPhotos(
         latitude: String,
         longitude: String,
+        page: Int,
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
     ) {
-        guard let url = URL(string: Endpoints.getPhotosForLocation(latitude, longitude).stringValue) else {
+        guard let url = URL(string: Endpoints.getPhotosForLocation(lat: latitude, lon: longitude, page: page).stringValue) else {
             completion(Result.failure(Error.unknownAPIResponse))
             return
         }

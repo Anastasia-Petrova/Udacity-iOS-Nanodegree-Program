@@ -13,12 +13,13 @@ final class PhotoAlbumViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
     let dataSource: AlbumCollectionDataSource
     let coordinate:  CLLocationCoordinate2D
-    let images: [UIImage]
+    let photos: [FlickrPhoto]
+    var page = 1
     
-    init(coordinate:  CLLocationCoordinate2D, images: [UIImage]) {
+    init(coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
         self.coordinate = coordinate
-        self.images = images
-        self.dataSource = AlbumCollectionDataSource(coordinate: coordinate, images: images)
+        self.photos = photos
+        self.dataSource = AlbumCollectionDataSource(coordinate: coordinate, photos: photos)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -78,13 +79,18 @@ final class PhotoAlbumViewController: UIViewController {
     }
     
     @objc func addNewCollection() {
-        FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)") { result in
+        page += 1
+        FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)", page: page) { result in
             switch result {
             case .success(let photos):
-                
-                self.dataSource.images = photos.searchResults.compactMap { $0.image }
-                self.collectionView.reloadData()
                 print("SUUCCEESSS!!!!!!")
+                if self.dataSource.photos == photos.searchResults {
+                    print("SAAAMEEE PHOOOTOOOS!!!!!")
+                } else {
+                    print("DIFFERENT PHOOOTOOOS!!!!!")
+                }
+                self.dataSource.photos = photos.searchResults
+                self.collectionView.reloadData()
             case .failure:
                 print("EEEERRRROOOOOOORRRRR!!!!!!")
             }
