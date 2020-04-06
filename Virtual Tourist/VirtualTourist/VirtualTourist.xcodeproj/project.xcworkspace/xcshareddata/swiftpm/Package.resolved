@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "EasyCoreData",
+        "repositoryURL": "https://github.com/Anastasia-Petrova/EasyCoreData",
+        "state": {
+          "branch": null,
+          "revision": "4b40649d3182d6f0b71d9eae75d96dfec079fe57",
+          "version": "0.2.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

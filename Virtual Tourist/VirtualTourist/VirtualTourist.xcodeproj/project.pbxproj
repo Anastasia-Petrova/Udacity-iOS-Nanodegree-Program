@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,7 @@
 		6D99402E243A81E700430D2C /* FlickrSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D99402D243A81E700430D2C /* FlickrSearchResults.swift */; };
 		6D994031243B6AFE00430D2C /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6D99402F243B6AFE00430D2C /* VirtualTourist.xcdatamodeld */; };
 		6D994033243B838000430D2C /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D994032243B838000430D2C /* DataController.swift */; };
+		6D994036243BBF0F00430D2C /* EasyCoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 6D994035243BBF0F00430D2C /* EasyCoreData */; };
 		6DB6B2C22437CEB200565C78 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6B2C12437CEB200565C78 /* PhotoAlbumViewController.swift */; };
 		6DB6B2C524388BC900565C78 /* AlbumCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6B2C424388BC900565C78 /* AlbumCollectionDataSource.swift */; };
 		6DB6B2C724388C7A00565C78 /* MapCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6B2C624388C7A00565C78 /* MapCollectionHeader.swift */; };
@@ -51,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D994036243BBF0F00430D2C /* EasyCoreData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +131,9 @@
 			dependencies = (
 			);
 			name = VirtualTourist;
+			packageProductDependencies = (
+				6D994035243BBF0F00430D2C /* EasyCoreData */,
+			);
 			productName = VirtualTourist;
 			productReference = 6D36EA722437BD9600EC7B3D /* VirtualTourist.app */;
 			productType = "com.apple.product-type.application";
@@ -157,6 +162,9 @@
 				Base,
 			);
 			mainGroup = 6D36EA692437BD9600EC7B3D;
+			packageReferences = (
+				6D994034243BBF0F00430D2C /* XCRemoteSwiftPackageReference "EasyCoreData" */,
+			);
 			productRefGroup = 6D36EA732437BD9600EC7B3D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -386,6 +394,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6D994034243BBF0F00430D2C /* XCRemoteSwiftPackageReference "EasyCoreData" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Anastasia-Petrova/EasyCoreData";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6D994035243BBF0F00430D2C /* EasyCoreData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D994034243BBF0F00430D2C /* XCRemoteSwiftPackageReference "EasyCoreData" */;
+			productName = EasyCoreData;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		6D99402F243B6AFE00430D2C /* VirtualTourist.xcdatamodeld */ = {
