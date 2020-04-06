@@ -12,6 +12,7 @@ import MapKit
 final class TravelMapViewController : UIViewController {
     let mapView = MKMapView(frame: .zero)
     var coordinate = CLLocationCoordinate2D()
+    var images: [UIImage] = []
     
     lazy var longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture))
 
@@ -50,6 +51,17 @@ final class TravelMapViewController : UIViewController {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         mapView.addAnnotation(annotation)
+        FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)") { result in
+            switch result {
+            case .success(let photos):
+                self.images = photos.searchResults.compactMap { result in
+                    return result.image
+                }
+            case .failure:
+                print("EEEERRRROOOOOOORRRRR!!!!!!")
+            }
+        }
+
     }
 }
 
@@ -67,6 +79,6 @@ extension TravelMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        navigationController?.pushViewController(PhotoAlbumViewController(coordinate: coordinate), animated: true)
+        navigationController?.pushViewController(PhotoAlbumViewController(coordinate: coordinate, images: images), animated: true)
     }
 }

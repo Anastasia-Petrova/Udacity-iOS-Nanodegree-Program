@@ -11,13 +11,16 @@ import MapKit
 
 final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     let coordinate:  CLLocationCoordinate2D
+//    var photos: [FlickrPhoto]
+    var images: [UIImage] //{ photos.compactMap { $0.image }}
     
-    init(coordinate:  CLLocationCoordinate2D) {
+    init(coordinate:  CLLocationCoordinate2D, images: [UIImage]) {
         self.coordinate = coordinate
+        self.images = images
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+        return images.count
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -38,7 +41,7 @@ final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionCell.identifier, for: indexPath) as! PhotosCollectionCell
-        cell.photoImageView.image = UIImage(named: "launchScreen")
+        cell.photoImageView.image = images[indexPath.row]
         return cell
     }
 }

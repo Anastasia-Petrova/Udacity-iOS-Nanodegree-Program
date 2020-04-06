@@ -12,9 +12,13 @@ import MapKit
 final class PhotoAlbumViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
     let dataSource: AlbumCollectionDataSource
+    let coordinate:  CLLocationCoordinate2D
+    let images: [UIImage]
     
-    init(coordinate:  CLLocationCoordinate2D) {
-        self.dataSource = AlbumCollectionDataSource(coordinate: coordinate)
+    init(coordinate:  CLLocationCoordinate2D, images: [UIImage]) {
+        self.coordinate = coordinate
+        self.images = images
+        self.dataSource = AlbumCollectionDataSource(coordinate: coordinate, images: images)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -74,7 +78,17 @@ final class PhotoAlbumViewController: UIViewController {
     }
     
     @objc func addNewCollection() {
-        
+        FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)") { result in
+            switch result {
+            case .success(let photos):
+                
+                self.dataSource.images = photos.searchResults.compactMap { $0.image }
+                self.collectionView.reloadData()
+                print("SUUCCEESSS!!!!!!")
+            case .failure:
+                print("EEEERRRROOOOOOORRRRR!!!!!!")
+            }
+        }
     }
 }
 

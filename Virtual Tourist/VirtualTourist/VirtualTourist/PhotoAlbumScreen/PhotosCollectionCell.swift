@@ -24,6 +24,8 @@ final class PhotosCollectionCell: UICollectionViewCell {
             photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         
+        photoImageView.image = UIImage(named: "udacity")?.withRenderingMode(.alwaysTemplate)
+        photoImageView.tintColor = .lightGray
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
     }
