@@ -36,21 +36,17 @@ final class FlickrClient {
         case taskError
     }
     
-    class func getPhotos(
-        latitude: String,
-        longitude: String,
-        page: Int,
+    class func makegetPhotosRequest(latitude: String, longitude: String, page: Int) -> URLRequest {
+         let url = URL(string: Endpoints.getPhotosForLocation(lat: latitude, lon: longitude, page: page).stringValue)!
+        return URLRequest(url: url)
+    }
+    
+    class func makegetPhotosTask(
+        session: URLSession = .shared,
+        request: URLRequest,
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
-    ) {
-        guard let url = URL(string: Endpoints.getPhotosForLocation(lat: latitude, lon: longitude, page: page).stringValue) else {
-            completion(Result.failure(Error.unknownAPIResponse))
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
+    ) -> URLSessionDataTask {
+        return session.dataTask(with: request) { (data, response, error) in
             if error != nil {
                 DispatchQueue.main.async {
                     completion(Result.failure(Error.taskError))
@@ -138,6 +134,20 @@ final class FlickrClient {
                print("\(error)")
             }
         }
+    }
+    
+    class func getPhotos(
+        latitude: String,
+        longitude: String,
+        page: Int,
+        completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
+    ) {
+        
+        let request = makegetPhotosRequest(latitude: latitude, longitude: longitude, page: page)
+        
+        let task = makegetPhotosTask(
+            request: request,
+            completion: completion)
         task.resume()
     }
 }
