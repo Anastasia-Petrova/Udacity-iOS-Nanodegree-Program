@@ -13,6 +13,11 @@ final class PhotosCollectionCell: UICollectionViewCell {
     
     let photoImageView = UIImageView()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        photoImageView.image = nil
+    }
+    
     override init(frame: CGRect) {
     super.init(frame: frame)
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -24,7 +29,6 @@ final class PhotosCollectionCell: UICollectionViewCell {
             photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         
-        photoImageView.image = UIImage(named: "udacity")?.withRenderingMode(.alwaysTemplate)
         photoImageView.tintColor = .lightGray
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true

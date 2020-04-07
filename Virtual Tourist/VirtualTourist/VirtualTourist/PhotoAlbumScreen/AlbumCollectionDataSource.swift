@@ -19,8 +19,6 @@ final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
         }
     }
     
-    var images: [UIImage] { photos.compactMap { $0.image }}
-    
     init(collectionView: UICollectionView, coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
         self.collectionView = collectionView
         self.coordinate = coordinate
@@ -39,7 +37,7 @@ final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return photos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -60,7 +58,14 @@ final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionCell.identifier, for: indexPath) as! PhotosCollectionCell
-        cell.photoImageView.image = images[indexPath.row]
+        let photo = photos[indexPath.row]
+        let cellImage: UIImage
+        if let image = photo.image {
+            cellImage = image
+        } else {
+            cellImage = UIImage(named: "placeholder")!.withRenderingMode(.alwaysTemplate)
+        }
+        cell.photoImageView.image = cellImage
         return cell
     }
 }
