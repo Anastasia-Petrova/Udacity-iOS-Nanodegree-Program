@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 
 final class PhotoAlbumViewController: UIViewController {
+    let activityIndicator = UIActivityIndicatorView()
+    let addNewCollectionButton = UIButton()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
     let dataSource: AlbumCollectionDataSource
     let coordinate:  CLLocationCoordinate2D
@@ -62,22 +64,38 @@ final class PhotoAlbumViewController: UIViewController {
     }
     
     private func setUpAddCollectionButton() {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(button)
+        let stackView = UIStackView(arrangedSubviews: [addNewCollectionButton, activityIndicator])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        view.addSubview(stackView)
+        
         NSLayoutConstraint.activate ([
-            button.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            stackView.heightAnchor.constraint(equalToConstant: 50)
         ])
-        button.backgroundColor = .white
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.setTitle("New Collection", for: .normal)
-        button.addTarget(self, action: #selector(addNewCollection), for: .touchUpInside)
+        addNewCollectionButton.backgroundColor = .white
+        addNewCollectionButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        addNewCollectionButton.setTitleColor(.systemBlue, for: .normal)
+        addNewCollectionButton.setTitle("New Collection", for: .normal)
+        addNewCollectionButton.addTarget(self, action: #selector(addNewCollection), for: .touchUpInside)
+        
+        activityIndicator.color = .systemBlue
+        activityIndicator.hidesWhenStopped = true
+    }
+    
+    private func setActivityIndicatorOn(_ isOn: Bool) {
+        addNewCollectionButton.isHidden = isOn
+        if isOn {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
     }
     
     @objc func addNewCollection() {
+        setActivityIndicatorOn(true)
         page += 1
         FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)", page: page) { result in
             switch result {
@@ -90,9 +108,11 @@ final class PhotoAlbumViewController: UIViewController {
                 }
                 self.dataSource.photos = photos.searchResults
                 self.collectionView.reloadData()
+                
             case .failure:
                 print("EEEERRRROOOOOOORRRRR!!!!!!")
             }
+            self.setActivityIndicatorOn(false)
         }
     }
 }
