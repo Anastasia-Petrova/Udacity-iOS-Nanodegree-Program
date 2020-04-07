@@ -13,7 +13,11 @@ final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     weak var collectionView: UICollectionView?
     
     let coordinate:  CLLocationCoordinate2D
-    var photos: [FlickrPhoto]
+    var photos: [FlickrPhoto] {
+        didSet {
+            startImageDownload()
+        }
+    }
     
     var images: [UIImage] { photos.compactMap { $0.image }}
     
