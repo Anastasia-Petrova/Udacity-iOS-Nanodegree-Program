@@ -64,18 +64,16 @@ final class PhotoAlbumViewController: UIViewController {
     }
     
     private func setUpAddCollectionButton() {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .white
+        view.addSubview(containerView)
+        
         let stackView = UIStackView(arrangedSubviews: [addNewCollectionButton, activityIndicator])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
-        view.addSubview(stackView)
+        containerView.addSubview(stackView)
         
-        NSLayoutConstraint.activate ([
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        addNewCollectionButton.backgroundColor = .white
         addNewCollectionButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         addNewCollectionButton.setTitleColor(.systemBlue, for: .normal)
         addNewCollectionButton.setTitle("New Collection", for: .normal)
@@ -83,6 +81,17 @@ final class PhotoAlbumViewController: UIViewController {
         
         activityIndicator.color = .systemBlue
         activityIndicator.hidesWhenStopped = true
+        
+        NSLayoutConstraint.activate ([
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 50),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor)
+        ])
     }
     
     private func setActivityIndicatorOn(_ isOn: Bool) {
