@@ -36,12 +36,12 @@ final class FlickrClient {
         case taskError
     }
     
-    class func makegetPhotosRequest(latitude: String, longitude: String, page: Int) -> URLRequest {
+    class func makeGetPhotosRequest(latitude: String, longitude: String, page: Int) -> URLRequest {
          let url = URL(string: Endpoints.getPhotosForLocation(lat: latitude, lon: longitude, page: page).stringValue)!
         return URLRequest(url: url)
     }
     
-    class func makegetPhotosTask(
+    class func makeGetPhotosTask(
         session: URLSession = .shared,
         request: URLRequest,
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
@@ -111,25 +111,12 @@ final class FlickrClient {
                         id: id,
                         secret: secret
                     )
-                    
-                    guard
-                        let url = flickrPhoto.flickrImageURL(),
-                        let imageData = try? Data(contentsOf: url as URL)
-                        else {
-                            return nil
-                    }
-                    if let image = UIImage(data: imageData) {
-                        flickrPhoto.image = image
-                        return flickrPhoto
-                    } else {
-                        return nil
-                    }
+                    return flickrPhoto
                 }
                 let searchResults = FlickrSearchResults(searchResults: flickrPhotos)
                 DispatchQueue.main.async {
                     completion(Result.success(searchResults))
                 }
-                
             } catch {
                print("\(error)")
             }
@@ -143,9 +130,9 @@ final class FlickrClient {
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
     ) {
         
-        let request = makegetPhotosRequest(latitude: latitude, longitude: longitude, page: page)
+        let request = makeGetPhotosRequest(latitude: latitude, longitude: longitude, page: page)
         
-        let task = makegetPhotosTask(
+        let task = makeGetPhotosTask(
             request: request,
             completion: completion)
         task.resume()
