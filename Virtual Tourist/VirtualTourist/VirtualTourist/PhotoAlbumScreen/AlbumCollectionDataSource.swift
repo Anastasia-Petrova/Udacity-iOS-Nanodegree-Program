@@ -80,8 +80,7 @@ final class AlbumCollectionDataSource: NSObject {
     func getPhotosUrls() {
         FlickrClient.getPhotos(
             latitude: "\(coordinate.latitude)",
-            longitude: "\(coordinate.longitude)",
-            page: 1
+            longitude: "\(coordinate.longitude)"
         ) { result in
             switch result {
             case .success(let response):

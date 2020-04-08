@@ -126,7 +126,7 @@ final class FlickrClient {
     class func getPhotos(
         latitude: String,
         longitude: String,
-        page: Int,
+        page: Int = 1,
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
     ) {
         
