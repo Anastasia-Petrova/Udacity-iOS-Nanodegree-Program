@@ -6,38 +6,144 @@
 //  Copyright © 2020 Anastasia Petrova. All rights reserved.
 //
 
-import UIKit
+import CoreData
+import EasyCoreData
 import MapKit
+import UIKit
 
-final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
-    weak var collectionView: UICollectionView?
-    
-    let coordinate:  CLLocationCoordinate2D
-    var photos: [FlickrPhoto] {
+final class AlbumCollectionDataSource: NSObject {
+    typealias Controller = CoreDataController<Photo, PhotoViewModel>
+    let controller: Controller
+    private var pandingChanges: [Controller.Change] = []
+    let pin: Pin
+    let pinID: NSManagedObjectID
+    var collectionView: UICollectionView
+    var imagesURLs: [URL] = [] {
         didSet {
             startImageDownload()
         }
     }
+//    var photoIDs: [UUID] = []
+    var loadedImages: [UIImage] = []
+    var savedImagesID: [UUID] = []
     
-    init(collectionView: UICollectionView, coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
+    let coordinate:  CLLocationCoordinate2D
+    
+    init(collectionView: UICollectionView, pinID: NSManagedObjectID) {
         self.collectionView = collectionView
-        self.coordinate = coordinate
-        self.photos = photos
+        self.pinID = pinID
+        pin = try! CoreDataStack.instance.context.existingObject(with: pinID) as! Pin
+        coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+        let predicate = NSPredicate(format: "%K == %@",
+                                    #keyPath(Photo.pin), pin)
+        controller = Controller(
+            entityName: "Photo",
+            predicate: predicate
+        )
+        super.init()
+        
+        controller.beginUpdate = { [weak self] in
+            self?.pandingChanges.removeAll()
+        }
+        controller.endUpdate = { [weak self] in
+            guard let self = self else { return }
+            collectionView.performBatchUpdates({
+                self.pandingChanges.forEach {
+                    switch $0.type {
+                    case let .row(rowChange):
+                        switch rowChange {
+                        case let .delete(indexPath):
+                            self.collectionView.deleteItems(at: [indexPath])
+                        case let .insert(indexPath):
+                            self.collectionView.insertItems(at: [indexPath])
+                        case let  .move(fromIndexPath, toIndexPath):
+                            self.collectionView.moveItem(at: fromIndexPath, to: toIndexPath)
+                        case let .update(indexPath):
+                            self.collectionView.reloadItems(at: [indexPath])
+                        case let .error(error):
+                            print(error)
+                        }
+                    case .section: break
+                    }
+                }
+            }, completion: nil)
+        }
+        controller.changeCallback = { [weak self] change in
+            self?.pandingChanges.append(change)
+        }
+        controller.fetch()
     }
     
-    func startImageDownload() {
-        photos.forEach {
-            $0.didLoadImage = { [weak self] _ in
+    func getPhotosUrls() {
+        FlickrClient.getPhotos(
+            latitude: "\(coordinate.latitude)",
+            longitude: "\(coordinate.longitude)",
+            page: 1
+        ) { result in
+            switch result {
+            case .success(let response):
                 DispatchQueue.main.async {
-                    self?.collectionView?.reloadData()
+                    response
+                        .searchResults
+                        .map {
+                            let photo = Photo()
+                            photo.url = $0.flickrImageURL()
+                            return photo
+                        }
+                        .forEach { (photo: Photo) in
+                            CoreDataStack.instance.context.insert(photo)
+                            photo.pin = self.pin
+                        }
+                    CoreDataStack.instance.saveContext()
                 }
+            case .failure:
+                print("EEEERRRROOOOOOORRRRR!!!!!!")
             }
-            $0.loadImage { _ in }
         }
     }
     
+    func startImageDownload() {
+        imagesURLs.forEach { url in
+            loadImage(url: url) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case let .success(image):
+                        self.loadedImages.append(image)
+                    case .failure: break
+                    }
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+    
+//    func saveImageOnDisk(image: UIImage) {
+//        let id = UUID()
+//        try! ImageStore.saveImage(image: image, id: id)
+//        savedImagesID.append(id)
+//        let photo = Photo(context: CoreDataStack.instance.context)
+////        photo.id = id
+//        photo.pin = pin
+//        CoreDataStack.instance.saveContext()
+//    }
+
+    func loadImageFromDisk() {
+        
+    }
+    
+    func deletePhoto(at indexPath: IndexPath) {
+        controller.deleteItems(at: [indexPath])
+        collectionView.reloadData()
+    }
+}
+
+extension AlbumCollectionDataSource: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return controller.numberOfSections()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        return controller.numberOfItems(in: section)
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -58,13 +164,14 @@ final class AlbumCollectionDataSource: NSObject, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionCell.identifier, for: indexPath) as! PhotosCollectionCell
-        let photo = photos[indexPath.row]
-        let cellImage: UIImage
-        if let image = photo.image {
-            cellImage = image
-        } else {
+//        let key = Array(photos.keys)[indexPath.row]
+        
+        let cellImage: UIImage?
+//        if let image = photos[key] {
+//            cellImage = image
+//        } else {
             cellImage = UIImage(named: "placeholder")!.withRenderingMode(.alwaysTemplate)
-        }
+//        }
         cell.photoImageView.image = cellImage
         return cell
     }
@@ -82,20 +189,58 @@ extension AlbumCollectionDataSource: MKMapViewDelegate {
             return pinView
         }
     }
-     
+    
     private func setUpMapAnnotations(at
         coordinate: CLLocationCoordinate2D) ->  MKPointAnnotation {
-         let annotation = MKPointAnnotation()
-         annotation.coordinate = coordinate
-         return annotation
-     }
-     
-     private func setUpZoomArea(_ coordinate: CLLocationCoordinate2D) ->  MKCoordinateRegion {
-         let span = MKCoordinateSpan(
-             latitudeDelta: 0.5,
-             longitudeDelta: 0.5
-         )
-         return MKCoordinateRegion(center: coordinate, span: span)
-     }
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        return annotation
+    }
     
+    private func setUpZoomArea(_ coordinate: CLLocationCoordinate2D) ->  MKCoordinateRegion {
+        let span = MKCoordinateSpan(
+            latitudeDelta: 0.5,
+            longitudeDelta: 0.5
+        )
+        return MKCoordinateRegion(center: coordinate, span: span)
+    }
+    
+    private func loadImage(url: URL, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        let loadRequest = URLRequest(url: url)
+        
+        let task = URLSession.shared.dataTask(with: loadRequest) { (data, response, error) in
+            if error != nil {
+                DispatchQueue.main.async {
+                    completion(.failure(Error.taskError))
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(Error.noData))
+                }
+                return
+            }
+            
+            let image = UIImage(data: data)
+            
+            DispatchQueue.main.async {
+                if let image = image {
+                    completion(.success(image))
+                } else {
+                    completion(.failure(Error.badData))
+                }
+            }
+        }
+        task.resume()
+    }
+}
+
+extension AlbumCollectionDataSource {
+    enum Error: Swift.Error {
+        case badData
+        case noData
+        case taskError
+    }
 }

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Anastasia Petrova. All rights reserved.
 //
 
+import CoreData
 import UIKit
 import MapKit
 
@@ -17,9 +18,12 @@ final class PhotoAlbumViewController: UIViewController {
     let coordinate:  CLLocationCoordinate2D
     var page = 1
     
-    init(coordinate:  CLLocationCoordinate2D, photos: [FlickrPhoto]) {
+    init(coordinate:  CLLocationCoordinate2D, pinID: NSManagedObjectID) {
         self.coordinate = coordinate
-        self.dataSource = AlbumCollectionDataSource(collectionView: collectionView, coordinate: coordinate, photos: photos)
+        self.dataSource = AlbumCollectionDataSource(
+            collectionView: collectionView,
+            pinID: pinID
+        )
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,7 +45,8 @@ final class PhotoAlbumViewController: UIViewController {
         collectionView.delegate = self
         setUpCollectionView()
         setUpAddCollectionButton()
-        dataSource.startImageDownload()
+        dataSource.getPhotosUrls()
+//        dataSource.startImageDownload()
     }
     
     override func viewDidLayoutSubviews() {
@@ -109,13 +114,9 @@ final class PhotoAlbumViewController: UIViewController {
         FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)", page: page) { result in
             switch result {
             case .success(let photos):
-                print("SUUCCEESSS!!!!!!")
-                if self.dataSource.photos == photos.searchResults {
-                    print("SAAAMEEE PHOOOTOOOS!!!!!")
-                } else {
-                    print("DIFFERENT PHOOOTOOOS!!!!!")
-                }
-                self.dataSource.photos = photos.searchResults
+//                self.dataSource.photos = photos.searchResults.reduce(into: [:], { (dic, photo) in
+//                    dic[photo.flickrImageURL()!] = nil
+//                })
                 self.collectionView.reloadData()
                 
             case .failure:
