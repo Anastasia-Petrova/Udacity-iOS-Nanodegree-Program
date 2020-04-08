@@ -36,8 +36,9 @@ final class FlickrClient {
         case taskError
     }
     
-    class func makeGetPhotosRequest(latitude: String, longitude: String, page: Int) -> URLRequest {
-         let url = URL(string: Endpoints.getPhotosForLocation(lat: latitude, lon: longitude, page: page).stringValue)!
+    class func makeGetPhotosRequest(latitude: String, longitude: String) -> URLRequest {
+        let page = Int.random(in: 1..<30)
+        let url = URL(string: Endpoints.getPhotosForLocation(lat: latitude, lon: longitude, page: page).stringValue)!
         return URLRequest(url: url)
     }
     
@@ -126,11 +127,10 @@ final class FlickrClient {
     class func getPhotos(
         latitude: String,
         longitude: String,
-        page: Int = 1,
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
     ) {
         
-        let request = makeGetPhotosRequest(latitude: latitude, longitude: longitude, page: page)
+        let request = makeGetPhotosRequest(latitude: latitude, longitude: longitude)
         
         let task = makeGetPhotosTask(
             request: request,

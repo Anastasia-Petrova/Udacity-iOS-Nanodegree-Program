@@ -72,11 +72,10 @@ final class TravelMapViewController : UIViewController {
         return annotation
     }
     
-    private func savePin(latitude: Double, longitude: Double, page: Int) {
+    private func savePin(latitude: Double, longitude: Double) {
         let pin = Pin()
         pin.latitude = latitude
         pin.longitude = longitude
-        pin.page = Int16(page)
         controller.add(model: pin)
     }
     
@@ -91,7 +90,7 @@ final class TravelMapViewController : UIViewController {
         let location = longPressRecognizer.location(in: mapView)
         coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         addAnnotation(coordinate: coordinate)
-        savePin(latitude: coordinate.latitude, longitude: coordinate.longitude, page: 1)
+        savePin(latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
 }
 

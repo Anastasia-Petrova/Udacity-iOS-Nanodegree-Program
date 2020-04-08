@@ -13,13 +13,11 @@ import MapKit
 struct PinViewModel: CoreDataMappable {
     let latitude: Double
     let longitude: Double
-    let page: Int16
     let photoURLs: [URL]
     
     init(model: Pin) {
         latitude = model.latitude
         longitude = model.longitude
-        page = model.page
         if let photos = model.photos as? Set<Photo> {
             photoURLs = photos.compactMap { $0.url }
         } else {

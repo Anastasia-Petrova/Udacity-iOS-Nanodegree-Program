@@ -16,7 +16,6 @@ final class PhotoAlbumViewController: UIViewController {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: AlbumCollectionLayout())
     let dataSource: AlbumCollectionDataSource
     let coordinate:  CLLocationCoordinate2D
-    var page = 1
     
     init(coordinate:  CLLocationCoordinate2D, pinID: NSManagedObjectID) {
         self.coordinate = coordinate
@@ -108,9 +107,8 @@ final class PhotoAlbumViewController: UIViewController {
     
     @objc func addNewCollection() {
         setActivityIndicatorOn(true)
-        page = Int(dataSource.pin.page) + 1
         dataSource.deleteAllPhotos()
-        dataSource.getPhotosUrls(page: page)
+        dataSource.getPhotosUrls()
         self.setActivityIndicatorOn(false)
     }
 }
