@@ -86,17 +86,13 @@
 		6D36EA742437BD9600EC7B3D /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
-				6D99402C243A81C700430D2C /* Flickr */,
+				6D99402C243A81C700430D2C /* Flickr Service */,
+				6DE41ECA243E738F00081913 /* Map Screen */,
 				6DB6B2C324388B5400565C78 /* PhotoAlbumScreen */,
 				6D36EA752437BD9600EC7B3D /* AppDelegate.swift */,
+				6DDB8DBB243DDA030081CD3C /* ImagesStore.swift */,
 				6D36EA772437BD9600EC7B3D /* SceneDelegate.swift */,
 				6D99402F243B6AFE00430D2C /* VirtualTourist.xcdatamodeld */,
-				6D36EA792437BD9600EC7B3D /* TravelMapViewController.swift */,
-				6DDB8DB3243CB9310081CD3C /* Pin+Init.swift */,
-				6DDB8DB5243CB9DF0081CD3C /* PinViewModel.swift */,
-				6DDB8DB7243CBE7E0081CD3C /* PhotoViewModel.swift */,
-				6DDB8DBB243DDA030081CD3C /* ImagesStore.swift */,
-				6DDB8DB9243CFE850081CD3C /* Photo+Init.swift */,
 				6D36EA7E2437BD9B00EC7B3D /* Assets.xcassets */,
 				6D36EA802437BD9B00EC7B3D /* LaunchScreen.storyboard */,
 				6D36EA832437BD9B00EC7B3D /* Info.plist */,
@@ -104,7 +100,7 @@
 			path = VirtualTourist;
 			sourceTree = "<group>";
 		};
-		6D99402C243A81C700430D2C /* Flickr */ = {
+		6D99402C243A81C700430D2C /* Flickr Service */ = {
 			isa = PBXGroup;
 			children = (
 				6D08879824390F26006F7D4B /* FlickrClient.swift */,
@@ -112,12 +108,13 @@
 				6D99402D243A81E700430D2C /* FlickrSearchResults.swift */,
 				6D7854FE243A615100C888E3 /* FlickrPhotoRequest.swift */,
 			);
-			path = Flickr;
+			path = "Flickr Service";
 			sourceTree = "<group>";
 		};
 		6DB6B2C324388B5400565C78 /* PhotoAlbumScreen */ = {
 			isa = PBXGroup;
 			children = (
+				6DE41ECB243E73AF00081913 /* Photo Model */,
 				6DB6B2C424388BC900565C78 /* AlbumCollectionDataSource.swift */,
 				6DB6B2C824388E7E00565C78 /* AlbumCollectionLayout.swift */,
 				6DB6B2C624388C7A00565C78 /* MapCollectionHeader.swift */,
@@ -125,6 +122,33 @@
 				6DB6B2CA243896CC00565C78 /* PhotosCollectionCell.swift */,
 			);
 			path = PhotoAlbumScreen;
+			sourceTree = "<group>";
+		};
+		6DE41ECA243E738F00081913 /* Map Screen */ = {
+			isa = PBXGroup;
+			children = (
+				6DE41ECC243E73C700081913 /* Pin Model */,
+				6D36EA792437BD9600EC7B3D /* TravelMapViewController.swift */,
+			);
+			path = "Map Screen";
+			sourceTree = "<group>";
+		};
+		6DE41ECB243E73AF00081913 /* Photo Model */ = {
+			isa = PBXGroup;
+			children = (
+				6DDB8DB7243CBE7E0081CD3C /* PhotoViewModel.swift */,
+				6DDB8DB9243CFE850081CD3C /* Photo+Init.swift */,
+			);
+			path = "Photo Model";
+			sourceTree = "<group>";
+		};
+		6DE41ECC243E73C700081913 /* Pin Model */ = {
+			isa = PBXGroup;
+			children = (
+				6DDB8DB3243CB9310081CD3C /* Pin+Init.swift */,
+				6DDB8DB5243CB9DF0081CD3C /* PinViewModel.swift */,
+			);
+			path = "Pin Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
