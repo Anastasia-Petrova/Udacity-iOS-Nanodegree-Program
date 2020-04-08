@@ -44,7 +44,7 @@ final class TravelMapViewController : UIViewController {
     }
     
     private func setUpLongPressGestureRecognizer() {
-        longPressRecognizer.minimumPressDuration = 1.0
+        longPressRecognizer.minimumPressDuration = 0.5
         longPressRecognizer.delaysTouchesBegan = true
         mapView.addGestureRecognizer(longPressRecognizer)
     }
@@ -87,6 +87,7 @@ final class TravelMapViewController : UIViewController {
     }
     
     @objc func handleLongPressGesture() {
+        guard longPressRecognizer.state == .began else { return }
         let location = longPressRecognizer.location(in: mapView)
         coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         addAnnotation(coordinate: coordinate)
