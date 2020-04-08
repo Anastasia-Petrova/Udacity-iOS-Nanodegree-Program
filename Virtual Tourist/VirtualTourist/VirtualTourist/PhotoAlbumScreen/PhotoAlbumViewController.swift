@@ -108,20 +108,10 @@ final class PhotoAlbumViewController: UIViewController {
     
     @objc func addNewCollection() {
         setActivityIndicatorOn(true)
-        page += 1
-        FlickrClient.getPhotos(latitude: "\(coordinate.latitude)", longitude: "\(coordinate.longitude)", page: page) { result in
-            switch result {
-            case .success(let photos):
-//                self.dataSource.photos = photos.searchResults.reduce(into: [:], { (dic, photo) in
-//                    dic[photo.flickrImageURL()!] = nil
-//                })
-                self.collectionView.reloadData()
-                
-            case .failure:
-                print("EEEERRRROOOOOOORRRRR!!!!!!")
-            }
-            self.setActivityIndicatorOn(false)
-        }
+        page = Int(dataSource.pin.page) + 1
+        dataSource.deleteAllPhotos()
+        dataSource.getPhotosUrls(page: page)
+        self.setActivityIndicatorOn(false)
     }
 }
 

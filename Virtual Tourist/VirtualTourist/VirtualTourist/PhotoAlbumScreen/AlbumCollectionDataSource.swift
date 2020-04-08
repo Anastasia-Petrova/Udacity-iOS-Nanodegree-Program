@@ -20,8 +20,6 @@ final class AlbumCollectionDataSource: NSObject {
     var collectionView: UICollectionView
     var loadedImages: [URL : UIImage] = [:] {
         didSet {
-//            var set = Set(loadedImages.keys)
-//            set.subtract(Set(oldValue.keys))
             collectionView.reloadData()
         }
     }
@@ -147,6 +145,19 @@ final class AlbumCollectionDataSource: NSObject {
         try? ImageStore.deleteImage(id: id)
         controller.deleteItems(at: [indexPath])
     }
+    
+    func deleteAllPhotos() {
+        let indexPaths =
+            (0..<controller.numberOfItems(in: 0))
+            .map { IndexPath(item: $0, section: 0) }
+
+        try? indexPaths
+            .compactMap { controller.getItem(at: $0).fileID }
+            .forEach(ImageStore.deleteImage)
+
+        controller.deleteItems(at: indexPaths)
+    }
+    
 }
 
 extension AlbumCollectionDataSource: UICollectionViewDataSource {
