@@ -26,6 +26,7 @@ final class AlbumCollectionDataSource: NSObject {
     var savedImagesID: [UUID] = []
     
     let coordinate:  CLLocationCoordinate2D
+    var didFinishWithError: ((String) -> Void)?
     
     init(collectionView: UICollectionView, pinID: NSManagedObjectID) {
         self.collectionView = collectionView
@@ -96,8 +97,8 @@ final class AlbumCollectionDataSource: NSObject {
                         }
                     CoreDataStack.instance.saveContext()
                 }
-            case .failure:
-                print("EEEERRRROOOOOOORRRRR!!!!!!")
+            case .failure(let error):
+                self.didFinishWithError?(error.localizedDescription)
             }
         }
     }
@@ -108,19 +109,23 @@ final class AlbumCollectionDataSource: NSObject {
                 switch result {
                 case let .success(image):
                     self.loadedImages[url] = image
+                    guard let id = self.saveImageOnDisk(image: image)
+                        else { return }
                     self.updatePhotoURL(
-                        fileID: self.saveImageOnDisk(image: image),
+                        fileID: id,
                         indexPath: indexPath
                     )
-                case .failure: break
+                case .failure(let error):
+                    self.didFinishWithError?(error.localizedDescription)
+                    break
                 }
                 self.collectionView.reloadData()
             }
         }
     }
     
-    func saveImageOnDisk(image: UIImage) -> UUID {
-        return try! ImageStore.saveImage(image: image)
+    func saveImageOnDisk(image: UIImage) -> UUID? {
+        return ImageStore.saveImage(image: image)
     }
     
     func updatePhotoURL(fileID: UUID, indexPath: IndexPath) {

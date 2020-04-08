@@ -24,6 +24,9 @@ final class PhotoAlbumViewController: UIViewController {
             pinID: pinID
         )
         super.init(nibName: nil, bundle: nil)
+        dataSource.didFinishWithError = { error in
+            self.presentAlert(title: "Error.", message: error)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -103,6 +106,22 @@ final class PhotoAlbumViewController: UIViewController {
         } else {
             activityIndicator.stopAnimating()
         }
+    }
+    
+    private func presentAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: "OK",
+                style: .default,
+                handler: nil
+            )
+        )
+        present(alert, animated: true, completion: nil)
     }
     
     @objc func addNewCollection() {

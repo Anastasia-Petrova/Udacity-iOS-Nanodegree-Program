@@ -50,8 +50,6 @@ final class TravelMapViewController : UIViewController {
     }
     
     private func addMapAnnotationsOnMap() {
-        print("number of items: \(controller.numberOfItems(in: 0))")
-        
         (0..<controller.numberOfItems(in: 0))
             .map(toPinViewModel)
             .map(toMapAnnotation)

@@ -17,12 +17,12 @@ enum ImageStore {
         .urls(for: .documentDirectory, in: .userDomainMask)[0]
         .appendingPathComponent(imagesDirectoryName)
     
-    public static func saveImage(image: UIImage) throws -> UUID {
+    public static func saveImage(image: UIImage) -> UUID? {
         guard let imageData = image.pngData() else {
-            throw ImageStore.Error.imageNotFound
+            return nil
         }
         if !FileManager.default.fileExists(atPath: imagesDirectoryURL.path) {
-            try FileManager.default.createDirectory(
+            try? FileManager.default.createDirectory(
                 at: imagesDirectoryURL,
                 withIntermediateDirectories: true,
                 attributes: nil
@@ -30,7 +30,7 @@ enum ImageStore {
         }
         let id = UUID()
         let fileURL = imagesDirectoryURL.appendingPathComponent(id.uuidString)
-        try imageData.write(to: fileURL, options: .atomic)
+        try? imageData.write(to: fileURL, options: .atomic)
         return id
     }
     
@@ -45,22 +45,3 @@ enum ImageStore {
     }
 }
 
-extension ImageStore {
-    enum `Error`: Swift.Error {
-        case imageNotFound
-        
-        var title: String {
-            switch self {
-            case .imageNotFound:
-                return "Image Not Found"
-            }
-        }
-        
-        var localizedDescription: String {
-            switch self {
-            case .imageNotFound:
-                return "Looks like your image is empty. Try another one."
-            }
-        }
-    }
-}

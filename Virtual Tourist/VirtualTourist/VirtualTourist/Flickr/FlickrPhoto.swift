@@ -42,16 +42,23 @@ final class FlickrPhoto: Equatable {
         return nil
     }
     
-    enum Error: Swift.Error {
-        case invalidURL
+    enum NetworkError: LocalizedError {
         case noData
+        case invalidURL
         case taskError
+        
+        var errorDescription: String? {
+            switch self {
+            case .noData, .taskError: return "Something went wrong. Try again later."
+            case .invalidURL : return "Invalid URL"
+            }
+        }
     }
     
     func loadImage(_ completion: @escaping (Error?) -> Void) {
         guard let loadURL = flickrImageURL() else {
             DispatchQueue.main.async {
-                completion(Error.invalidURL)
+                completion(NetworkError.invalidURL)
             }
             return
         }
@@ -59,16 +66,16 @@ final class FlickrPhoto: Equatable {
         let loadRequest = URLRequest(url:loadURL)
         
         let task = URLSession.shared.dataTask(with: loadRequest) { (data, response, error) in
-            if error != nil {
+            if let error = error {
                 DispatchQueue.main.async {
-                    completion(Error.taskError)
+                    completion(error)
                 }
                 return
             }
             
             guard let data = data else {
                 DispatchQueue.main.async {
-                    completion(Error.noData)
+                    completion(NetworkError.noData)
                 }
                 return
             }

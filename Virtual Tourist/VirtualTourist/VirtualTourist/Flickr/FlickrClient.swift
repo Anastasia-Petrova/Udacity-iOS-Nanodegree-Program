@@ -30,10 +30,15 @@ final class FlickrClient {
         }
     }
     
-    enum Error: Swift.Error {
-        case unknownAPIResponse
-        case generic
-        case taskError
+    enum NetworkError: LocalizedError {
+        case noData
+        case wrongAPIResponse
+        
+        var errorDescription: String? {
+            switch self {
+            case .noData, .wrongAPIResponse: return "Something went wrong. Try again later."
+            }
+        }
     }
     
     class func makeGetPhotosRequest(latitude: String, longitude: String) -> URLRequest {
@@ -48,16 +53,16 @@ final class FlickrClient {
         completion: @escaping (Result<FlickrSearchResults, Error>) -> Void
     ) -> URLSessionDataTask {
         return session.dataTask(with: request) { (data, response, error) in
-            if error != nil {
+            if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.failure(Error.taskError))
+                    completion(Result.failure(error))
                 }
                 return
             }
             
             guard let _ = response as? HTTPURLResponse,
                 let data = data else {
-                    DispatchQueue.main.async { completion(Result.failure(Error.unknownAPIResponse))
+                    DispatchQueue.main.async { completion(Result.failure(NetworkError.wrongAPIResponse))
                     }
                     return
             }
@@ -65,34 +70,20 @@ final class FlickrClient {
             do {
                 guard
                     let resultsDictionary = try JSONSerialization.jsonObject(with: data) as? [String: AnyObject],
-                    let stat = resultsDictionary["stat"] as? String
+                    let stat = resultsDictionary["stat"] as? String,
+                    stat == "ok"
                     else {
                         DispatchQueue.main.async {
-                            completion(Result.failure(Error.unknownAPIResponse))
+                            completion(Result.failure(NetworkError.wrongAPIResponse))
                         }
                         return
-                }
-                
-                switch (stat) {
-                case "ok":
-                    print("Results processed OK")
-                case "fail":
-                    DispatchQueue.main.async {
-                        completion(Result.failure(Error.generic))
-                    }
-                    return
-                default:
-                    DispatchQueue.main.async {
-                        completion(Result.failure(Error.unknownAPIResponse))
-                    }
-                    return
                 }
                 
                 guard
                     let photosContainer = resultsDictionary["photos"] as? [String: AnyObject],
                     let photosReceived = photosContainer["photo"] as? [[String: AnyObject]]
                     else {
-                        DispatchQueue.main.async { completion(Result.failure(Error.unknownAPIResponse))
+                        DispatchQueue.main.async { completion(Result.failure(NetworkError.wrongAPIResponse))
                         }
                         return
                 }
@@ -119,7 +110,7 @@ final class FlickrClient {
                     completion(Result.success(searchResults))
                 }
             } catch {
-               print("\(error)")
+                completion(.failure(error))
             }
         }
     }
