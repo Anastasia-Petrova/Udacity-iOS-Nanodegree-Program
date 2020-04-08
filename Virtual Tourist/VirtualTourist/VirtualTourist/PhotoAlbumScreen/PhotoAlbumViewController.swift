@@ -45,7 +45,7 @@ final class PhotoAlbumViewController: UIViewController {
         collectionView.delegate = self
         setUpCollectionView()
         setUpAddCollectionButton()
-        dataSource.getPhotosUrls()
+//        dataSource.getPhotosUrls()
 //        dataSource.startImageDownload()
     }
     
