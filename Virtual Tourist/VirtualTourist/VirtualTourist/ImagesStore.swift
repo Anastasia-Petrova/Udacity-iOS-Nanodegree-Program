@@ -17,7 +17,7 @@ enum ImageStore {
         .urls(for: .documentDirectory, in: .userDomainMask)[0]
         .appendingPathComponent(imagesDirectoryName)
     
-    public static func saveImage(image: UIImage) throws -> URL {
+    public static func saveImage(image: UIImage) throws -> UUID {
         guard let imageData = image.pngData() else {
             throw ImageStore.Error.imageNotFound
         }
@@ -31,7 +31,7 @@ enum ImageStore {
         let id = UUID()
         let fileURL = imagesDirectoryURL.appendingPathComponent(id.uuidString)
         try imageData.write(to: fileURL, options: .atomic)
-        return fileURL
+        return id
     }
     
     static func deleteImage(id: UUID) throws -> Void {
@@ -39,7 +39,8 @@ enum ImageStore {
         try FileManager.default.removeItem(at: url)
     }
     
-    static func getImage(url: URL) -> UIImage? {
+    static func getImage(id: UUID) -> UIImage? {
+        let url = imagesDirectoryURL.appendingPathComponent(id.uuidString)
         return UIImage(contentsOfFile: url.path)
     }
 }

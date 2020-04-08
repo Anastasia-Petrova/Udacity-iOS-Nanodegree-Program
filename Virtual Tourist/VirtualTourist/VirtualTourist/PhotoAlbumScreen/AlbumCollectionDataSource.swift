@@ -18,7 +18,13 @@ final class AlbumCollectionDataSource: NSObject {
     let pin: Pin
     let pinID: NSManagedObjectID
     var collectionView: UICollectionView
-    var loadedImages: [UIImage] = []
+    var loadedImages: [URL : UIImage] = [:] {
+        didSet {
+//            var set = Set(loadedImages.keys)
+//            set.subtract(Set(oldValue.keys))
+            collectionView.reloadData()
+        }
+    }
     var savedImagesID: [UUID] = []
     
     let coordinate:  CLLocationCoordinate2D
@@ -66,16 +72,8 @@ final class AlbumCollectionDataSource: NSObject {
             self?.pandingChanges.append(change)
         }
         controller.fetch()
-        if let photos = pin.photos as? Set<Photo> {
-            if photos.isEmpty {
-                getPhotosUrls()
-            } else {
-                photos.forEach { photo in
-                    if let url = photo.url {
-                        loadImageFromDisk(url: url)
-                    }
-                }
-            }
+        if controller.numberOfItems(in: 0) == 0 {
+            getPhotosUrls()
         }
     }
     
@@ -100,7 +98,6 @@ final class AlbumCollectionDataSource: NSObject {
                             photo.pin = self.pin
                         }
                     CoreDataStack.instance.saveContext()
-                    self.startImageDownload()
                 }
             case .failure:
                 print("EEEERRRROOOOOOORRRRR!!!!!!")
@@ -108,43 +105,40 @@ final class AlbumCollectionDataSource: NSObject {
         }
     }
     
-    func startImageDownload() {
-        let count = controller.numberOfItems(in: 0)
-        for index in 0..<count {
-            let indexPath = IndexPath(item: index, section: 0)
-            let item = controller.getItem(at: indexPath)
-            guard let url = item.url else { return }
-            loadImage(url: url) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case let .success(image):
-                        self.loadedImages.append(image)
-                        self.updatePhotoURL(
-                            url: self.saveImageOnDisk(image: image, indexPath: indexPath),
-                            indexPath: indexPath
-                        )
-                    case .failure: break
-                    }
-                    self.collectionView.reloadData()
+    func loadRemoteImage(_ url: URL, indexPath: IndexPath) {
+        loadImage(url: url) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case let .success(image):
+                    self.loadedImages[url] = image
+                    self.updatePhotoURL(
+                        fileID: self.saveImageOnDisk(image: image),
+                        indexPath: indexPath
+                    )
+                case .failure: break
                 }
+                self.collectionView.reloadData()
             }
         }
     }
     
-    func saveImageOnDisk(image: UIImage, indexPath: IndexPath) -> URL {
+    func saveImageOnDisk(image: UIImage) -> UUID {
         return try! ImageStore.saveImage(image: image)
     }
     
-    func updatePhotoURL(url: URL, indexPath: IndexPath) {
+    func updatePhotoURL(fileID: UUID, indexPath: IndexPath) {
         controller.updateModels(indexPaths: [indexPath]) { photo in
-            photo.first?.url = url
+            photo.first?.fileID = fileID
         }
     }
 
-    func loadImageFromDisk(url: URL) {
-        let image = ImageStore.getImage(url: url)
-        if let image = image {
-            loadedImages.append(image)
+    func loadLocalImage(_ url: URL, fileID: UUID) {
+        DispatchQueue.global().async {
+            guard let image = ImageStore.getImage(id: fileID) else { return }
+            
+            DispatchQueue.main.async {
+                self.loadedImages[url] = image
+            }
         }
     }
     
@@ -183,10 +177,19 @@ extension AlbumCollectionDataSource: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionCell.identifier, for: indexPath) as! PhotosCollectionCell
 
         let cellImage: UIImage?
-        if indexPath.row < loadedImages.count {
-            cellImage = loadedImages[indexPath.row]
+        let photo = controller.getItem(at: indexPath)
+        
+        guard let url = photo.url else { return cell }
+        
+        if let image = loadedImages[url] {
+            cellImage = image
         } else {
             cellImage = UIImage(named: "placeholder")!.withRenderingMode(.alwaysTemplate)
+            if let fileID = photo.fileID {
+                loadLocalImage(url, fileID: fileID)
+            } else {
+                loadRemoteImage(url, indexPath: indexPath)
+            }
         }
         cell.photoImageView.image = cellImage
         return cell
