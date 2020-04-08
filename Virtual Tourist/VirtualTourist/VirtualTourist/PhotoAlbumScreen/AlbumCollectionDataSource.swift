@@ -143,8 +143,10 @@ final class AlbumCollectionDataSource: NSObject {
     }
     
     func deletePhoto(at indexPath: IndexPath) {
+        let photo = controller.getItem(at: indexPath)
+        guard let id = photo.fileID else { return }
+        try? ImageStore.deleteImage(id: id)
         controller.deleteItems(at: [indexPath])
-        collectionView.reloadData()
     }
 }
 

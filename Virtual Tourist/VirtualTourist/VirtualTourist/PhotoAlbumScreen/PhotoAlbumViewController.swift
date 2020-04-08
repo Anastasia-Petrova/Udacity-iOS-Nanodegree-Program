@@ -45,8 +45,6 @@ final class PhotoAlbumViewController: UIViewController {
         collectionView.delegate = self
         setUpCollectionView()
         setUpAddCollectionButton()
-//        dataSource.getPhotosUrls()
-//        dataSource.startImageDownload()
     }
     
     override func viewDidLayoutSubviews() {
@@ -128,7 +126,10 @@ final class PhotoAlbumViewController: UIViewController {
 }
 
 extension PhotoAlbumViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        dataSource.deletePhoto(at: indexPath)
+        collectionView.deleteItems(at: [indexPath])
+    }
 }
 
 
