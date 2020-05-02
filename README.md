@@ -1,8 +1,8 @@
-[![CircleCI](https://circleci.com/gh/Anastasia-Petrova/Udacity.svg?style=svg)](https://circleci.com/gh/Anastasia-Petrova/Udacity)
+[![CircleCI](https://circleci.com/gh/Anastasia-Petrova/Udacity-iOS-Nanodegree-Program.svg?style=svg)](https://circleci.com/gh/Anastasia-Petrova/Udacity-iOS-Nanodegree-Program)
 
-# Udacity
+# ![Udacity](https://i.imgur.com/A4EK5Zz.png)
 
-## iOS Developer Nanodegree Program
+## [iOS Developer Nanodegree Program](https://www.udacity.com/course/ios-developer-nanodegree--nd003)
 
 ### Accomplished Projects:
 
