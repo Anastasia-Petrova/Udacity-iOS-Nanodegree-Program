@@ -10,4 +10,4 @@
 - [x] [MemeMe 😂](https://github.com/Anastasia-Petrova/Udacity/tree/master/MemeMe)
 - [x] [On the Map 🗺](https://github.com/Anastasia-Petrova/Udacity/tree/master/On%20the%20Map) 
 - [x] [Virtual Tourist 📸](https://github.com/Anastasia-Petrova/Udacity/tree/master/Virtual%20Tourist) 
-- [x] [Graduation Project 👩🏻‍🎓](https://github.com/Anastasia-Petrova/Udacity/tree/master/Final%20Project)
+- [x] [Graduation Project 👩🏻‍🎓](https://github.com/Anastasia-Petrova/Udacity/tree/master/Graduation%20Project)
