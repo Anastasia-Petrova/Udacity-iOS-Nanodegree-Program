@@ -1,0 +1,1140 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6D01BC5B2451FE3C00E82BC0 /* VimeoUploadLinkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01BC5A2451FE3C00E82BC0 /* VimeoUploadLinkResponse.swift */; };
+		6D01E03623BFA2F900B558E8 /* LooksCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E03523BFA2F900B558E8 /* LooksCollectionViewCell.swift */; };
+		6D01E03823BFA3D600B558E8 /* LooksCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E03723BFA3D600B558E8 /* LooksCollectionDataSource.swift */; };
+		6D01E03A23BFC2FE00B558E8 /* AssetImageGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01E03923BFC2FE00B558E8 /* AssetImageGenerator.swift */; };
+		6D05022623B9154100036D60 /* VideoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D05022523B9154100036D60 /* VideoEditorViewController.swift */; };
+		6D0C29C123C28CA5006E7C40 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C29C023C28CA5006E7C40 /* App.swift */; };
+		6D0C29C423C2A8C1006E7C40 /* AVAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0C29C323C2A8C1006E7C40 /* AVAsset.swift */; };
+		6D0E9B88244B61A4008339FE /* VimeoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0E9B87244B61A4008339FE /* VimeoDataSource.swift */; };
+		6D0E9B8A244B6460008339FE /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0E9B89244B6460008339FE /* VideoCell.swift */; };
+		6D0E9B8C244B8ED3008339FE /* VimeoCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0E9B8B244B8ED3008339FE /* VimeoCollectionLayout.swift */; };
+		6D154AAE23DC72F900150E0A /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D154AAD23DC72F900150E0A /* Media.xcassets */; };
+		6D154AB023DC7A2A00150E0A /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D154AAF23DC7A2A00150E0A /* Bundle.swift */; };
+		6D154AB223DC817100150E0A /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D154AB123DC817100150E0A /* TestHelpers.swift */; };
+		6D17A7E123ABB39100C70542 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D17A7E023ABB39100C70542 /* AppDelegate.swift */; };
+		6D17A7E323ABB39100C70542 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D17A7E223ABB39100C70542 /* SceneDelegate.swift */; };
+		6D17A7EA23ABB39600C70542 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D17A7E923ABB39600C70542 /* Assets.xcassets */; };
+		6D17A7ED23ABB39600C70542 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6D17A7EB23ABB39600C70542 /* LaunchScreen.storyboard */; };
+		6D17A7F523ABB6E000C70542 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D17A7F423ABB6E000C70542 /* HomeViewController.swift */; };
+		6D19954623C7AA3C000A76B1 /* VideoEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D19954523C7AA3C000A76B1 /* VideoEditor.swift */; };
+		6D1D490B23D777F000ECACE5 /* BodyExportLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D490A23D777F000ECACE5 /* BodyExportLabel.swift */; };
+		6D1D490F23D7842F00ECACE5 /* MonochromeFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D490E23D7842F00ECACE5 /* MonochromeFilter.swift */; };
+		6D1D491123D785FB00ECACE5 /* ColorInvertFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491023D785FB00ECACE5 /* ColorInvertFilter.swift */; };
+		6D1D491323D788B800ECACE5 /* HalfToneFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491223D788B800ECACE5 /* HalfToneFilter.swift */; };
+		6D1D491523D78ADC00ECACE5 /* NoirFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491423D78ADC00ECACE5 /* NoirFilter.swift */; };
+		6D1D491723D78C4A00ECACE5 /* ProcessFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491623D78C4A00ECACE5 /* ProcessFilter.swift */; };
+		6D1D491923D78DA600ECACE5 /* RetroFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491823D78DA600ECACE5 /* RetroFilter.swift */; };
+		6D1D491B23D78EDA00ECACE5 /* TonalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491A23D78EDA00ECACE5 /* TonalFilter.swift */; };
+		6D1D491D23D7903C00ECACE5 /* VintageFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491C23D7903C00ECACE5 /* VintageFilter.swift */; };
+		6D1D491F23D791EC00ECACE5 /* MonoFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D491E23D791EC00ECACE5 /* MonoFilter.swift */; };
+		6D1D492123D793C500ECACE5 /* SepiaFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D492023D793C500ECACE5 /* SepiaFilter.swift */; };
+		6D1D492B23DB71EA00ECACE5 /* LooksCollectionDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D492A23DB71EA00ECACE5 /* LooksCollectionDataSourceTests.swift */; };
+		6D1D493323DC687200ECACE5 /* VideoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1D493223DC687200ECACE5 /* VideoBrowser.swift */; };
+		6D2E412D23F04B0000B499F0 /* LooksViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E412C23F04B0000B499F0 /* LooksViewControllerTests.swift */; };
+		6D2E8A0323CA671A00917E25 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E89FE23CA5AC700917E25 /* TabBar.swift */; };
+		6D2E8A0423CA673A00917E25 /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2E8A0023CA5DEA00917E25 /* TabBarItem.swift */; };
+		6D2ED3D224506AC800B2EBDA /* VimeoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED3D124506AC800B2EBDA /* VimeoPlayerViewController.swift */; };
+		6D2ED3D42451EA5700B2EBDA /* VimeoUploadClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED3D32451EA5700B2EBDA /* VimeoUploadClient.swift */; };
+		6D5EFEAB24269CE600FB5DC8 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5EFEAA24269CE600FB5DC8 /* UILabel.swift */; };
+		6D65B44223F0403A0068F378 /* LookCollectionViewLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D65B44123F0403A0068F378 /* LookCollectionViewLayoutTests.swift */; };
+		6D66487723EDFC9C002AAF2E /* WaitExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA80C923EC4433005A585E /* WaitExtension.swift */; };
+		6D66487923EDFC9C002AAF2E /* HomeViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDFFB6D23EC281D00093675 /* HomeViewControllerSnapshotTests.swift */; };
+		6D66487A23EDFC9C002AAF2E /* LooksCollectionViewCellSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA80D923EDA839005A585E /* LooksCollectionViewCellSnapshotTests.swift */; };
+		6D66487E23EDFD34002AAF2E /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D66487D23EDFD34002AAF2E /* Bundle.swift */; };
+		6D66488123EDFE7B002AAF2E /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 6D66488023EDFE7B002AAF2E /* SnapshotTesting */; };
+		6D73068423D06BE300226C77 /* HightlightedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73068323D06BE300226C77 /* HightlightedButton.swift */; };
+		6D8C284123F601A1008700C3 /* ImageAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8C284023F601A1008700C3 /* ImageAsset.swift */; };
+		6D8C284323F60697008700C3 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8C284223F60697008700C3 /* String.swift */; };
+		6D96B85023D08E5E00C1C6D5 /* HeaderExportLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D96B84F23D08E5E00C1C6D5 /* HeaderExportLabel.swift */; };
+		6D96B85323D090A300C1C6D5 /* ExportImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D96B85223D090A300C1C6D5 /* ExportImageView.swift */; };
+		6D96B85823D0969E00C1C6D5 /* LooksViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D96B85723D0969E00C1C6D5 /* LooksViewButton.swift */; };
+		6DA2491224532D8700F27855 /* VimeoUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA2491124532D8700F27855 /* VimeoUploadResponse.swift */; };
+		6DB0698A23EE0EAE0088F4B7 /* LooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0698923EE0EAE0088F4B7 /* LooksViewController.swift */; };
+		6DB0698C23EE11460088F4B7 /* LooksViewControllerSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0698B23EE11460088F4B7 /* LooksViewControllerSnapshotTests.swift */; };
+		6DB0699323EF53400088F4B7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0699223EF53400088F4B7 /* Media.xcassets */; };
+		6DB0699423EF53840088F4B7 /* videoTest.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 6DBA80D123EC994A005A585E /* videoTest.MOV */; };
+		6DB2BC5D2420192B00591D1C /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB2BC5C2420192B00591D1C /* UIView.swift */; };
+		6DB6C13D23C4D65D00E256A4 /* SharpAndWarmFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C13C23C4D65D00E256A4 /* SharpAndWarmFilter.swift */; };
+		6DB6C13F23C4D8A700E256A4 /* VignetteFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C13E23C4D8A700E256A4 /* VignetteFilter.swift */; };
+		6DB6C14123C4E82C00E256A4 /* ClampFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C14023C4E82C00E256A4 /* ClampFilter.swift */; };
+		6DB988BA23F1E0FC00F5F684 /* VideoEditorViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB988B923F1E0FC00F5F684 /* VideoEditorViewControllerTests.swift */; };
+		6DB988BC23F1E20F00F5F684 /* videoTest.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 6DB988BB23F1E20F00F5F684 /* videoTest.MOV */; };
+		6DBA80D423ED931B005A585E /* LooksCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA80D323ED931B005A585E /* LooksCollectionViewLayout.swift */; };
+		6DD4192D23F9A77B005A2706 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD4192C23F9A77B005A2706 /* VideoViewController.swift */; };
+		6DD4193223F9AB05005A2706 /* videoTest.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4193123F9AB05005A2706 /* videoTest.MOV */; };
+		6DD4193423FA0395005A2706 /* videoTest.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6DD4193323FA0394005A2706 /* videoTest.mp4 */; };
+		6DDE026323C11659002D7942 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE026223C11659002D7942 /* VideoView.swift */; };
+		6DDE026523C12A44002D7942 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE026423C12A44002D7942 /* Filter.swift */; };
+		6DDE026723C12A9D002D7942 /* PassthroughFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE026623C12A9D002D7942 /* PassthroughFilter.swift */; };
+		6DDE026A23C12B2A002D7942 /* BlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDE026923C12B2A002D7942 /* BlurFilter.swift */; };
+		6DE41ECF243F374D00081913 /* VimeoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE41ECE243F374D00081913 /* VimeoViewController.swift */; };
+		6DE41ED224407E4300081913 /* EasyCoreData in Frameworks */ = {isa = PBXBuildFile; productRef = 6DE41ED124407E4300081913 /* EasyCoreData */; };
+		6DEA248D23C2038B00D7595A /* ComicFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEA248C23C2038B00D7595A /* ComicFilter.swift */; };
+		6DF1B5C0244DB20B005D506A /* VimeoCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF1B5BF244DB20B005D506A /* VimeoCollectionHeader.swift */; };
+		6DF1B5C2244E06C4005D506A /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF1B5C1244E06C4005D506A /* BackgroundView.swift */; };
+		6DFA48C7244F26F20082D372 /* Snapvideo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA48C5244F26F20082D372 /* Snapvideo.xcdatamodeld */; };
+		6DFA48C9244F27EA0082D372 /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA48C8244F27EA0082D372 /* VideoViewModel.swift */; };
+		6DFA48CB244F29450082D372 /* Video+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA48CA244F29450082D372 /* Video+Init.swift */; };
+		6DFC0881244B4F8800C1AB40 /* VimeoClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFC0880244B4F8800C1AB40 /* VimeoClient.swift */; };
+		6DFF1AE023C3BEC7009BCAE2 /* OldFilmFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF1ADF23C3BEC7009BCAE2 /* OldFilmFilter.swift */; };
+		6E838801779348CEBB9384ED /* Pods_Snapvideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926A73A63FC07E8895ECCAA3 /* Pods_Snapvideo.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6D1D492D23DB71EA00ECACE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D17A7D523ABB39100C70542 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D17A7DC23ABB39100C70542;
+			remoteInfo = VideoTest;
+		};
+		6D66487223EDF9A5002AAF2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6D17A7D523ABB39100C70542 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6D17A7DC23ABB39100C70542;
+			remoteInfo = Snapvideo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		017CD30715D667916AE780E6 /* Pods-Snapvideo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Snapvideo.debug.xcconfig"; path = "Target Support Files/Pods-Snapvideo/Pods-Snapvideo.debug.xcconfig"; sourceTree = "<group>"; };
+		2FB6C59B13251A7AB3DC3F38 /* Pods-Snapvideo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Snapvideo.release.xcconfig"; path = "Target Support Files/Pods-Snapvideo/Pods-Snapvideo.release.xcconfig"; sourceTree = "<group>"; };
+		6D01BC5A2451FE3C00E82BC0 /* VimeoUploadLinkResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoUploadLinkResponse.swift; sourceTree = "<group>"; };
+		6D01E03523BFA2F900B558E8 /* LooksCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksCollectionViewCell.swift; sourceTree = "<group>"; };
+		6D01E03723BFA3D600B558E8 /* LooksCollectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksCollectionDataSource.swift; sourceTree = "<group>"; };
+		6D01E03923BFC2FE00B558E8 /* AssetImageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetImageGenerator.swift; sourceTree = "<group>"; };
+		6D05022523B9154100036D60 /* VideoEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorViewController.swift; sourceTree = "<group>"; };
+		6D0C29C023C28CA5006E7C40 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		6D0C29C323C2A8C1006E7C40 /* AVAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAsset.swift; sourceTree = "<group>"; };
+		6D0E9B87244B61A4008339FE /* VimeoDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoDataSource.swift; sourceTree = "<group>"; };
+		6D0E9B89244B6460008339FE /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
+		6D0E9B8B244B8ED3008339FE /* VimeoCollectionLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoCollectionLayout.swift; sourceTree = "<group>"; };
+		6D154AAD23DC72F900150E0A /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		6D154AAF23DC7A2A00150E0A /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		6D154AB123DC817100150E0A /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		6D17A7DD23ABB39100C70542 /* Snapvideo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snapvideo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D17A7E023ABB39100C70542 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6D17A7E223ABB39100C70542 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		6D17A7E923ABB39600C70542 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6D17A7EC23ABB39600C70542 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6D17A7EE23ABB39600C70542 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D17A7F423ABB6E000C70542 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		6D19954523C7AA3C000A76B1 /* VideoEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditor.swift; sourceTree = "<group>"; };
+		6D1D490A23D777F000ECACE5 /* BodyExportLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyExportLabel.swift; sourceTree = "<group>"; };
+		6D1D490E23D7842F00ECACE5 /* MonochromeFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonochromeFilter.swift; sourceTree = "<group>"; };
+		6D1D491023D785FB00ECACE5 /* ColorInvertFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorInvertFilter.swift; sourceTree = "<group>"; };
+		6D1D491223D788B800ECACE5 /* HalfToneFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfToneFilter.swift; sourceTree = "<group>"; };
+		6D1D491423D78ADC00ECACE5 /* NoirFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoirFilter.swift; sourceTree = "<group>"; };
+		6D1D491623D78C4A00ECACE5 /* ProcessFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessFilter.swift; sourceTree = "<group>"; };
+		6D1D491823D78DA600ECACE5 /* RetroFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetroFilter.swift; sourceTree = "<group>"; };
+		6D1D491A23D78EDA00ECACE5 /* TonalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonalFilter.swift; sourceTree = "<group>"; };
+		6D1D491C23D7903C00ECACE5 /* VintageFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VintageFilter.swift; sourceTree = "<group>"; };
+		6D1D491E23D791EC00ECACE5 /* MonoFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonoFilter.swift; sourceTree = "<group>"; };
+		6D1D492023D793C500ECACE5 /* SepiaFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SepiaFilter.swift; sourceTree = "<group>"; };
+		6D1D492823DB71EA00ECACE5 /* UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D1D492A23DB71EA00ECACE5 /* LooksCollectionDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksCollectionDataSourceTests.swift; sourceTree = "<group>"; };
+		6D1D492C23DB71EA00ECACE5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D1D493223DC687200ECACE5 /* VideoBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoBrowser.swift; sourceTree = "<group>"; };
+		6D2E412C23F04B0000B499F0 /* LooksViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksViewControllerTests.swift; sourceTree = "<group>"; };
+		6D2E89FE23CA5AC700917E25 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		6D2E8A0023CA5DEA00917E25 /* TabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarItem.swift; sourceTree = "<group>"; };
+		6D2ED3D124506AC800B2EBDA /* VimeoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoPlayerViewController.swift; sourceTree = "<group>"; };
+		6D2ED3D32451EA5700B2EBDA /* VimeoUploadClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoUploadClient.swift; sourceTree = "<group>"; };
+		6D5EFEAA24269CE600FB5DC8 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
+		6D65B44123F0403A0068F378 /* LookCollectionViewLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookCollectionViewLayoutTests.swift; sourceTree = "<group>"; };
+		6D66486D23EDF9A5002AAF2E /* SnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D66487123EDF9A5002AAF2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6D66487D23EDFD34002AAF2E /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		6D73068323D06BE300226C77 /* HightlightedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HightlightedButton.swift; sourceTree = "<group>"; };
+		6D8C284023F601A1008700C3 /* ImageAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAsset.swift; sourceTree = "<group>"; };
+		6D8C284223F60697008700C3 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		6D96B84F23D08E5E00C1C6D5 /* HeaderExportLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderExportLabel.swift; sourceTree = "<group>"; };
+		6D96B85223D090A300C1C6D5 /* ExportImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportImageView.swift; sourceTree = "<group>"; };
+		6D96B85723D0969E00C1C6D5 /* LooksViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksViewButton.swift; sourceTree = "<group>"; };
+		6DA2491124532D8700F27855 /* VimeoUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoUploadResponse.swift; sourceTree = "<group>"; };
+		6DB0698923EE0EAE0088F4B7 /* LooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksViewController.swift; sourceTree = "<group>"; };
+		6DB0698B23EE11460088F4B7 /* LooksViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
+		6DB0699223EF53400088F4B7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		6DB2BC5C2420192B00591D1C /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		6DB6C13C23C4D65D00E256A4 /* SharpAndWarmFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharpAndWarmFilter.swift; sourceTree = "<group>"; };
+		6DB6C13E23C4D8A700E256A4 /* VignetteFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VignetteFilter.swift; sourceTree = "<group>"; };
+		6DB6C14023C4E82C00E256A4 /* ClampFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClampFilter.swift; sourceTree = "<group>"; };
+		6DB988B923F1E0FC00F5F684 /* VideoEditorViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditorViewControllerTests.swift; sourceTree = "<group>"; };
+		6DB988BB23F1E20F00F5F684 /* videoTest.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = videoTest.MOV; sourceTree = "<group>"; };
+		6DBA80C923EC4433005A585E /* WaitExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitExtension.swift; sourceTree = "<group>"; };
+		6DBA80D123EC994A005A585E /* videoTest.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = videoTest.MOV; sourceTree = "<group>"; };
+		6DBA80D323ED931B005A585E /* LooksCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksCollectionViewLayout.swift; sourceTree = "<group>"; };
+		6DBA80D923EDA839005A585E /* LooksCollectionViewCellSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LooksCollectionViewCellSnapshotTests.swift; sourceTree = "<group>"; };
+		6DD4192C23F9A77B005A2706 /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
+		6DD4193123F9AB05005A2706 /* videoTest.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = videoTest.MOV; sourceTree = "<group>"; };
+		6DD4193323FA0394005A2706 /* videoTest.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = videoTest.mp4; sourceTree = "<group>"; };
+		6DDE026223C11659002D7942 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		6DDE026423C12A44002D7942 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		6DDE026623C12A9D002D7942 /* PassthroughFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassthroughFilter.swift; sourceTree = "<group>"; };
+		6DDE026923C12B2A002D7942 /* BlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurFilter.swift; sourceTree = "<group>"; };
+		6DDFFB6D23EC281D00093675 /* HomeViewControllerSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerSnapshotTests.swift; sourceTree = "<group>"; };
+		6DE41ECE243F374D00081913 /* VimeoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoViewController.swift; sourceTree = "<group>"; };
+		6DEA248C23C2038B00D7595A /* ComicFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicFilter.swift; sourceTree = "<group>"; };
+		6DF1B5BF244DB20B005D506A /* VimeoCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoCollectionHeader.swift; sourceTree = "<group>"; };
+		6DF1B5C1244E06C4005D506A /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
+		6DFA48C6244F26F20082D372 /* Video.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Video.xcdatamodel; sourceTree = "<group>"; };
+		6DFA48C8244F27EA0082D372 /* VideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewModel.swift; sourceTree = "<group>"; };
+		6DFA48CA244F29450082D372 /* Video+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video+Init.swift"; sourceTree = "<group>"; };
+		6DFC0880244B4F8800C1AB40 /* VimeoClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VimeoClient.swift; sourceTree = "<group>"; };
+		6DFF1ADF23C3BEC7009BCAE2 /* OldFilmFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldFilmFilter.swift; sourceTree = "<group>"; };
+		926A73A63FC07E8895ECCAA3 /* Pods_Snapvideo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Snapvideo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6D17A7DA23ABB39100C70542 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DE41ED224407E4300081913 /* EasyCoreData in Frameworks */,
+				6E838801779348CEBB9384ED /* Pods_Snapvideo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D1D492523DB71EA00ECACE5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D66486A23EDF9A5002AAF2E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D66488123EDFE7B002AAF2E /* SnapshotTesting in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6D0C29C223C2A8B5006E7C40 /* Extenstions */ = {
+			isa = PBXGroup;
+			children = (
+				6D0C29C323C2A8C1006E7C40 /* AVAsset.swift */,
+				6D8C284223F60697008700C3 /* String.swift */,
+				6D5EFEAA24269CE600FB5DC8 /* UILabel.swift */,
+				6DB2BC5C2420192B00591D1C /* UIView.swift */,
+			);
+			path = Extenstions;
+			sourceTree = "<group>";
+		};
+		6D17A7D423ABB39100C70542 = {
+			isa = PBXGroup;
+			children = (
+				6D17A7DF23ABB39100C70542 /* Snapvideo */,
+				6D1D492923DB71EA00ECACE5 /* UnitTests */,
+				6D66486E23EDF9A5002AAF2E /* SnapshotTests */,
+				6D17A7DE23ABB39100C70542 /* Products */,
+				FA43E10D1905DEBD55B1A2D5 /* Pods */,
+				DAEFA7C8383A692575D60434 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		6D17A7DE23ABB39100C70542 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6D17A7DD23ABB39100C70542 /* Snapvideo.app */,
+				6D1D492823DB71EA00ECACE5 /* UnitTests.xctest */,
+				6D66486D23EDF9A5002AAF2E /* SnapshotTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6D17A7DF23ABB39100C70542 /* Snapvideo */ = {
+			isa = PBXGroup;
+			children = (
+				6D2E8A0523CA6F9400917E25 /* Assets */,
+				6D0C29C223C2A8B5006E7C40 /* Extenstions */,
+				6DDE026823C12B0A002D7942 /* Filters */,
+				6D9874AC23CB9DBA00EC83DC /* LooksCollection */,
+				6D2E8A0223CA65BD00917E25 /* TabBar */,
+				6D9874AD23CB9F0100EC83DC /* VideoEditingHelpers */,
+				6D17A80523AD4EB100C70542 /* VideoEditor */,
+				6DE41ECD243F36A400081913 /* VimeoService */,
+				6D0C29C023C28CA5006E7C40 /* App.swift */,
+				6D17A7E023ABB39100C70542 /* AppDelegate.swift */,
+				6D17A7F423ABB6E000C70542 /* HomeViewController.swift */,
+				6D8C284023F601A1008700C3 /* ImageAsset.swift */,
+				6D17A7EE23ABB39600C70542 /* Info.plist */,
+				6DFA48C5244F26F20082D372 /* Snapvideo.xcdatamodeld */,
+				6D17A7E223ABB39100C70542 /* SceneDelegate.swift */,
+			);
+			path = Snapvideo;
+			sourceTree = "<group>";
+		};
+		6D17A80523AD4EB100C70542 /* VideoEditor */ = {
+			isa = PBXGroup;
+			children = (
+				6D96B85123D08FD600C1C6D5 /* ExportViewСomponents */,
+				6D96B85423D0960000C1C6D5 /* LooksViewСomponents */,
+				6DFA48CC244F29840082D372 /* Video Model */,
+				6D19954523C7AA3C000A76B1 /* VideoEditor.swift */,
+				6D05022523B9154100036D60 /* VideoEditorViewController.swift */,
+				6DDE026223C11659002D7942 /* VideoView.swift */,
+				6DD4192C23F9A77B005A2706 /* VideoViewController.swift */,
+			);
+			path = VideoEditor;
+			sourceTree = "<group>";
+		};
+		6D1D492923DB71EA00ECACE5 /* UnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				6DC05F9F23EC3B7400A96B76 /* Assets */,
+				6D66488223EE01DF002AAF2E /* LooksCollection */,
+				6DB988B823F1E0B800F5F684 /* VideoEditor */,
+				6D154AAF23DC7A2A00150E0A /* Bundle.swift */,
+				6D1D492C23DB71EA00ECACE5 /* Info.plist */,
+				6D154AB123DC817100150E0A /* TestHelpers.swift */,
+			);
+			path = UnitTests;
+			sourceTree = "<group>";
+		};
+		6D2E8A0223CA65BD00917E25 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				6D2E89FE23CA5AC700917E25 /* TabBar.swift */,
+				6D2E8A0023CA5DEA00917E25 /* TabBarItem.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		6D2E8A0523CA6F9400917E25 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				6D17A7E923ABB39600C70542 /* Assets.xcassets */,
+				6D17A7EB23ABB39600C70542 /* LaunchScreen.storyboard */,
+				6DD4193123F9AB05005A2706 /* videoTest.MOV */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		6D66486E23EDF9A5002AAF2E /* SnapshotTests */ = {
+			isa = PBXGroup;
+			children = (
+				6DB0699123EF53310088F4B7 /* Assets */,
+				6D66488423EE02CC002AAF2E /* LooksCollection */,
+				6DDFFB6D23EC281D00093675 /* HomeViewControllerSnapshotTests.swift */,
+				6D66487D23EDFD34002AAF2E /* Bundle.swift */,
+				6D66487123EDF9A5002AAF2E /* Info.plist */,
+				6DBA80C923EC4433005A585E /* WaitExtension.swift */,
+			);
+			path = SnapshotTests;
+			sourceTree = "<group>";
+		};
+		6D66488223EE01DF002AAF2E /* LooksCollection */ = {
+			isa = PBXGroup;
+			children = (
+				6D1D492A23DB71EA00ECACE5 /* LooksCollectionDataSourceTests.swift */,
+				6D65B44123F0403A0068F378 /* LookCollectionViewLayoutTests.swift */,
+				6D2E412C23F04B0000B499F0 /* LooksViewControllerTests.swift */,
+			);
+			path = LooksCollection;
+			sourceTree = "<group>";
+		};
+		6D66488423EE02CC002AAF2E /* LooksCollection */ = {
+			isa = PBXGroup;
+			children = (
+				6DBA80D923EDA839005A585E /* LooksCollectionViewCellSnapshotTests.swift */,
+				6DB0698B23EE11460088F4B7 /* LooksViewControllerSnapshotTests.swift */,
+			);
+			path = LooksCollection;
+			sourceTree = "<group>";
+		};
+		6D96B85123D08FD600C1C6D5 /* ExportViewСomponents */ = {
+			isa = PBXGroup;
+			children = (
+				6D1D490A23D777F000ECACE5 /* BodyExportLabel.swift */,
+				6D96B85223D090A300C1C6D5 /* ExportImageView.swift */,
+				6D96B84F23D08E5E00C1C6D5 /* HeaderExportLabel.swift */,
+				6D73068323D06BE300226C77 /* HightlightedButton.swift */,
+			);
+			path = "ExportViewСomponents";
+			sourceTree = "<group>";
+		};
+		6D96B85423D0960000C1C6D5 /* LooksViewСomponents */ = {
+			isa = PBXGroup;
+			children = (
+				6D96B85723D0969E00C1C6D5 /* LooksViewButton.swift */,
+			);
+			path = "LooksViewСomponents";
+			sourceTree = "<group>";
+		};
+		6D9874AC23CB9DBA00EC83DC /* LooksCollection */ = {
+			isa = PBXGroup;
+			children = (
+				6D01E03723BFA3D600B558E8 /* LooksCollectionDataSource.swift */,
+				6D01E03523BFA2F900B558E8 /* LooksCollectionViewCell.swift */,
+				6DBA80D323ED931B005A585E /* LooksCollectionViewLayout.swift */,
+				6DB0698923EE0EAE0088F4B7 /* LooksViewController.swift */,
+			);
+			path = LooksCollection;
+			sourceTree = "<group>";
+		};
+		6D9874AD23CB9F0100EC83DC /* VideoEditingHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				6D01E03923BFC2FE00B558E8 /* AssetImageGenerator.swift */,
+				6D1D493223DC687200ECACE5 /* VideoBrowser.swift */,
+			);
+			path = VideoEditingHelpers;
+			sourceTree = "<group>";
+		};
+		6DA2491024532CF700F27855 /* VimeoClient */ = {
+			isa = PBXGroup;
+			children = (
+				6DFC0880244B4F8800C1AB40 /* VimeoClient.swift */,
+				6D2ED3D32451EA5700B2EBDA /* VimeoUploadClient.swift */,
+				6D01BC5A2451FE3C00E82BC0 /* VimeoUploadLinkResponse.swift */,
+				6DA2491124532D8700F27855 /* VimeoUploadResponse.swift */,
+			);
+			path = VimeoClient;
+			sourceTree = "<group>";
+		};
+		6DB0699123EF53310088F4B7 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				6DB0699223EF53400088F4B7 /* Media.xcassets */,
+				6DBA80D123EC994A005A585E /* videoTest.MOV */,
+				6DD4193323FA0394005A2706 /* videoTest.mp4 */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		6DB988B823F1E0B800F5F684 /* VideoEditor */ = {
+			isa = PBXGroup;
+			children = (
+				6DB988B923F1E0FC00F5F684 /* VideoEditorViewControllerTests.swift */,
+			);
+			path = VideoEditor;
+			sourceTree = "<group>";
+		};
+		6DC05F9F23EC3B7400A96B76 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				6DB988BB23F1E20F00F5F684 /* videoTest.MOV */,
+				6D154AAD23DC72F900150E0A /* Media.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		6DDE026823C12B0A002D7942 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				6DDE026923C12B2A002D7942 /* BlurFilter.swift */,
+				6DB6C14023C4E82C00E256A4 /* ClampFilter.swift */,
+				6D1D491023D785FB00ECACE5 /* ColorInvertFilter.swift */,
+				6DEA248C23C2038B00D7595A /* ComicFilter.swift */,
+				6DDE026423C12A44002D7942 /* Filter.swift */,
+				6D1D491223D788B800ECACE5 /* HalfToneFilter.swift */,
+				6D1D490E23D7842F00ECACE5 /* MonochromeFilter.swift */,
+				6D1D491E23D791EC00ECACE5 /* MonoFilter.swift */,
+				6D1D491423D78ADC00ECACE5 /* NoirFilter.swift */,
+				6DFF1ADF23C3BEC7009BCAE2 /* OldFilmFilter.swift */,
+				6DDE026623C12A9D002D7942 /* PassthroughFilter.swift */,
+				6D1D491623D78C4A00ECACE5 /* ProcessFilter.swift */,
+				6D1D491823D78DA600ECACE5 /* RetroFilter.swift */,
+				6D1D492023D793C500ECACE5 /* SepiaFilter.swift */,
+				6DB6C13C23C4D65D00E256A4 /* SharpAndWarmFilter.swift */,
+				6D1D491A23D78EDA00ECACE5 /* TonalFilter.swift */,
+				6DB6C13E23C4D8A700E256A4 /* VignetteFilter.swift */,
+				6D1D491C23D7903C00ECACE5 /* VintageFilter.swift */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		6DE41ECD243F36A400081913 /* VimeoService */ = {
+			isa = PBXGroup;
+			children = (
+				6DA2491024532CF700F27855 /* VimeoClient */,
+				6DF1B5C1244E06C4005D506A /* BackgroundView.swift */,
+				6D0E9B89244B6460008339FE /* VideoCell.swift */,
+				6D0E9B87244B61A4008339FE /* VimeoDataSource.swift */,
+				6DF1B5BF244DB20B005D506A /* VimeoCollectionHeader.swift */,
+				6D0E9B8B244B8ED3008339FE /* VimeoCollectionLayout.swift */,
+				6D2ED3D124506AC800B2EBDA /* VimeoPlayerViewController.swift */,
+				6DE41ECE243F374D00081913 /* VimeoViewController.swift */,
+			);
+			path = VimeoService;
+			sourceTree = "<group>";
+		};
+		6DFA48CC244F29840082D372 /* Video Model */ = {
+			isa = PBXGroup;
+			children = (
+				6DFA48CA244F29450082D372 /* Video+Init.swift */,
+				6DFA48C8244F27EA0082D372 /* VideoViewModel.swift */,
+			);
+			path = "Video Model";
+			sourceTree = "<group>";
+		};
+		DAEFA7C8383A692575D60434 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				926A73A63FC07E8895ECCAA3 /* Pods_Snapvideo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FA43E10D1905DEBD55B1A2D5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				017CD30715D667916AE780E6 /* Pods-Snapvideo.debug.xcconfig */,
+				2FB6C59B13251A7AB3DC3F38 /* Pods-Snapvideo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6D17A7DC23ABB39100C70542 /* Snapvideo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D17A7F123ABB39600C70542 /* Build configuration list for PBXNativeTarget "Snapvideo" */;
+			buildPhases = (
+				CD7D4C7C129986E1FBFF539A /* [CP] Check Pods Manifest.lock */,
+				6D17A7D923ABB39100C70542 /* Sources */,
+				6D17A7DA23ABB39100C70542 /* Frameworks */,
+				6D17A7DB23ABB39100C70542 /* Resources */,
+				5453ECC86B154C67EA7F45BC /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Snapvideo;
+			packageProductDependencies = (
+				6DE41ED124407E4300081913 /* EasyCoreData */,
+			);
+			productName = VideoTest;
+			productReference = 6D17A7DD23ABB39100C70542 /* Snapvideo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6D1D492723DB71EA00ECACE5 /* UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D1D493123DB71EA00ECACE5 /* Build configuration list for PBXNativeTarget "UnitTests" */;
+			buildPhases = (
+				6D1D492423DB71EA00ECACE5 /* Sources */,
+				6D1D492523DB71EA00ECACE5 /* Frameworks */,
+				6D1D492623DB71EA00ECACE5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D1D492E23DB71EA00ECACE5 /* PBXTargetDependency */,
+			);
+			name = UnitTests;
+			productName = VideoTestTests;
+			productReference = 6D1D492823DB71EA00ECACE5 /* UnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6D66486C23EDF9A5002AAF2E /* SnapshotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6D66487623EDF9A5002AAF2E /* Build configuration list for PBXNativeTarget "SnapshotTests" */;
+			buildPhases = (
+				6D66486923EDF9A5002AAF2E /* Sources */,
+				6D66486A23EDF9A5002AAF2E /* Frameworks */,
+				6D66486B23EDF9A5002AAF2E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D66487323EDF9A5002AAF2E /* PBXTargetDependency */,
+			);
+			name = SnapshotTests;
+			packageProductDependencies = (
+				6D66488023EDFE7B002AAF2E /* SnapshotTesting */,
+			);
+			productName = SnapshotTests;
+			productReference = 6D66486D23EDF9A5002AAF2E /* SnapshotTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6D17A7D523ABB39100C70542 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Anastasia Petrova";
+				TargetAttributes = {
+					6D17A7DC23ABB39100C70542 = {
+						CreatedOnToolsVersion = 11.3;
+					};
+					6D1D492723DB71EA00ECACE5 = {
+						CreatedOnToolsVersion = 11.3;
+						TestTargetID = 6D17A7DC23ABB39100C70542;
+					};
+					6D66486C23EDF9A5002AAF2E = {
+						CreatedOnToolsVersion = 11.3;
+						TestTargetID = 6D17A7DC23ABB39100C70542;
+					};
+				};
+			};
+			buildConfigurationList = 6D17A7D823ABB39100C70542 /* Build configuration list for PBXProject "Snapvideo" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6D17A7D423ABB39100C70542;
+			packageReferences = (
+				6D66487F23EDFE7B002AAF2E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				6DE41ED024407E4300081913 /* XCRemoteSwiftPackageReference "EasyCoreData" */,
+			);
+			productRefGroup = 6D17A7DE23ABB39100C70542 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6D17A7DC23ABB39100C70542 /* Snapvideo */,
+				6D1D492723DB71EA00ECACE5 /* UnitTests */,
+				6D66486C23EDF9A5002AAF2E /* SnapshotTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6D17A7DB23ABB39100C70542 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D17A7ED23ABB39600C70542 /* LaunchScreen.storyboard in Resources */,
+				6D17A7EA23ABB39600C70542 /* Assets.xcassets in Resources */,
+				6DD4193223F9AB05005A2706 /* videoTest.MOV in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D1D492623DB71EA00ECACE5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DB988BC23F1E20F00F5F684 /* videoTest.MOV in Resources */,
+				6D154AAE23DC72F900150E0A /* Media.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D66486B23EDF9A5002AAF2E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DB0699423EF53840088F4B7 /* videoTest.MOV in Resources */,
+				6DB0699323EF53400088F4B7 /* Media.xcassets in Resources */,
+				6DD4193423FA0395005A2706 /* videoTest.mp4 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5453ECC86B154C67EA7F45BC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Snapvideo/Pods-Snapvideo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Snapvideo/Pods-Snapvideo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Snapvideo/Pods-Snapvideo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CD7D4C7C129986E1FBFF539A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Snapvideo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6D17A7D923ABB39100C70542 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6DB2BC5D2420192B00591D1C /* UIView.swift in Sources */,
+				6DDE026723C12A9D002D7942 /* PassthroughFilter.swift in Sources */,
+				6D01E03A23BFC2FE00B558E8 /* AssetImageGenerator.swift in Sources */,
+				6D8C284323F60697008700C3 /* String.swift in Sources */,
+				6D1D493323DC687200ECACE5 /* VideoBrowser.swift in Sources */,
+				6DDE026A23C12B2A002D7942 /* BlurFilter.swift in Sources */,
+				6DA2491224532D8700F27855 /* VimeoUploadResponse.swift in Sources */,
+				6D96B85023D08E5E00C1C6D5 /* HeaderExportLabel.swift in Sources */,
+				6D0E9B88244B61A4008339FE /* VimeoDataSource.swift in Sources */,
+				6D1D490F23D7842F00ECACE5 /* MonochromeFilter.swift in Sources */,
+				6D01BC5B2451FE3C00E82BC0 /* VimeoUploadLinkResponse.swift in Sources */,
+				6D2E8A0423CA673A00917E25 /* TabBarItem.swift in Sources */,
+				6D0C29C123C28CA5006E7C40 /* App.swift in Sources */,
+				6D2ED3D42451EA5700B2EBDA /* VimeoUploadClient.swift in Sources */,
+				6D1D491F23D791EC00ECACE5 /* MonoFilter.swift in Sources */,
+				6DDE026523C12A44002D7942 /* Filter.swift in Sources */,
+				6D1D491723D78C4A00ECACE5 /* ProcessFilter.swift in Sources */,
+				6D2ED3D224506AC800B2EBDA /* VimeoPlayerViewController.swift in Sources */,
+				6D1D491923D78DA600ECACE5 /* RetroFilter.swift in Sources */,
+				6D1D491523D78ADC00ECACE5 /* NoirFilter.swift in Sources */,
+				6DE41ECF243F374D00081913 /* VimeoViewController.swift in Sources */,
+				6D0E9B8A244B6460008339FE /* VideoCell.swift in Sources */,
+				6D19954623C7AA3C000A76B1 /* VideoEditor.swift in Sources */,
+				6D17A7E123ABB39100C70542 /* AppDelegate.swift in Sources */,
+				6DBA80D423ED931B005A585E /* LooksCollectionViewLayout.swift in Sources */,
+				6DFC0881244B4F8800C1AB40 /* VimeoClient.swift in Sources */,
+				6DD4192D23F9A77B005A2706 /* VideoViewController.swift in Sources */,
+				6D1D491D23D7903C00ECACE5 /* VintageFilter.swift in Sources */,
+				6DF1B5C2244E06C4005D506A /* BackgroundView.swift in Sources */,
+				6D1D490B23D777F000ECACE5 /* BodyExportLabel.swift in Sources */,
+				6D1D491323D788B800ECACE5 /* HalfToneFilter.swift in Sources */,
+				6DEA248D23C2038B00D7595A /* ComicFilter.swift in Sources */,
+				6DB6C14123C4E82C00E256A4 /* ClampFilter.swift in Sources */,
+				6DB6C13D23C4D65D00E256A4 /* SharpAndWarmFilter.swift in Sources */,
+				6D01E03823BFA3D600B558E8 /* LooksCollectionDataSource.swift in Sources */,
+				6DFA48CB244F29450082D372 /* Video+Init.swift in Sources */,
+				6DB0698A23EE0EAE0088F4B7 /* LooksViewController.swift in Sources */,
+				6DDE026323C11659002D7942 /* VideoView.swift in Sources */,
+				6DFA48C7244F26F20082D372 /* Snapvideo.xcdatamodeld in Sources */,
+				6DB6C13F23C4D8A700E256A4 /* VignetteFilter.swift in Sources */,
+				6D0E9B8C244B8ED3008339FE /* VimeoCollectionLayout.swift in Sources */,
+				6D17A7E323ABB39100C70542 /* SceneDelegate.swift in Sources */,
+				6D1D491123D785FB00ECACE5 /* ColorInvertFilter.swift in Sources */,
+				6D1D491B23D78EDA00ECACE5 /* TonalFilter.swift in Sources */,
+				6D17A7F523ABB6E000C70542 /* HomeViewController.swift in Sources */,
+				6D05022623B9154100036D60 /* VideoEditorViewController.swift in Sources */,
+				6D96B85323D090A300C1C6D5 /* ExportImageView.swift in Sources */,
+				6D1D492123D793C500ECACE5 /* SepiaFilter.swift in Sources */,
+				6D73068423D06BE300226C77 /* HightlightedButton.swift in Sources */,
+				6D5EFEAB24269CE600FB5DC8 /* UILabel.swift in Sources */,
+				6DF1B5C0244DB20B005D506A /* VimeoCollectionHeader.swift in Sources */,
+				6D8C284123F601A1008700C3 /* ImageAsset.swift in Sources */,
+				6D01E03623BFA2F900B558E8 /* LooksCollectionViewCell.swift in Sources */,
+				6D96B85823D0969E00C1C6D5 /* LooksViewButton.swift in Sources */,
+				6D2E8A0323CA671A00917E25 /* TabBar.swift in Sources */,
+				6DFF1AE023C3BEC7009BCAE2 /* OldFilmFilter.swift in Sources */,
+				6D0C29C423C2A8C1006E7C40 /* AVAsset.swift in Sources */,
+				6DFA48C9244F27EA0082D372 /* VideoViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D1D492423DB71EA00ECACE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D2E412D23F04B0000B499F0 /* LooksViewControllerTests.swift in Sources */,
+				6D1D492B23DB71EA00ECACE5 /* LooksCollectionDataSourceTests.swift in Sources */,
+				6D154AB023DC7A2A00150E0A /* Bundle.swift in Sources */,
+				6D65B44223F0403A0068F378 /* LookCollectionViewLayoutTests.swift in Sources */,
+				6D154AB223DC817100150E0A /* TestHelpers.swift in Sources */,
+				6DB988BA23F1E0FC00F5F684 /* VideoEditorViewControllerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D66486923EDF9A5002AAF2E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D66487A23EDFC9C002AAF2E /* LooksCollectionViewCellSnapshotTests.swift in Sources */,
+				6D66487E23EDFD34002AAF2E /* Bundle.swift in Sources */,
+				6D66487723EDFC9C002AAF2E /* WaitExtension.swift in Sources */,
+				6DB0698C23EE11460088F4B7 /* LooksViewControllerSnapshotTests.swift in Sources */,
+				6D66487923EDFC9C002AAF2E /* HomeViewControllerSnapshotTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6D1D492E23DB71EA00ECACE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D17A7DC23ABB39100C70542 /* Snapvideo */;
+			targetProxy = 6D1D492D23DB71EA00ECACE5 /* PBXContainerItemProxy */;
+		};
+		6D66487323EDF9A5002AAF2E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6D17A7DC23ABB39100C70542 /* Snapvideo */;
+			targetProxy = 6D66487223EDF9A5002AAF2E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6D17A7EB23ABB39600C70542 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6D17A7EC23ABB39600C70542 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6D17A7EF23ABB39600C70542 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6D17A7F023ABB39600C70542 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6D17A7F223ABB39600C70542 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 017CD30715D667916AE780E6 /* Pods-Snapvideo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Snapvideo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.anastasia.Snapvideo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6D17A7F323ABB39600C70542 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2FB6C59B13251A7AB3DC3F38 /* Pods-Snapvideo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = Snapvideo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.anastasia.Snapvideo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6D1D492F23DB71EA00ECACE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = UnitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.anastasia.UnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Snapvideo.app/Snapvideo";
+			};
+			name = Debug;
+		};
+		6D1D493023DB71EA00ECACE5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = UnitTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.anastasia.UnitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Snapvideo.app/Snapvideo";
+			};
+			name = Release;
+		};
+		6D66487423EDF9A5002AAF2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = SnapshotTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.anastasia.SnapshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Snapvideo.app/Snapvideo";
+			};
+			name = Debug;
+		};
+		6D66487523EDF9A5002AAF2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = SnapshotTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.petrova.anastasia.SnapshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Snapvideo.app/Snapvideo";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6D17A7D823ABB39100C70542 /* Build configuration list for PBXProject "Snapvideo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D17A7EF23ABB39600C70542 /* Debug */,
+				6D17A7F023ABB39600C70542 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D17A7F123ABB39600C70542 /* Build configuration list for PBXNativeTarget "Snapvideo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D17A7F223ABB39600C70542 /* Debug */,
+				6D17A7F323ABB39600C70542 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D1D493123DB71EA00ECACE5 /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D1D492F23DB71EA00ECACE5 /* Debug */,
+				6D1D493023DB71EA00ECACE5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6D66487623EDF9A5002AAF2E /* Build configuration list for PBXNativeTarget "SnapshotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6D66487423EDF9A5002AAF2E /* Debug */,
+				6D66487523EDF9A5002AAF2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6D66487F23EDFE7B002AAF2E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.1;
+			};
+		};
+		6DE41ED024407E4300081913 /* XCRemoteSwiftPackageReference "EasyCoreData" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Anastasia-Petrova/EasyCoreData.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6D66488023EDFE7B002AAF2E /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D66487F23EDFE7B002AAF2E /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		6DE41ED124407E4300081913 /* EasyCoreData */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6DE41ED024407E4300081913 /* XCRemoteSwiftPackageReference "EasyCoreData" */;
+			productName = EasyCoreData;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		6DFA48C5244F26F20082D372 /* Snapvideo.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6DFA48C6244F26F20082D372 /* Video.xcdatamodel */,
+			);
+			currentVersion = 6DFA48C6244F26F20082D372 /* Video.xcdatamodel */;
+			path = Snapvideo.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 6D17A7D523ABB39100C70542 /* Project object */;
+}
